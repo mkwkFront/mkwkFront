@@ -1,23 +1,19 @@
 <template>
   <div>
-
-    <div id="nav">
-     
- 
-      
-      
-    </div>
     <router-view />
+    <Menu />
   </div>
 
 </template>
 
 <script>
+import Menu from "@/components/MainMenu.vue";
 
 export default {
   name: 'App',
   components: {
-  }
+    Menu,
+  },
 }
 </script>
 
@@ -27,7 +23,7 @@ body {
 }
 
 #app {
-  margin:0 auto; width:750px; min-height:100%; padding-top:71px; border-left:1px #D8D8D8 solid; border-right:1px #D8D8D8 solid; 
+  margin:0 auto; min-height:100%; border-left:1px #D8D8D8 solid; border-right:1px #D8D8D8 solid; 
   position: relative; 
   text-align:center;
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -35,12 +31,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media(max-width:750px){
-    #app{ width:100%; border-left:0; border-right:0; }
-  }
+/* Mobile First CSS */
 
-</style>
+/* default - 가로 해상도가 768px 이하*/
+.elem {font-size:0.75rem}
 
-<style scoped>
-  #mappage{ width:inherit; height:600px; position:relative; }
+/* 가로 해상도가 768px 이상*/
+@media (min-width: 768px) {
+  .elem {font-size:0.875rem}
+}
+
+/* 가로 해상도가 1024px 이상*/
+@media (min-width: 1024px) {
+  .elem {font-size:1rem}
+  #app {width:750px}
+}
 </style>

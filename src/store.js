@@ -1,16 +1,19 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createApp } from 'vue'
+import { createStore } from 'vuex'
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
+const store = createStore({
   state: {
-
+    selectedCircles: [],
   },
   mutations: {
-
+    setSelectedCircles(state, circles) {
+      state.selectedCircles = circles;
+    },
   },
-  actions: {
+});
 
-  }
-})
+const app = createApp({});
+app.use(store);
+app.mount('#app');
+
+export default store;
