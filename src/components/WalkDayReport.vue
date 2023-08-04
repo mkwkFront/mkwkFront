@@ -111,7 +111,7 @@ export default {
 <style scoped>
 
 #background {
-    background-color: rgb(141, 139, 139);
+    background-color: #F1F8FF;
     position: relative;
     width: inherit;
     padding: 40px;

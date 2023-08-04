@@ -391,7 +391,7 @@
       transition: all 0.3s
   }
   #mappage{ 
-      background-color: #EBEFFF;
+    background-color: #F1F8FF;
       width:inherit;  
       position:relative; 
       height: 100%;

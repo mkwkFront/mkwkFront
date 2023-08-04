@@ -1,5 +1,18 @@
 <template>
     <div id="friendaddpg">
+       <!--top-->
+    <div class="top">
+      <div class="top_wrap">
+        <div class="top_left">
+          <img
+            class="icon"
+            src="../assets/LeftIcon.png"
+            @click="$router.go(-1)"
+          />
+        </div>
+        <p class="top_center top_name"> 친구 추가</p>
+      </div>
+    </div>
       <!-- 아이디를 입력하라는 모달창 -->
       <div class="black-bg2" v-if="openModal == true">
         <div class="white-bg2">
@@ -35,13 +48,6 @@
         </div>
       </div>
       <div class="upperbar">
-        <img
-          src="@/assets/backbutton.png"
-          alt="backButton"
-          class="back-button"
-          @click="goBack"
-        />
-        <h1>친구 추가</h1>
         <div class="friendadd-button2_btn_wrap">
           <div></div>
           <button class="friendadd-button2" @click="openModal = true">
@@ -173,6 +179,64 @@ showAlertModal(message) {
     width: 100%;
     display: flex;
     flex-direction: column;
+    background-color: #F1F8FF;
+  }
+  .top_name {
+    text-align: center;
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 21px;
+
+    text-align: center;
+    letter-spacing: -0.32px;
+  
+    color: #ffffff;
+  
+  }
+  
+.top {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center; /* 가로 중앙에 위치 */
+    align-items: flex-end; /* 세로 위에서 70% 지점에 위치 */
+    background: #70B4CB;
+    padding: 1em;
+  }
+  .top_wrap {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+  }
+  .top_center {
+    width: 70%;
+    height: fit-content;
+    color: white;
+  }
+  .top_left {
+    width: 15%;
+    height: fit-content;
+  }
+  .top_right {
+    
+    display: flex;
+   align-items: center;
+   text-align: center;
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 21px;
+
+    text-align: center;
+    letter-spacing: -0.32px;
+
+    color:rgb(48, 48, 48);
   }
   .upperbar {
     width: 100%;
@@ -211,6 +275,7 @@ showAlertModal(message) {
     padding: 0 2%;
     padding-bottom: 2%;
     box-sizing: border-box;
+    background-color: #F1F8FF;
   }
   .friend-list-box2 {
     width: 100%;
@@ -221,7 +286,7 @@ showAlertModal(message) {
     align-items: flex-start;
     padding: 10px;
     box-sizing: border-box;
-    background-color: #f1f1f1;
+    background-color: #ffffff;
     border: 1px solid #ccc;
     border-radius: 10px;
   }
@@ -253,10 +318,10 @@ showAlertModal(message) {
   
   .addfriend-button2 {
     padding: 10px 15px 10px 20px;
-    background-color: #dcdada;
+    background-color: #70B4CB;
     cursor: pointer;
     border-radius: 60px;
-  }
+  } /*이거 그 사람 플러스 버튼*/
   
   .black-bg2 {
     width: 100%;

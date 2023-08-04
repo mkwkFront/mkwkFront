@@ -1,5 +1,18 @@
 <template>
   <div id="friendlistpg">
+    <div class="top">
+      <div class="top_wrap">
+        <div class="top_left">
+          <img
+            class="icon"
+            src="../assets/LeftIcon.png"
+            @click="$router.go(-1)"
+          />
+        </div>
+        <p class="top_center top_name">  나의 친구</p>
+      </div>
+    </div>
+
     <!-- 아이디를 입력하라는 모달창 -->
     <div class="black-bg" v-if="openModal == true && selectedFriend">
       <div class="white-bg">
@@ -36,13 +49,8 @@
     </div>
 
     <div class="upperbar">
-      <img
-        src="@/assets/backbutton.png"
-        alt="backButton"
-        class="back-button"
-        @click="goBackto"
-      />
-      <h1>나의 친구</h1>
+      
+ 
       <div class="friendadd-button2_btn_wrap">
         <div></div>
         <button class="friendadd-button2" @click="$router.push('./friendadd')">
@@ -163,7 +171,64 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
+  background-color: #F1F8FF;
 }
+.top {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center; /* 가로 중앙에 위치 */
+    align-items: flex-end; /* 세로 위에서 70% 지점에 위치 */
+    background: #70B4CB;
+    padding: 1em;
+  }
+  .top_wrap {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+  }
+  .top_center {
+    width: 70%;
+    height: fit-content;
+    color: white;
+  }
+  .top_left {
+    width: 15%;
+    height: fit-content;
+  }
+  .top_right {
+    
+    display: flex;
+   align-items: center;
+   text-align: center;
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 21px;
+
+    text-align: center;
+    letter-spacing: -0.32px;
+
+    color:rgb(48, 48, 48);
+  }
+  .top_name {
+    text-align: center;
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 21px;
+
+    text-align: center;
+    letter-spacing: -0.32px;
+  
+    color: #ffffff;
+  
+  }
 .upperbar {
   width: 100%;
   height: 5%;
@@ -187,6 +252,8 @@ export default {
   height: 100%;
   border-radius: 30px;
   border: none;
+  background-color: #DFEFFF;
+  color: #00BFFF;
 }
 .friendadd-button2_btn_wrap > .friendadd-button2:hover {
   border: 5px solid grey;
@@ -210,7 +277,7 @@ export default {
   align-items: flex-start;
   padding: 10px;
   box-sizing: border-box;
-  background-color: #f1f1f1;
+  background-color: #ffffff;
   border: 1px solid #ccc;
   border-radius: 10px;
 }
@@ -242,10 +309,10 @@ export default {
 
 .walkrq-button {
   padding: 5px 10px;
-  background-color: #dcdada;
+  background-color: #00BFFF;
   border: none;
   border-radius: 5px;
-  color: #4a4a4a;
+  color: #ffffff;
   font-size: 1.1rem;
 }
 

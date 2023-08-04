@@ -59,7 +59,7 @@
         <!-- 알림 버튼 -->
         <div class="alarm_box">
           <router-link to="/alarm" class="circle-button">
-            <img src="../assets/bell.png" alt="알람 아이콘" />
+            <img src="../assets/bell.png" alt="알람 아이콘" style="width: 70px; height: 70px;" />
           </router-link>
         </div>
       </div>
@@ -203,7 +203,7 @@ export default {
   display: flex;
   justify-content: center; /* 가로 중앙에 위치 */
   align-items: flex-end; /* 세로 위에서 70% 지점에 위치 */
-  background: #687089;
+  background: #00BFFF;
   padding: 1em;
 }
 .mypage .top_wrap {
@@ -327,6 +327,7 @@ export default {
   height: 90px;
   right: 3%;
   top: 5%;
+  size: 0.1;
 
   display: flex;
   justify-content: center; /* 수평 가운데 정렬 */

@@ -1,28 +1,19 @@
 <template>
   <div class="alarmpage">
-    <div class="pg_alarm">
-      <img
-        src="@/assets/backbutton.png"
-        alt="backButton"
-        class="back-button"
-        @click="$router.go(-1)"
-      />
-      📬 알림이 왔어요!<br />
-    </div>
-
-    <div v-if="showBanner" class="banner">
-      <img
-        src="../assets/StarbucksLogo.png"
-        alt="bannerimage"
-        class="bannerimage"
-      />
-      <div class="bannertext">
-        '나를 잡아봐' 배지! <br />
-        선착순 50명 <br />
-        스타벅스 아메리카노 증정 이벤트
+    <!--top-->
+    <div class="top">
+      <div class="top_wrap">
+        <div class="top_left">
+          <img
+            class="icon"
+            src="../assets/LeftIcon.png"
+            @click="$router.go(-1)"
+          />
+        </div>
+        <p class="top_center top_name"> 📬 알림이 왔어요!</p>
       </div>
     </div>
-
+    
     <div class="alarmlist">
       <div class="alarmbox" v-for="(request, index) in walkRequests" :key="index">
         <img
@@ -101,6 +92,10 @@ export default defineComponent({
     };
   },
   methods: {
+    goToAlarmPage() {
+      // "/Alarm" 페이지로 이동
+      window.location.href = '../component/Alarm';
+    },
   rejectRequest(index) {
     this.friendRequests.splice(index, 1);
   },
@@ -114,6 +109,7 @@ export default defineComponent({
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500&display=swap');
 .alarmpage {
+  background-color: #F1F8FF;
   width: 100%;
   height: 90vh;
   display: flex;
@@ -123,28 +119,10 @@ export default defineComponent({
   text-align: left;
   font-weight: bold;
   font-size: 3vh;
-  color: #4a4a4a;
+  color: #005F7F;
 }
 
-.banner {
-  background-color: rgb(92, 86, 86);
-  padding: 3%;
-  display: flex;
-  align-items: center;
-  height: 130px;
-  box-sizing: border-box;
-  justify-content: space-around;
-}
-.bannerimage {
-  width: 80px;
-  height: 80px;
-}
-.bannertext {
-  color: #f1f1f1;
-  font-size: large;
-  margin-left: 2%;
-  font-family: 'IBM Plex Sans KR', sans-serif;
-}
+
 
 .alarmlist {
   width: 100%;
@@ -161,7 +139,7 @@ export default defineComponent({
   /* justify-content: flex-start; */
   padding: 2%;
   box-sizing: border-box;
-  background-color: #f1f1f1;
+  background-color: #ffffff;
   border: 1px solid #ccc;
   border-radius: 10px;
   margin-bottom: 2%;
@@ -191,18 +169,78 @@ export default defineComponent({
 }
 .friendreject {
   width: 40%;
-  background-color: #7a7878;
+  background-color: #DFEFFF;
   border: none;
   border-radius: 25px;
-  color: #ffffff;
+  color: #00BFFF;
   font-size: 2vh;
+  font-weight: bold;
 }
 .friendaccept {
   width: 40%;
-  background-color: #585757;
+  background-color: #00BFFF;
   border: none;
   border-radius: 25px;
   color: #ffffff;
   font-size: 2vh;
+  font-weight: bold;
 }
+.top_name {
+    text-align: center;
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 21px;
+
+    text-align: center;
+    letter-spacing: -0.32px;
+  
+    color: #ffffff;
+  
+  }
+  
+.top {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center; /* 가로 중앙에 위치 */
+    align-items: flex-end; /* 세로 위에서 70% 지점에 위치 */
+    background: #70B4CB;
+    padding: 1em;
+  }
+  .top_wrap {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+  }
+  .top_center {
+    width: 70%;
+    height: fit-content;
+    color: white;
+  }
+  .top_left {
+    width: 15%;
+    height: fit-content;
+  }
+  .top_right {
+    
+    display: flex;
+   align-items: center;
+   text-align: center;
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 21px;
+
+    text-align: center;
+    letter-spacing: -0.32px;
+
+    color:rgb(48, 48, 48);
+  }
+
 </style>

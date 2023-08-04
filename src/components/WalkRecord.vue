@@ -235,6 +235,7 @@ export default {
 
 <style scoped>
 .WalkRecordPage {
+  background-color: #F1F8FF;
   width: 100%;
   height: 90vh;
   overflow-y: auto;
@@ -247,7 +248,7 @@ export default {
   display: flex;
   justify-content: center; /* 가로 중앙에 위치 */
   align-items: flex-end;
-  background: #687089;
+  background: #70B4CB;
   padding: 1em;
 }
 .WalkRecordPage .top_wrap {

@@ -1,19 +1,20 @@
 <template>
-  <div>
+<div>
     <router-view />
+    <p>
+    </p>
     <Menu />
   </div>
-
 </template>
 
 <script>
-import Menu from "@/components/MainMenu.vue";
+//import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
   components: {
-    Menu,
-  },
+  
+  }
 }
 </script>
 

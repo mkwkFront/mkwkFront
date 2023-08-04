@@ -503,6 +503,9 @@ const showValidationModal = (message) => {
 
 
 <style>
+.startpage {
+  background-color: #F1F8FF;
+}
 
 .exit-button {
   position: absolute;

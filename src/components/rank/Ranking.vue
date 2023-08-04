@@ -204,7 +204,7 @@ export default defineComponent({
 }
 /* 페이지 정보*/
 .rank-head {
-  background-color: #687089;
+  background-color: #00BFFF;
   padding: 40px 30px 20px 30px;
   color: #ffffff;
   font-size: 25px;
@@ -227,9 +227,9 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #638263;
+  background-color: #DFEFFF;
   border-radius: 10px;
-  color: #ffffff;
+  color: #00BFFF;
 }
 
 /* 페이지 이동 버튼 */

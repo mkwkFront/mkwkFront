@@ -99,7 +99,7 @@
   height: 90vh;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: #ecf1ff;
+  background-color: #F1F8FF;
   font-family: 'IBM Plex Sans KR', sans-serif;
 }
 

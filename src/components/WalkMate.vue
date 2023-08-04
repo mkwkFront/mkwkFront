@@ -289,6 +289,7 @@ showAlertModal(message) {
   flex-direction: column;
   align-items: center;
   font-family: 'IBM Plex Sans KR', sans-serif;
+  background-color: #F1F8FF;
 }
 
 .header {

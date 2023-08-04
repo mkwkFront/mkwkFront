@@ -142,6 +142,7 @@ export default {
 
 .MBcheck p {
   margin: 3% 0;
+  
 }
 
 .MBcheck_flex {
@@ -160,6 +161,7 @@ export default {
   width: 10%;
 }
 .badgepage {
+  background-color: #F1F8FF;
   width: 100%;
   height: 90vh;
 }
@@ -171,7 +173,7 @@ export default {
   display: flex;
   justify-content: center; /* 가로 중앙에 위치 */
   align-items: flex-end;
-  background: #687089;
+  background: #70B4CB;
   padding: 1em;
 }
 .badgepage .top_wrap {
