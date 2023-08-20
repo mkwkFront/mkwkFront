@@ -53,6 +53,15 @@
           <button class="friendadd-button2" @click="openModal = true">
             아이디로 친구추가
           </button>
+
+          <input v-model="tempId" placeholder="임시 아이디를 입력하세요" />
+    <button @click="findUser">아이디 찾기</button>
+    <div v-if="user">
+      <p>사용자 이름: {{ user.username }}</p>
+      <p>이메일: {{ user.email }}</p>
+    </div>
+  
+
         </div>
       </div>
       <div class="friend-list-box1">
@@ -81,10 +90,10 @@
   
   <script>
   import { useRouter } from "vue-router";
+  import axios from 'axios';
   
   export default {
     name: "pg_friendadd",
-  
     setup() {
       const router = useRouter();
       function goBack() {
@@ -94,7 +103,17 @@
         goBack,
       };
     },
+
     methods: {
+      indUser() {
+      axios.get(`/users/find?tempId=${this.tempId}`)
+        .then(response => {
+          this.user = response.data;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
       goToFriendList() {
         this.$router.push("/friendlist");
       },
@@ -126,6 +145,8 @@ showAlertModal(message) {
     },
     data() {
       return {
+        tempId: '',
+        user: null,
         openModal: false,
         inputValue: "",
         friend: null,

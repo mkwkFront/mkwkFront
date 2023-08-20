@@ -26,9 +26,6 @@
     <!-- 모달창 부분을 추가합니다. v-if로 showModal 변수가 true일 때만 모달창이 나타납니다. -->
     <div class="modal" v-if="showModal">
       <div class="modal-content">
-
-   
-        
         <!-- 캘린더 내용 -->
         <div class="calendar">
           <div class="calendar-header">
@@ -36,20 +33,21 @@
             <span>{{ currentMonth }}</span>
             <button @click="nextMonth">&gt;</button>
           </div>
-            <!-- 요일 표시 부분 -->
-        <div class="calendar-days week-days">
-          <div v-for="dayOfWeek in daysOfWeek" :key="dayOfWeek" class="day">{{ dayOfWeek }}</div>
-        </div>
+          <!-- 요일 표시 부분 -->
+          <div class="calendar-days week-days">
+            <div v-for="dayOfWeek in daysOfWeek" :key="dayOfWeek" class="day">{{ dayOfWeek }}</div>
+          </div>
           <div class="calendar-days">
             <div v-for="day in daysInMonth" 
-                      :key="day" class="['day', { 'today': isToday(day), 'selected-day': isSelectedDay(day) }]">{{ day }}</div>
+                  @click="selectDay(day)"
+                  :key="day" class="['day', { 'today': isToday(day), 'selected-day': isSelectedDay(day) }]">{{ day }}</div>
           </div>
         </div>
       </div>
+      <button class="close-button" @click="toggleModal">닫기</button>
     </div>
   </div>
 </template>
-
 
 
 <script>
