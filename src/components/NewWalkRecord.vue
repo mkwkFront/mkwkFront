@@ -35,14 +35,6 @@
           </div>
           <!-- 요일 표시 부분 -->
           <div class="calendar-days week-days">
-<<<<<<< HEAD
-            <div v-for="dayOfWeek in daysOfWeek" :key="dayOfWeek" class="day">{{ dayOfWeek }}</div>
-          </div>
-          <div class="calendar-days">
-            <div v-for="day in daysInMonth" 
-                  @click="selectDay(day)"
-                  :key="day" class="['day', { 'today': isToday(day), 'selected-day': isSelectedDay(day) }]">{{ day }}</div>
-=======
             <div v-for="dayOfWeek in daysOfWeek" :key="dayOfWeek" class="day">
               {{ dayOfWeek }}
             </div>
@@ -56,11 +48,9 @@
             >
               {{ day }}
             </div>
->>>>>>> 5120ddbada5ac2daec0ed8ad06929113133e33dd
           </div>
         </div>
       </div>
-      <button class="close-button" @click="toggleModal">닫기</button>
     </div>
 
     <div class="record-page" v-if="showRecordPage">
@@ -68,6 +58,7 @@
     </div>
   </div>
 </template>
+
 
 
 <script>
