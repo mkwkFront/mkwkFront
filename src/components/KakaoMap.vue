@@ -69,7 +69,7 @@
   </div>
 </template>
     
-    <script>
+<script>
 /* eslint-disable no-undef */
 import Sidebar from "./sidebar/SidebarComponent.vue";
 import { sidebarWidth, sidebarHeight } from "./sidebar/state";
@@ -124,7 +124,7 @@ export default {
       openModal2: false,
       timer: 0,
       isWalking: false,
-      distance: 0, // Keep track of total distance
+      distance: 0.0, // Keep track of total distance
       watchId: null,
       position: null,
       marker: null,
@@ -134,6 +134,7 @@ export default {
       polyline: null,
       images: Array(5).fill(pointImage),
       averageNumberOfSteps: 0,
+      getpoint: 0,
     };
   },
   mounted() {
@@ -194,9 +195,9 @@ export default {
               currentPosition
             );
             this.distance += newDistance;
-            console.log(`Distance traveled: ${newDistance.toFixed(3)} km`);
+            console.log(`Distance traveled: ${newDistance.toFixed(2)} km`);
             console.log(
-              `Total distance traveled: ${this.distance.toFixed(3)} km`
+              `Total distance traveled: ${this.distance.toFixed(2)} km`
             );
           }
         }
@@ -270,35 +271,24 @@ export default {
       this.timerId = null;
       this.isWalking = false;
     },
-    stopTimerAndNavigate() {
-      this.stopTimer();
-      const walkTime = this.timer.toString().trim(); // 산책 시간을 문자열로 변환하고 불필요한 공백을 제거합니다.
-      this.sendWalkDataToBack(walkTime.toString()); // 백으로 전송 (정수를 문자열로 변환하여 전송)
-      this.totalDistance = this.distance; // Assign the current distance to totalDistance
-      this.distance = 0; // Reset the distance
 
-      const caloriesBurned = calculateCaloriesBurned(this.totalDistance); // Calculate calories bWalkDayReporturned
-      console.log(`소모칼로리: ${caloriesBurned.toFixed(0)} `);
-
-      const timeData = {
-        min: Math.floor(this.timer / 60),
-        seconds: this.timer % 60,
-      };
-      console.log("timeData:", timeData);
-      console.log(`Final Distance: ${this.totalDistance.toFixed(3)} km`);
-
-      this.$router.push({
-        name: "WalkDayReport",
-        query: {
-          min: timeData.min,
-          seconds: timeData.seconds,
-          distance: this.totalDistance,
-          calories: calculateCaloriesBurned(this.totalDistance),
-          steps: this.averageNumberOfSteps,
-        },
-      });
-    },
     toggleTimer() {
+      // const date = new Date();
+      // const year = date.getFullYear();
+      // const month = ("0" + (date.getMonth() + 1)).slice(-2);
+      // const day = ("0" + date.getDate()).slice(-2);
+      // var hr = date.getHours();
+      // console.log(hr);
+      // var min = date.getMinutes();
+      // console.log(min);
+      // var sec = date.getSeconds();
+      // console.log(sec);
+
+      // var walkdate =
+      //   year + "-" + month + "-" + day + " " + hr + ":" + min + ":" + sec;
+
+      // console.log(walkdate);
+
       if (!this.isWalking) {
         // Start the timer and random movement
         this.isWalking = true;
@@ -327,6 +317,52 @@ export default {
         this.openModal2 = true;
       }
     },
+    stopTimerAndNavigate() {
+      this.stopTimer();
+      const walkTime = this.timer.toString().trim();
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = ("0" + (date.getMonth() + 1)).slice(-2);
+      const day = ("0" + date.getDate()).slice(-2);
+      var hr = date.getHours();
+      console.log(hr);
+      var min = date.getMinutes();
+      console.log(min);
+      var sec = date.getSeconds();
+      console.log(sec);
+
+      const walkdate =
+        year + "-" + month + "-" + day + " " + hr + ":" + min + ":" + sec;
+
+      console.log(walkdate);
+      // 산책 시간을 문자열로 변환하고 불필요한 공백을 제거합니다.
+      this.sendWalkDataToBack(walkTime.toString(), this.distance, walkdate); // 백으로 전송 (정수를 문자열로 변환하여 전송)
+      this.totalDistance = this.distance; // Assign the current distance to totalDistance
+      this.distance = 0; // Reset the distance
+
+      console.log(walkdate);
+
+      const caloriesBurned = calculateCaloriesBurned(this.totalDistance); // Calculate calories bWalkDayReporturned
+      console.log(`소모칼로리: ${caloriesBurned.toFixed(2)} `);
+
+      const timeData = {
+        min: Math.floor(this.timer / 60),
+        seconds: this.timer % 60,
+      };
+      console.log("timeData:", timeData);
+      console.log(`Final Distance: ${this.totalDistance.toFixed(2)} km`);
+
+      this.$router.push({
+        name: "WalkDayReport",
+        query: {
+          min: timeData.min,
+          seconds: timeData.seconds,
+          distance: this.totalDistance,
+          calories: calculateCaloriesBurned(this.totalDistance),
+          steps: this.averageNumberOfSteps,
+        },
+      });
+    },
     changeImage() {
       const newImage = getpointImage;
       const currentIndex = Math.floor(this.timer / 5) - 1;
@@ -334,10 +370,12 @@ export default {
       if (currentIndex < this.images.length) {
         // Replace the image at the current index with the new image
         this.images.splice(currentIndex, 1, newImage);
+
+        this.getpoint++;
       }
     },
     updateChangedImageCount(count) {
-      this.changedImageCount = count;
+      this.getpoint = count;
     },
     closeModal() {
       this.openModal2 = false;
@@ -354,24 +392,31 @@ export default {
     destroyed() {
       this.stopTimer();
     },
-    sendWalkDataToBack(timeData) {
+    sendWalkDataToBack(timeData, distance, walkdate) {
       const headers = {
         "Content-Type": "application/json", // 요청의 Content-Type을 application/json으로 설정
       };
+      console.log(distance);
+
       console.log("전송하는 산책 시간 데이터:", timeData); // 산책 시간 데이터 확인
+      console.log("전송하는 코인 개수:", this.getpoint);
+      console.log("전송하는 산책 거리:", distance.toFixed(2));
 
       const requestData = JSON.stringify({
         min: Math.floor(timeData / 60), // Convert total seconds to minutes
         seconds: timeData % 60, // Get the remaining seconds
+        getpoint: this.getpoint,
+        distance: distance.toFixed(2),
+        walkdate: walkdate,
       });
       axios
         .post("http://localhost:8001/walkData", requestData, { headers })
         .then((response) => {
-          console.log("산책 시간이 백엔드로 전송되었습니다.");
+          console.log("산책 데이터 백엔드로 전송 성공");
           console.log("응답 데이터:", response.data); // 응답 데이터 출력
         })
         .catch((error) => {
-          console.error("산책 시간 전송에 실패했습니다:", error);
+          console.error("산책 데이터 전송 실패 : ", error);
         });
     },
   },
@@ -393,7 +438,7 @@ export default {
   width: 89%;
   background: white;
   border-radius: 8px;
-  padding: 36px 0;
+  padding: 36px 0px;
   font-size: 20px;
   margin-top: 50%;
   margin-left: 6%;
