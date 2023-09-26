@@ -14,32 +14,35 @@
       </div>
     </div>
     <!-- middle-->
-    <div class="date-icon-container">
-      <div class="top_right">
-        <p class="date-text"><br />&emsp;&emsp;오늘은 {{ currentDate }}</p>
-        <div class="modal-wrapper">
-          <div class="calendar-icon" @click="toggleModal"><br />📅</div>
+    <div class="middle">
+      <div class="middle_top">
+        <p class="date-text">오늘은 {{ currentDate }}</p>
+        <div class="calendar_icon" @click="toggleModal">📅</div>
+      </div>
+      <div class="middle_content">
+        <div class="record_date" v-if="showRecordPage">
+          <p>선택한 날짜 : {{ selectedDate }}</p>
         </div>
       </div>
     </div>
-
+    <!-- @click="closeModalOnOverlay" -->
     <!-- 모달창 부분을 추가합니다. v-if로 showModal 변수가 true일 때만 모달창이 나타납니다. -->
-    <div class="modal" v-if="showModal" @click="closeModalOnOverlay">
-      <div class="modal-content">
+    <div class="modal" v-if="showModal">
+      <div class="modal_content">
         <!-- 캘린더 내용 -->
         <div class="calendar">
-          <div class="calendar-header">
+          <div class="calendar_header">
             <button @click="prevMonth">&lt;</button>
             <span>{{ currentMonth }}</span>
             <button @click="nextMonth">&gt;</button>
           </div>
           <!-- 요일 표시 부분 -->
-          <div class="calendar-days week-days">
+          <div class="calendar_days week-days">
             <div v-for="dayOfWeek in daysOfWeek" :key="dayOfWeek" class="day">
               {{ dayOfWeek }}
             </div>
           </div>
-          <div class="calendar-days">
+          <div class="calendar_days">
             <div
               v-for="day in daysInMonth"
               :key="day"
@@ -51,10 +54,6 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="record-page" v-if="showRecordPage">
-      <p>선택한 날짜 : {{ selectedDate }}</p>
     </div>
   </div>
 </template>
@@ -175,59 +174,34 @@ export default defineComponent({
   height: 100vh;
   overflow-y: auto;
 }
-.WalkRecordPage .top {
+/* top */
+.NewWalkRecordPage .top {
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  height: 10%;
-  display: flex;
-  justify-content: center; /* 가로 중앙에 위치 */
-  align-items: flex-end;
-  background: #70b4cb;
-  padding: 1em;
-}
-.top {
-  position: relative;
-  box-sizing: border-box;
-  width: 100%;
-  height: 10%;
+  height: 10vh;
   display: flex;
   justify-content: center; /* 가로 중앙에 위치 */
   align-items: flex-end; /* 세로 위에서 70% 지점에 위치 */
   background: #70b4cb;
   padding: 1em;
 }
-.top_wrap {
+.NewWalkRecordPage .top_wrap {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: flex;
   align-items: center;
 }
-.top_center {
+.NewWalkRecordPage .top_center {
   width: 70%;
   height: fit-content;
   color: white;
 }
-.top_left {
+.NewWalkRecordPage .top_left {
   width: 15%;
   height: fit-content;
 }
-.top_right {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 1.3rem;
-  line-height: 21px;
-
-  text-align: center;
-  letter-spacing: -0.32px;
-
-  color: rgb(48, 48, 48);
-}
-.top_name {
+.NewWalkRecordPage .top_name {
   text-align: center;
   font-family: "Inter";
   font-style: normal;
@@ -240,21 +214,51 @@ export default defineComponent({
 
   color: #ffffff;
 }
-.modal {
-  /* 기존 배경색과 테두리를 없앱니다. */
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-  position: absolute;
-  top: -15%;
-  left: 0;
-  right: 0;
-  bottom: 100%;
+/* middle */
+.NewWalkRecordPage .middle {
+  position: relative;
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+.NewWalkRecordPage .middle_top {
+  width: 100%;
+  height: 5vh;
+  background: #f2f2f7;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.modal[style*="display: block;"] {
+.NewWalkRecordPage .middle_content {
+  width: 100%;
+  height: 85vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.NewWalkRecordPage .record_date {
+  height: 5vh;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* modal */
+.NewWalkRecordPage .modal {
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.NewWalkRecordPage .modal[style*="display: block;"] {
   /* 모달창 열릴 때 애니메이션 효과 추가 */
   animation: modalOpenAnim 0.3s ease-out;
 }
@@ -268,60 +272,49 @@ export default defineComponent({
     opacity: 1;
   }
 }
-.modal-content {
-  background-color: rgb(249, 252, 255);
-  padding: 160px;
-  width: 10px;
-  height: 1%;
+.NewWalkRecordPage .modal_content {
+  width: 20em;
+  height: 22em;
   border: 2px solid #b1c9e0;
   border-radius: 17px;
-  animation: modalOpenAnim 0.5s ease-out;
+  padding: 1em;
+  box-sizing: border-box;
+  animation: modalOpenAnim-4bff843a 0.5s ease-out;
+  background-color: rgb(249, 252, 255);
 }
-.modal-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: transparent; /* 배경색을 투명하게 설정합니다. */
-  z-index: 999;
-}
-.calendar-header {
+.NewWalkRecordPage .calendar_header {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   font-weight: bold;
   padding: 8px;
-  background-color: #ffffff;
+  background-color: rgb(249, 252, 255);
 }
-.calendar-days {
+
+.NewWalkRecordPage .calendar_days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
   padding: 8px;
 }
-.day {
+.NewWalkRecordPage .day {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 32px;
   height: 32px;
 }
-.calendar-icon {
+.NewWalkRecordPage .calendar_icon {
   cursor: pointer;
 }
-.calendar-header button {
+.NewWalkRecordPage .calendar_header button {
   background: none;
   border: none;
   cursor: pointer;
 }
-.calendar-header button:hover {
+.NewWalkRecordPage .calendar_header button:hover {
   background-color: #f0f0f0;
 }
 
-.record-page {
-  background-color: rgb(247, 156, 156);
-  width: 85vw;
-  margin: 0 auto;
-}
+
 </style>

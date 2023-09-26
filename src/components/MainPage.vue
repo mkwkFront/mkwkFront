@@ -531,7 +531,7 @@ export default defineComponent ({
   width: 8vh;
 }
 /* middle */
-.middle {
+.MainPage .middle {
   position: relative;
   width: 100%;
   height: 90%;
@@ -541,7 +541,7 @@ export default defineComponent ({
   flex-direction: column;
 }
 /* middle 1 */
-.middle_1 {
+.MainPage .middle_1 {
   position: relative;
   width: 100%;
   height: 32%;
