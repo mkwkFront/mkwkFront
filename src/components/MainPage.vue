@@ -250,13 +250,6 @@ export default defineComponent ({
   background-position: center;
 }
 
-html, body, .main-container {
-  height: 113vh;
-  margin: 0;
-  padding: 0;
-  overflow-y: auto;
-}
-
 .header-container {
   position: relative;
   display: flex;
