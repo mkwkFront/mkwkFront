@@ -28,20 +28,22 @@
     <!-- middle -->
     <div class="middle scroller">
       <transition name="fade">
-        <div v-if="showMessage" class="badge-message">
-          배지 획득
-        </div>
+        <div v-if="showMessage" class="badge-message">배지 획득</div>
       </transition>
 
-     <!-- 대표 배지 박스 -->
-     <div class="mainbadge">
+      <!-- 대표 배지 박스 -->
+      <div class="mainbadge">
         <div class="MB_main">
           <div class="MB_top">
             <p>대표 배지</p>
           </div>
           <div class="MB_wrap">
             <div class="MB_left">
-              <img class="mainbadge_img" :src="mainBadge.img || require('@/assets/BadgePage/lock.png')" alt="대표 배지" />
+              <img
+                class="mainbadge_img"
+                :src="mainBadge.img || require('@/assets/BadgePage/lock.png')"
+                alt="대표 배지"
+              />
             </div>
             <div class="MB_right">
               <p v-if="!mainBadge.img">대표 배지를<br />설정해 보세요!</p>
@@ -56,9 +58,18 @@
 
       <!-- 배지 리스트 -->
       <div class="badgelist">
-        <div class="badge" v-for="(badge, index) in          badgedata[0].badges         " :key="index">
-          <div class="badge_img"
-            @click="getBadgeImage(badge) !== require('@/assets/BadgePage/lock.png') && (openModal = true, selectedBadge = badge)">
+        <div
+          class="badge"
+          v-for="(badge, index) in badgedata[0].badges"
+          :key="index"
+        >
+          <div
+            class="badge_img"
+            @click="
+              getBadgeImage(badge) !== require('@/assets/BadgePage/lock.png') &&
+                ((openModal = true), (selectedBadge = badge))
+            "
+          >
             <img :src="getBadgeImage(badge)" />
           </div>
           <div class="badge_name">{{ badge.name }}</div>
@@ -77,7 +88,7 @@ export default {
     walkCount: {
       type: Number,
       default: 2,
-    }
+    },
   }, // walkCount prop 선언
   data() {
     return {
@@ -85,7 +96,7 @@ export default {
       openModal: false,
       selectedBadge: null,
       mainBadge: {
-        img: "" // 대표 배지 이미지 URL
+        img: "", // 대표 배지 이미지 URL
       },
       hasShownMessage: false,
     };
@@ -101,14 +112,24 @@ export default {
     getMainBadgeName() {
       if (this.mainBadge.img) {
         // 대표 배지 이미지가 설정되어 있을 때 해당 배지의 이름 반환
-        const badge = this.badgedata[0].badges.find(b => b.img === this.mainBadge.img);
-        return badge ? badge.name : '';
+        const badge = this.badgedata[0].badges.find(
+          (b) => b.img === this.mainBadge.img
+        );
+        return badge ? badge.name : "";
       }
-      return '';
+      return "";
     },
 
     getBadgeImage(badge) {
-      if (this.walkCount >= 1 && [this.badgedata[0].badges[0], this.badgedata[0].badges[3], this.badgedata[0].badges[2], this.badgedata[0].badges[1]].some(b => b === badge)) {
+      if (
+        this.walkCount >= 1 &&
+        [
+          this.badgedata[0].badges[0],
+          this.badgedata[0].badges[3],
+          this.badgedata[0].badges[2],
+          this.badgedata[0].badges[1],
+        ].some((b) => b === badge)
+      ) {
         return badge.img;
       }
       return require("@/assets/BadgePage/lock.png");
@@ -142,7 +163,6 @@ export default {
 
 .MBcheck p {
   margin: 3% 0;
-  
 }
 
 .MBcheck_flex {
@@ -161,7 +181,7 @@ export default {
   width: 10%;
 }
 .badgepage {
-  background-color: #F1F8FF;
+  background-color: #f1f8ff;
   width: 100%;
   height: 90vh;
 }
@@ -173,7 +193,7 @@ export default {
   display: flex;
   justify-content: center; /* 가로 중앙에 위치 */
   align-items: flex-end;
-  background: #70B4CB;
+  background: #70b4cb;
   padding: 1em;
 }
 .badgepage .top_wrap {

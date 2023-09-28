@@ -23,10 +23,16 @@
         <div class="record_date" v-if="showRecordPage">
           <p>선택한 날짜 : {{ selectedDate }}</p>
         </div>
+        <div class="walkdata_list" v-if="showRecordPage">
+          <p>n 번째 산책</p>
+        </div>
+        
+        <div>{{ dataFromBackend }}</div>
+
       </div>
     </div>
-    <!-- @click="closeModalOnOverlay" -->
     <!-- 모달창 부분을 추가합니다. v-if로 showModal 변수가 true일 때만 모달창이 나타납니다. -->
+    <!-- @click="closeModalOnOverlay" -->
     <div class="modal" v-if="showModal">
       <div class="modal_content">
         <!-- 캘린더 내용 -->
@@ -61,6 +67,8 @@
 
 
 <script>
+import axios from "axios";
+
 import { defineComponent, ref, computed } from "vue";
 import {
   startOfMonth,
@@ -164,15 +172,36 @@ export default defineComponent({
       this.showHistory = this.selectedButton === "history";
     },
   },
+  data() {
+    return {
+      dataFromBackend: null, // 백엔드에서 가져온 데이터를 저장할 변수
+      walkKeys: null,
+    };
+  },
+  mounted() {
+    // 백엔드 API 엔드포인트로 GET 요청을 보냅니다.
+    axios
+      .get("http://localhost:8001/BringWalkData")
+      .then((response) => {
+        // HTTP 요청이 성공하면 백엔드에서 받은 데이터를 변수에 저장하고 화면에 출력합니다.
+        this.dataFromBackend = response.data;
+        this.walkKeys = this.dataFromBackend.map((item) => item.walkKey); //  배열 만들어서 저장하는 코드
+        console.log("walkKeys:", this.walkKeys); // 'walkKeys' 배열 값 출력함
+      })
+
+      .catch((error) => {
+        console.error("데이터를 가져오는 중 오류 발생:", error);
+      });
+  },
 });
 </script>
 
 <style scoped>
 .NewWalkRecordPage {
-  background-color: #f1f8ff;
   width: 100%;
   height: 100vh;
   overflow-y: auto;
+  background-color: #f1f8ff;
 }
 /* top */
 .NewWalkRecordPage .top {
@@ -244,6 +273,18 @@ export default defineComponent({
   height: 5vh;
   width: 100%;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.NewWalkRecordPage .walkdata_list {
+  width: 80%;
+  height: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 10px;
 }
 
 /* modal */
@@ -315,6 +356,11 @@ export default defineComponent({
 .NewWalkRecordPage .calendar_header button:hover {
   background-color: #f0f0f0;
 }
-
-
+.NewWalkRecordPage p {
+  display: block;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}
 </style>
