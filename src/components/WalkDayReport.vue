@@ -110,7 +110,7 @@ export default {
 
 <style scoped>
 
-#background {
+.WalkDayReport #background {
     background-color: #F1F8FF;
     position: relative;
     width: inherit;
@@ -118,7 +118,7 @@ export default {
     height: 100vh;
 }
 
-#dailyreport {
+.WalkDayReport #dailyreport {
     background-color: rgb(255, 255, 255);
     border-radius: 50px;
     height: 73%;
@@ -126,16 +126,16 @@ export default {
     padding: 50px 0;
 
 }
-.todaypoint {
+.WalkDayReport .todaypoint {
     padding: 0 70px;
     display: flex; /* 추가 */
 }
 
-.point-container {
+.WalkDayReport .point-container {
     display: flex;
 }
 
-.walkfriend {
+.WalkDayReport .walkfriend {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -147,22 +147,22 @@ export default {
     padding: 0 20px;
 }
 
-.walkfriend h1 {
+.WalkDayReport .walkfriend h1 {
     font-size: 2vh;
     margin: 0 10px;
 }
 
-.person-container {
+.WalkDayReport .person-container {
     display: flex;
     align-items: center;
     margin-left: 10px;
 }
 
-.person-container img {
+.WalkDayReport .person-container img {
     margin: 0 5px;
 }
 
-.todaypoint {
+.WalkDayReport .todaypoint {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -174,39 +174,39 @@ export default {
     padding: 0 20px;
 }
 
-.todaypoint p {
+.WalkDayReport .todaypoint p {
     font-weight: bold;
     text-align: center;
     font-size: 2vh;
     margin-right: 10px;
 }
 
-.point-container {
+.WalkDayReport .point-container {
     display: flex;
     align-items: center;
     margin-left: 10px;
 }
 
-.point {
+.WalkDayReport .point {
     width: 3vh;
     height: 3vh;
     margin-right: 5px;
 }
 
-.reportbody {
+.WalkDayReport .reportbody {
     background-color: rgba(218, 213, 213, 0.893);
     display: block;
     height: 90%;
     padding: 23px;
 }
 
-.walkfriend img {
+.WalkDayReport .walkfriend img {
     text-align: right;
     margin: 5px;
     width:5vh;
 }
 
-.walkfriend, .todaypoint{
+.WalkDayReport .walkfriend, .todaypoint{
     border: 7px solid rgb(179, 179, 179);
     background-color: rgb(255, 255, 255);
     height: 9vh;
@@ -219,7 +219,7 @@ export default {
     justify-content: space-evenly;
 }
 
-.todaydata_1, .todaydata_2{
+.WalkDayReport .todaydata_1, .todaydata_2{
     height : 20vh;
     width: 100%;
     display: flex; 
@@ -227,37 +227,37 @@ export default {
     margin-left: 0%;
 }
 
-.todaydata_1 img, .todaydata_2 img {
+.WalkDayReport .todaydata_1 img, .todaydata_2 img {
     width: 8vh;
     margin: 2vh;
     
 }
 
-.todaydata_1 p, .todaydata_2 p {
+.WalkDayReport .todaydata_1 p, .todaydata_2 p {
     font-size: 3vh;
 }
 
 
-.walk, .kcal, .time, .long {
+.WalkDayReport .walk, .kcal, .time, .long {
     flex: 1;
     background-color:rgb(228, 228, 228);
     border: 5px solid rgb(142, 141, 141);
 }
 
-.walk {
+.WalkDayReport .walk {
     border-radius: 30px 0 0 0 ;
 }
-.kcal {
+.WalkDayReport .kcal {
     border-radius: 0 30px 0 0 ;
 }
-.time {
+.WalkDayReport .time {
     border-radius: 0 0 0 30px;
 }
-.long {
+.WalkDayReport .long {
     border-radius: 0 0 30px 0 ;
 }
 
-.walkclose {
+.WalkDayReport .walkclose {
     cursor: pointer;
     border : none;
     background: #02311e;
@@ -267,7 +267,7 @@ export default {
     padding: 0.8vh 4vh;
     margin: 1.2vh;
 }
-.walkclose:hover {
+.WalkDayReport .walkclose:hover {
     background-color: rgba(182, 10, 10, 0.63);
     font-weight: bold;
     transform: scale(1, 1);

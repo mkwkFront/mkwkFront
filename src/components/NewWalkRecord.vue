@@ -16,19 +16,67 @@
     <!-- middle-->
     <div class="middle">
       <div class="middle_top">
-        <p class="date-text">오늘은 {{ currentDate }}</p>
+        <p>오늘은 {{ currentDate }}</p>
         <div class="calendar_icon" @click="toggleModal">📅</div>
       </div>
       <div class="middle_content">
         <div class="record_date" v-if="showRecordPage">
-          <p>선택한 날짜 : {{ selectedDate }}</p>
+          <p>선택한 날짜 : {{ currentMonth }} {{ selectedDate }}일</p>
         </div>
-        <div class="walkdata_list" v-if="showRecordPage">
-          <p>n 번째 산책</p>
+        <div
+          class="walkdata_list"
+          v-if="showRecordPage"
+          @click="toggleWalkRecord"
+        >
+          <p>2023년 10월 1일 산책 1</p>
         </div>
-        
-        <div>{{ dataFromBackend }}</div>
 
+        <div class="walkracord_background" v-if="showWalkRocord">
+          <div class="dailyreport">
+            <div class="reportbody">
+              <div class="walkfriend">
+                <h1>동행한 사람</h1>
+                <div class="person-container">
+                  <img src="../assets/people/Preview-8.png" />
+                  <img src="../assets/people/Preview-3.png" />
+                </div>
+              </div>
+              <div class="todaypoint">
+                <p>획득한<br />도토리</p>
+                <div class="point-container"></div>
+                <img src="../assets/point.png" class="point" />
+                <img src="../assets/point.png" class="point" />
+                <img src="../assets/point.png" class="point" />
+                <img src="../assets/point.png" class="point" />
+                <img src="../assets/point.png" class="point" />
+              </div>
+
+              <div class="todaydata_1">
+                <div class="walk">
+                  <img src="../assets/walkicon.png" />
+                  <p>2548 걸음</p>
+                </div>
+                <div class="kcal">
+                  <img src="../assets/kcal.png" />
+                  <p>352 칼로리</p>
+                </div>
+              </div>
+
+              <div class="todaydata_2">
+                <div class="time">
+                  <img src="../assets/timericon.png" />
+                  <p>12분 35초</p>
+                </div>
+
+                <div class="long">
+                  <img src="../assets/distanceicon.png" />
+                  <p>1.89 KM</p>
+                </div>
+              </div>
+            </div>
+            <button class="walkclose" @click="closeWalkRecord">닫기</button>
+          </div>
+        </div>
       </div>
     </div>
     <!-- 모달창 부분을 추가합니다. v-if로 showModal 변수가 true일 때만 모달창이 나타납니다. -->
@@ -53,7 +101,7 @@
               v-for="day in daysInMonth"
               :key="day"
               class="day"
-              @click="selectDate(day)"
+              @click="console.log(currentMonth), selectDate(day)"
             >
               {{ day }}
             </div>
@@ -67,8 +115,6 @@
 
 
 <script>
-import axios from "axios";
-
 import { defineComponent, ref, computed } from "vue";
 import {
   startOfMonth,
@@ -88,6 +134,7 @@ export default defineComponent({
   setup() {
     const currentDate = ref(new Date());
     const showModal = ref(false);
+    const showWalkRocord = ref(false);
     const currentMonth = ref(new Date());
 
     const showRecordPage = ref(false);
@@ -141,12 +188,19 @@ export default defineComponent({
       showRecordPage.value = true;
     }
 
+    function toggleWalkRecord() {
+      showWalkRocord.value = !showWalkRocord.value;
+    }
+    function closeWalkRecord() {
+      showWalkRocord.value = false;
+    }
+
     return {
       currentDate: computed(() =>
         format(currentDate.value, "yyyy년 MM월 dd일")
       ),
       showModal,
-      currentMonth: computed(() => format(currentMonth.value, "MMMM yyyy")),
+      currentMonth: computed(() => format(currentMonth.value, "yyyy년 MM월")),
       daysInMonth,
       daysOfWeek,
       showCalendarModal,
@@ -158,40 +212,10 @@ export default defineComponent({
       showRecordPage,
       selectDate,
       selectedDate,
+      toggleWalkRecord,
+      showWalkRocord,
+      closeWalkRecord,
     };
-  },
-  methods: {
-    toggleButton(button) {
-      if (this.selectedButton === button) {
-        this.selectedButton = null;
-      } else {
-        this.selectedButton = button;
-      }
-      this.showController = this.selectedButton === "controller";
-      this.showState = this.selectedButton === "state";
-      this.showHistory = this.selectedButton === "history";
-    },
-  },
-  data() {
-    return {
-      dataFromBackend: null, // 백엔드에서 가져온 데이터를 저장할 변수
-      walkKeys: null,
-    };
-  },
-  mounted() {
-    // 백엔드 API 엔드포인트로 GET 요청을 보냅니다.
-    axios
-      .get("http://localhost:8001/BringWalkData")
-      .then((response) => {
-        // HTTP 요청이 성공하면 백엔드에서 받은 데이터를 변수에 저장하고 화면에 출력합니다.
-        this.dataFromBackend = response.data;
-        this.walkKeys = this.dataFromBackend.map((item) => item.walkKey); //  배열 만들어서 저장하는 코드
-        console.log("walkKeys:", this.walkKeys); // 'walkKeys' 배열 값 출력함
-      })
-
-      .catch((error) => {
-        console.error("데이터를 가져오는 중 오류 발생:", error);
-      });
   },
 });
 </script>
@@ -287,7 +311,7 @@ export default defineComponent({
   border-radius: 10px;
 }
 
-/* modal */
+/* 달력 모달 */
 .NewWalkRecordPage .modal {
   width: 100%;
   height: 100vh;
@@ -331,7 +355,6 @@ export default defineComponent({
   padding: 8px;
   background-color: rgb(249, 252, 255);
 }
-
 .NewWalkRecordPage .calendar_days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -362,5 +385,154 @@ export default defineComponent({
   margin-block-end: 0;
   margin-inline-start: 0;
   margin-inline-end: 0;
+}
+
+/* 산책기록 모달 */
+.NewWalkRecordPage .walkracord_background {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background: white;
+}
+.NewWalkRecordPage .dailyreport {
+  background-color: #dfefff;
+  border-radius: 50px;
+  height: 73%;
+  margin-top: 1vh;
+  padding: 50px 0;
+}
+.NewWalkRecordPage .todaypoint {
+  padding: 0 70px;
+  display: flex; /* 추가 */
+}
+.NewWalkRecordPage .point-container {
+  display: flex;
+}
+.NewWalkRecordPage .walkfriend {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border: 7px solid rgb(179, 179, 179);
+  background-color: rgb(255, 255, 255);
+  height: 8vh;
+  border-radius: 30px;
+  margin: 19px 0;
+  padding: 0 20px;
+}
+.NewWalkRecordPage .walkfriend h1 {
+  font-size: 2vh;
+  margin: 0 10px;
+}
+.NewWalkRecordPage .person-container {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+.NewWalkRecordPage .person-container img {
+  margin: 0 5px;
+}
+.NewWalkRecordPage .todaypoint {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border: 7px solid rgb(179, 179, 179);
+  background-color: rgb(255, 255, 255);
+  height: 8vh;
+  border-radius: 30px;
+  margin: 19px 0;
+  padding: 0 20px;
+}
+.NewWalkRecordPage .todaypoint p {
+  font-weight: bold;
+  text-align: center;
+  font-size: 2vh;
+  margin-right: 10px;
+}
+.NewWalkRecordPage .point-container {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+.NewWalkRecordPage .point {
+  width: 3vh;
+  height: 3vh;
+  margin-right: 5px;
+}
+.NewWalkRecordPage .reportbody {
+  background-color: rgba(218, 213, 213, 0.893);
+  display: block;
+  height: 90%;
+  padding: 23px;
+}
+.NewWalkRecordPage .walkfriend img {
+  text-align: right;
+  margin: 5px;
+  width: 5vh;
+}
+.NewWalkRecordPage .walkfriend,
+.todaypoint {
+  border: 7px solid rgb(179, 179, 179);
+  background-color: rgb(255, 255, 255);
+  height: 9vh;
+  border-radius: 30px;
+  text-align: left;
+  margin: 1vh 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.NewWalkRecordPage .todaydata_1,
+.todaydata_2 {
+  height: 20vh;
+  width: 100%;
+  display: flex;
+  margin: auto;
+  margin-left: 0%;
+}
+.NewWalkRecordPage .todaydata_1 img,
+.todaydata_2 img {
+  width: 8vh;
+  margin: 2vh;
+}
+.NewWalkRecordPage .todaydata_1 p,
+.todaydata_2 p {
+  font-size: 3vh;
+}
+.NewWalkRecordPage .walk,
+.kcal,
+.time,
+.long {
+  flex: 1;
+  background-color: rgb(228, 228, 228);
+  border: 5px solid rgb(142, 141, 141);
+}
+.NewWalkRecordPage .walk {
+  border-radius: 30px 0 0 0;
+}
+.NewWalkRecordPage .kcal {
+  border-radius: 0 30px 0 0;
+}
+.NewWalkRecordPage .time {
+  border-radius: 0 0 0 30px;
+}
+.NewWalkRecordPage .long {
+  border-radius: 0 0 30px 0;
+}
+.NewWalkRecordPage .walkclose {
+  cursor: pointer;
+  border: none;
+  background: #02311e;
+  color: white;
+  font-size: 30px;
+  border-radius: 20px;
+  padding: 0.1vh 4vh;
+  margin: 1.2vh;
+}
+.NewWalkRecordPage .walkclose:hover {
+  background-color: rgba(182, 10, 10, 0.63);
+  font-weight: bold;
+  transform: scale(1, 1);
+  transition: all 0.3s;
 }
 </style>
