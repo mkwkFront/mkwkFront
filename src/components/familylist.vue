@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="family-list">
         <div class="familyheader">
       <div class="back-button">
@@ -21,9 +21,9 @@
         </div>
       </div>
     </div>
-  </template>
+  </template> -->
   
-  <script>
+  <!-- <script>
   export default {
     name: "familyComponent",
     methods: {
@@ -87,9 +87,9 @@
       };
     }
   };
-  </script>
+  </script> -->
   
-  <style scoped>
+  <!-- <style scoped>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500&display=swap');
 .family-list { 
   display: flex;
@@ -99,7 +99,7 @@
   height: 90vh;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: #F1F8FF;
+  background-color: #ecf1ff;
   font-family: 'IBM Plex Sans KR', sans-serif;
 }
 
@@ -172,4 +172,4 @@ position: sticky;
   color: white;
 }
 
-</style>
+</style> -->

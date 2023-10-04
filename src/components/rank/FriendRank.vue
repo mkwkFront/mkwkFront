@@ -3,29 +3,29 @@
     <!-- top -->
     <div class="top">
       <div class="top_wrap">
-        <div class="top_left"></div>
-        <p class="top_center top_name">랭킹</p>
+        <div class="top_left">
+          <img
+            class="icon"
+            src="@/assets/backbutton.png"
+            @click="$router.go(-1)"
+          />
+        </div>
+        <p class="top_center">랭킹</p>
         <div class="top_right"></div>
       </div>
     </div>
 
     <div class="Rank_middle">
-      <div class="myRank_wrap">
+      <!-- <div class="myRank_wrap">
         <h3 id="myRank">친구 랭킹</h3>
-      </div>
-      <div class="arrow-buttons-container">
-        <!-- 왼쪽 화살표 버튼 -->
-        <div @click="FamilyRankPage" class="arrow-button left">
-          &#60; 가족 랭킹
-        </div>
-        <!-- 오른쪽 화살표 버튼 -->
-        <div @click="PetRankPage" class="arrow-button right">
-          반려동물 랭킹 &#62;
-        </div>
+      </div> -->
+      <div class="buttons_container">
+        <button @click="MyRankPage" class="rank_button">나의 랭킹</button>
+        <button @click="FriendRankPage" class="click_rank_button">친구 랭킹</button>
       </div>
 
       <div class="rank_margin">
-        <div class="rank">
+        <!-- <div class="rank"> -->
           <h3 class="top_10">TOP 10</h3>
           <div
             class="green-rank"
@@ -40,14 +40,14 @@
                 <img :src="friend.img" />
               </div>
               <div class="friend-info">
-                <h3>{{ friend.name }}</h3>
-                <p>총 {{ friend.range }}KM 산책</p>
+                <p class="title-name">{{ friend.name }}</p>
+                <p class="walk-content">총 {{ friend.range }}KM 산책</p>
                 <p>총 {{ friend.time }}시간 산책</p>
                 <p>동반 산책 : {{ friend.mate }}회</p>
               </div>
             </div>
           </div>
-        </div>
+        <!-- </div> -->
       </div>
     </div>
 
@@ -71,13 +71,11 @@ export default {
     };
   },
   methods: {
-    PetRankPage() {
-      // 오른쪽 화살표 버튼이 클릭되었을 때 실행되는 메소드
-      this.$router.push("/rank/pet");
+    MyRankPage() {
+      this.$router.push("/ranking");
     },
-    FamilyRankPage() {
-      // 왼쪽 화살표 버튼이 클릭되었을 때 실행되는 메소드
-      this.$router.push("/rank/family");
+    FriendRankPage() {
+      this.$router.push("/friendRank");
     },
   },
   computed: {
@@ -103,22 +101,28 @@ export default {
 
 .green-rank {
   position: relative; /* 부모 요소에 대해 상대적인 위치 설정 */
-  margin: 40px 15px;
+  margin: 5%;
+  margin-bottom: 7%;
 }
 
 .profile {
-  width: 100px;
-  height: 100px;
+  width: 33%;
+  height: 33%;
   border-radius: 50%;
   overflow: hidden;
-  margin: 10px 50px 10px 30px;
+  margin: 2%;
+  padding-right: 4%;
 }
 .rank-icon {
   position: absolute; /* 이미지에 대해 절대적인 위치 설정 */
-  left: -10px;
-  top: -65px;
+  left: -25px;
+  top: -20px;
   font-size: 50px;
   height: 100px; /* 이미지 크기 설정 */
   z-index: 1; /* 이미지를 다른 요소들 위로 렌더링하기 위한 z-index 설정 */
+}
+
+.title-name{
+  padding-bottom: 3%;
 }
 </style>

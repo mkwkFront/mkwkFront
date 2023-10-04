@@ -7,6 +7,7 @@
                     <div class="person-container">
                         <img src="../assets/people/Preview-8.png">
                         <img src="../assets/people/Preview-3.png">
+                        <img src="../assets/people/Preview-3.png">
                     </div>
                 </div>
                 <div class="todaypoint">
@@ -73,8 +74,8 @@ export default {
         };
         console.log('timeData:', this.timeData);
 
-        this.totalDistance = parseFloat(this.$route.query.distance); // Assign the value of distance to totalDistance
-        this.steps = parseInt(this.$route.query.steps); // 걸음수 데이터
+        this.totalDistance = parseFloat(this.$route.query.distance); 
+        this.steps = parseInt(this.$route.query.steps);
 
         this.changeImages();
     },
@@ -83,12 +84,12 @@ export default {
         return `${this.timeData.min.toString().padStart(2, '0')}:${this.timeData.seconds.toString().padStart(2, '0')}`;
         },
         formattedTotalDistance() {
-            return this.totalDistance.toFixed(2); // Format totalDistance with desired precision
+            return this.totalDistance.toFixed(2); 
         },
         calculateCaloriesBurned() {
             return (distance) => {
-                const calories = distance * 65; // Replace with your own formula
-                return calories.toFixed(0); // Format calories with desired precision
+                const calories = distance * 65; 
+                return calories.toFixed(0);
             }
         },
     },
@@ -99,7 +100,6 @@ export default {
 
             for (let i = 0; i < numImageChanges; i++) {
                 if (i < this.images.length) {
-                // Replace the image at the current index with the new image
                 this.images.splice(i, 1, newImage);
                 }
             }
@@ -110,15 +110,15 @@ export default {
 
 <style scoped>
 
-.WalkDayReport #background {
-    background-color: #F1F8FF;
+#background {
+    background-color: rgb(141, 139, 139);
     position: relative;
     width: inherit;
     padding: 40px;
     height: 100vh;
 }
 
-.WalkDayReport #dailyreport {
+#dailyreport {
     background-color: rgb(255, 255, 255);
     border-radius: 50px;
     height: 73%;
@@ -126,16 +126,16 @@ export default {
     padding: 50px 0;
 
 }
-.WalkDayReport .todaypoint {
+.todaypoint {
     padding: 0 70px;
-    display: flex; /* 추가 */
+    display: flex; 
 }
 
-.WalkDayReport .point-container {
+.point-container {
     display: flex;
 }
 
-.WalkDayReport .walkfriend {
+.walkfriend {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -147,22 +147,21 @@ export default {
     padding: 0 20px;
 }
 
-.WalkDayReport .walkfriend h1 {
-    font-size: 2vh;
-    margin: 0 10px;
+.walkfriend h1 {
+    font-size: 1.4vh;
 }
 
-.WalkDayReport .person-container {
+.person-container {
     display: flex;
     align-items: center;
     margin-left: 10px;
 }
 
-.WalkDayReport .person-container img {
+.person-container img {
     margin: 0 5px;
 }
 
-.WalkDayReport .todaypoint {
+.todaypoint {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -174,39 +173,38 @@ export default {
     padding: 0 20px;
 }
 
-.WalkDayReport .todaypoint p {
+.todaypoint p {
     font-weight: bold;
     text-align: center;
-    font-size: 2vh;
-    margin-right: 10px;
+    font-size: 1.5vh;
 }
 
-.WalkDayReport .point-container {
+.point-container {
     display: flex;
     align-items: center;
     margin-left: 10px;
 }
 
-.WalkDayReport .point {
+.point {
     width: 3vh;
     height: 3vh;
     margin-right: 5px;
 }
 
-.WalkDayReport .reportbody {
+.reportbody {
     background-color: rgba(218, 213, 213, 0.893);
     display: block;
     height: 90%;
     padding: 23px;
 }
 
-.WalkDayReport .walkfriend img {
+.walkfriend img {
     text-align: right;
     margin: 5px;
     width:5vh;
 }
 
-.WalkDayReport .walkfriend, .todaypoint{
+.walkfriend, .todaypoint{
     border: 7px solid rgb(179, 179, 179);
     background-color: rgb(255, 255, 255);
     height: 9vh;
@@ -219,7 +217,7 @@ export default {
     justify-content: space-evenly;
 }
 
-.WalkDayReport .todaydata_1, .todaydata_2{
+.todaydata_1, .todaydata_2{
     height : 20vh;
     width: 100%;
     display: flex; 
@@ -227,37 +225,37 @@ export default {
     margin-left: 0%;
 }
 
-.WalkDayReport .todaydata_1 img, .todaydata_2 img {
+.todaydata_1 img, .todaydata_2 img {
     width: 8vh;
     margin: 2vh;
     
 }
 
-.WalkDayReport .todaydata_1 p, .todaydata_2 p {
+.todaydata_1 p, .todaydata_2 p {
     font-size: 3vh;
 }
 
 
-.WalkDayReport .walk, .kcal, .time, .long {
+.walk, .kcal, .time, .long {
     flex: 1;
     background-color:rgb(228, 228, 228);
     border: 5px solid rgb(142, 141, 141);
 }
 
-.WalkDayReport .walk {
+.walk {
     border-radius: 30px 0 0 0 ;
 }
-.WalkDayReport .kcal {
+.kcal {
     border-radius: 0 30px 0 0 ;
 }
-.WalkDayReport .time {
+.time {
     border-radius: 0 0 0 30px;
 }
-.WalkDayReport .long {
+.long {
     border-radius: 0 0 30px 0 ;
 }
 
-.WalkDayReport .walkclose {
+.walkclose {
     cursor: pointer;
     border : none;
     background: #02311e;
@@ -265,9 +263,9 @@ export default {
     font-size: 30px;
     border-radius: 20px;
     padding: 0.8vh 4vh;
-    margin: 1.2vh;
+    margin: 0.8vh;
 }
-.WalkDayReport .walkclose:hover {
+.walkclose:hover {
     background-color: rgba(182, 10, 10, 0.63);
     font-weight: bold;
     transform: scale(1, 1);

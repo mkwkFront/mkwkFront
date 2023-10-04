@@ -1,37 +1,40 @@
 <template>
   <div class="NewWalkRecordPage">
-    <!--top-->
+    <!-- top -->
     <div class="top">
       <div class="top_wrap">
         <div class="top_left">
           <img
             class="icon"
-            src="../assets/LeftIcon.png"
+            src="@/assets/backbutton.png"
             @click="$router.go(-1)"
           />
         </div>
-        <p class="top_center top_name">산책기록</p>
+        <div class="top_center">산책기록</div>
+        <div class="top_right"></div>
       </div>
     </div>
     <!-- middle-->
     <div class="middle">
       <div class="middle_top">
         <p>오늘은 {{ currentDate }}</p>
-        <div class="calendar_icon" @click="toggleModal">📅</div>
+        <div class="calendar_icon" @click="toggleModal">ㅤ📅</div>
       </div>
       <div class="middle_content">
         <div class="record_date" v-if="showRecordPage">
-          <p>선택한 날짜 : {{ currentMonth }} {{ selectedDate }}일</p>
+          <p class="selected-date">선택한 날짜 : {{ currentMonth }} {{ selectedDate }}일</p>
         </div>
-        <div
-          class="walkdata_list"
-          v-if="showRecordPage"
-          @click="toggleWalkRecord"
-        >
-          <p>2023년 10월 1일 산책 1</p>
-        </div>
+          <div v-if="filteredRecords.length === 0 && selectedDate" class="no-records">
+            <p>해당 날짜의 <br />
+              산책 기록이 없습니다 😂</p>
+          </div>
+          <!-- 기록이 있을 때 -->
+          <div v-else v-for="record in filteredRecords" :key="record.date" @click="openDailyReport(record)" class="walkdata_list">
+            <p class="record-title">{{ record.title }}</p>
+              <p>📍 {{ record.map }}</p>
+          </div>
 
-        <div class="walkracord_background" v-if="showWalkRocord">
+        <div class="walkracord_background" v-if="showWalkRecord && selectedRecord">
           <div class="dailyreport">
             <div class="reportbody">
               <div class="walkfriend">
@@ -39,12 +42,13 @@
                 <div class="person-container">
                   <img src="../assets/people/Preview-8.png" />
                   <img src="../assets/people/Preview-3.png" />
+                  <img src="../assets/people/Preview-3.png" />
                 </div>
               </div>
               <div class="todaypoint">
                 <p>획득한<br />도토리</p>
                 <div class="point-container"></div>
-                <img src="../assets/point.png" class="point" />
+                <img src="../assets/coin.png" class="point" />
                 <img src="../assets/point.png" class="point" />
                 <img src="../assets/point.png" class="point" />
                 <img src="../assets/point.png" class="point" />
@@ -54,23 +58,22 @@
               <div class="todaydata_1">
                 <div class="walk">
                   <img src="../assets/walkicon.png" />
-                  <p>2548 걸음</p>
+                  <p>{{ selectedRecord.walkData.steps }} 걸음</p>
                 </div>
                 <div class="kcal">
                   <img src="../assets/kcal.png" />
-                  <p>352 칼로리</p>
+                  <p>{{ selectedRecord.walkData.calories }} 칼로리</p>
                 </div>
               </div>
 
               <div class="todaydata_2">
                 <div class="time">
                   <img src="../assets/timericon.png" />
-                  <p>12분 35초</p>
+                  <p>{{ selectedRecord.walkData.time }}</p>
                 </div>
-
                 <div class="long">
                   <img src="../assets/distanceicon.png" />
-                  <p>1.89 KM</p>
+                  <p>{{ selectedRecord.walkData.distance }}</p>
                 </div>
               </div>
             </div>
@@ -79,8 +82,8 @@
         </div>
       </div>
     </div>
+
     <!-- 모달창 부분을 추가합니다. v-if로 showModal 변수가 true일 때만 모달창이 나타납니다. -->
-    <!-- @click="closeModalOnOverlay" -->
     <div class="modal" v-if="showModal">
       <div class="modal_content">
         <!-- 캘린더 내용 -->
@@ -101,7 +104,7 @@
               v-for="day in daysInMonth"
               :key="day"
               class="day"
-              @click="console.log(currentMonth), selectDate(day)"
+              @click="selectDate(day)"
             >
               {{ day }}
             </div>
@@ -112,10 +115,8 @@
   </div>
 </template>
 
-
-
 <script>
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, watch } from "vue";
 import {
   startOfMonth,
   endOfMonth,
@@ -128,19 +129,85 @@ import {
 
 export default defineComponent({
   name: "NewWalkRecordpage",
-  components: {
-    // Modal 컴포넌트 등록
-  },
   setup() {
     const currentDate = ref(new Date());
     const showModal = ref(false);
-    const showWalkRocord = ref(false);
+    const showWalkRecord = ref(false);
     const currentMonth = ref(new Date());
-
     const showRecordPage = ref(false);
-    const selectedDate = ref("");
+    const selectedDate = ref(format(new Date(), "dd"));
 
     const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
+    const records = ref([
+      {
+        date: "2023-10-01",
+        title: "첫번째 산책",
+        map : "경기 하남시 위례대로 200",
+        walkData: {
+          steps: 2548,
+          calories: 352,
+          time: "12분 35초",
+          distance: "1.89 KM",
+        },
+      },
+      {
+        date: "2023-10-01",
+        title: "두번째 산책",
+        map : "경기도 안양시 만안구 성결대학로 53",
+        walkData: {
+          steps: 2548,
+          calories: 352,
+          time: "12분 35초",
+          distance: "1.89 KM",
+        },
+      },
+      {
+        date: "2023-10-04",
+        title: "첫번재 산책",
+        map : "경기도 성남시 수정구 수정로 201",
+        walkData: {
+          steps: 312,
+          calories: 14,
+          time: "00분 06초",
+          distance: "0.24 KM",
+        },
+      },
+      // 다른 기록 데이터 추가
+    ]);
+
+    const selectedRecord = ref(null);
+
+    // 현재 선택한 날짜가 변경될 때마다 호출되는 함수
+    function updateSelectedRecord() {
+      if (!selectedDate.value) {
+        selectedRecord.value = null;
+        return;
+      }
+
+      // 현재 선택한 날짜의 데이터를 찾습니다.
+      const formattedDate = `${currentMonth.value}-${selectedDate.value}`;
+      selectedRecord.value = records.value.find((record) => record.date === formattedDate);
+    }
+
+    // 선택한 날짜가 변경될 때마다 `updateSelectedRecord` 함수 호출
+    watch(selectedDate, () => {
+      updateSelectedRecord();
+    });
+
+    const filteredRecords = computed(() => {
+  return records.value.filter((record) => {
+    const recordDate = new Date(record.date);
+    return (
+      recordDate.getMonth() === currentMonth.value.getMonth() &&
+      recordDate.getDate() === Number(selectedDate.value)
+    );
+  });
+});
+
+    function openDailyReport(record) {
+      selectedRecord.value = record;
+      showWalkRecord.value = true;
+    }
 
     const daysInMonth = computed(() => {
       const start = startOfMonth(currentMonth.value);
@@ -161,6 +228,7 @@ export default defineComponent({
     function showCalendarModal() {
       showModal.value = true;
     }
+
     function closeModal() {
       showModal.value = false;
     }
@@ -183,16 +251,17 @@ export default defineComponent({
 
     function selectDate(date) {
       selectedDate.value = date;
-      console.log(selectedDate.value);
+      updateSelectedRecord();
       closeModal();
       showRecordPage.value = true;
     }
 
     function toggleWalkRecord() {
-      showWalkRocord.value = !showWalkRocord.value;
+      showWalkRecord.value = !showWalkRecord.value;
     }
+
     function closeWalkRecord() {
-      showWalkRocord.value = false;
+      showWalkRecord.value = false;
     }
 
     return {
@@ -213,8 +282,12 @@ export default defineComponent({
       selectDate,
       selectedDate,
       toggleWalkRecord,
-      showWalkRocord,
+      showWalkRecord,
       closeWalkRecord,
+      updateSelectedRecord,
+      selectedRecord,
+      filteredRecords,
+      openDailyReport,
     };
   },
 });
@@ -229,43 +302,15 @@ export default defineComponent({
 }
 /* top */
 .NewWalkRecordPage .top {
-  position: relative;
-  box-sizing: border-box;
-  width: 100%;
-  height: 10vh;
-  display: flex;
-  justify-content: center; /* 가로 중앙에 위치 */
-  align-items: flex-end; /* 세로 위에서 70% 지점에 위치 */
-  background: #70b4cb;
-  padding: 1em;
-}
-.NewWalkRecordPage .top_wrap {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-.NewWalkRecordPage .top_center {
-  width: 70%;
-  height: fit-content;
-  color: white;
-}
-.NewWalkRecordPage .top_left {
-  width: 15%;
-  height: fit-content;
-}
-.NewWalkRecordPage .top_name {
-  text-align: center;
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 1.3rem;
-  line-height: 21px;
-
-  text-align: center;
-  letter-spacing: -0.32px;
-
-  color: #ffffff;
+position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    background: none;
+    padding: 1%;
 }
 /* middle */
 .NewWalkRecordPage .middle {
@@ -280,10 +325,11 @@ export default defineComponent({
 .NewWalkRecordPage .middle_top {
   width: 100%;
   height: 5vh;
-  background: #f2f2f7;
+  background: #70b4cb;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 2vh;
 }
 .NewWalkRecordPage .middle_content {
   width: 100%;
@@ -302,13 +348,18 @@ export default defineComponent({
   justify-content: center;
 }
 .NewWalkRecordPage .walkdata_list {
-  width: 80%;
-  height: 15%;
+  width: 49.5vh;
+  height: 13.5vh;
+  background-color: #ffffff;
+  margin: 5px;
+  border-radius: 1vh;
+  box-shadow: 0 2px 6px rgba(71, 71, 71, 0.2);
+  padding: 10px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  display: flex;
   justify-content: center;
-  background-color: white;
-  border-radius: 10px;
+  align-items: center;
 }
 
 /* 달력 모달 */
@@ -399,7 +450,7 @@ export default defineComponent({
   border-radius: 50px;
   height: 73%;
   margin-top: 1vh;
-  padding: 50px 0;
+  padding: 36px 0;
 }
 .NewWalkRecordPage .todaypoint {
   padding: 0 70px;
@@ -524,7 +575,7 @@ export default defineComponent({
   border: none;
   background: #02311e;
   color: white;
-  font-size: 30px;
+  font-size: 20px;
   border-radius: 20px;
   padding: 0.1vh 4vh;
   margin: 1.2vh;
@@ -534,5 +585,24 @@ export default defineComponent({
   font-weight: bold;
   transform: scale(1, 1);
   transition: all 0.3s;
+}
+
+.no-records {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* 화면 높이만큼 확장 */
+  flex-direction: column;
+  font-size: 3vh;
+}
+
+.selected-date {
+  background-color: rgb(0, 0, 0); /* 흰색 테두리 스타일 지정 */
+  display: inline-block; 
+  color: white;/* 텍스트 내용만큼만 테두리가 나타나도록 인라인 블록 요소로 설정 */
+}
+
+.record-title{
+  font-size: 2vh;
 }
 </style>

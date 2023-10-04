@@ -2,210 +2,281 @@
   <div class="main-container">
     <div class="background-images">
       <div class="header-container">
-        <div class="text-image-container">
-          <img class="text-image" src="../assets/건강산책.png" alt="작은 글씨 이미지" />
+        <div class="text-image-container" @click="goMain">
+          <img 
+            class="text-image"
+            src="../assets/건강산책.png"
+            alt="작은 글씨 이미지"
+          />
         </div>
         <div class="right-container">
           <div class="circle-container">
             <div class="circle1">
-              <img src="../assets/people/Preview-2.png" alt="이미지 1" />
+              <img src="../assets/icon/Preview.png" alt="이미지 1" />
             </div>
             <div class="circle1">
-              <img src="../assets/people/Preview-3.png" alt="이미지 2" />
-            </div>
-            <div class="circle1">
-              <img src="../assets/people/Preview-4.png" alt="이미지 3" />
+              <img src="../assets/icon/dog4.png" alt="이미지 2" />
             </div>
           </div>
           <button class="image-button" @click="$router.push('./Alarm')">
-            <img src="../assets/종버튼.png" alt="버튼 이미지"   />
+            <img src="../assets/종버튼.png" alt="버튼 이미지" />
           </button>
         </div>
       </div>
       <div class="middle-container">
-        <div class="circle2" @click="$router.push('./WalkRecord')"> 
-          <button class="default-button" @click="showController = !showController"  >
-            <strong >산책시작</strong>
+        <!-- 9.26 산책 시작 router 수정 -->
+        <div class="circle2" @click="$router.push('./kakaomap')">
+          <button
+            class="default-button"
+            @click="showController = !showController"
+          >
+            <strong>산책시작</strong>
           </button>
           <div class="box-container" v-if="showController">
-            <div class="box" v-for="box in boxes" :key="box.id">{{ box.name }}</div>
+            <div class="box" v-for="box in boxes" :key="box.id">
+              {{ box.name }}
+            </div>
           </div>
         </div>
         <div class="text-container">
           <p>
-            <span class="bold-text large-text">55</span>
+            <span class="bold-text large-text">0.24</span>
             <span class="bold-text gray-text small-text">Km</span>
           </p>
         </div>
       </div>
-    </div>
-    <div class="square-image-container">
-      <img class="square-image" src="../assets/공원.png" alt="정사각형 이미지" />
-    </div>
-    <div class="button-group">
-      <button class="controller-button" :class="{ active: selectedButton === 'controller' }" @click="toggleButton('controller')">
-        <strong>컨트롤러</strong>
-      </button>
-      <button class="state-button" :class="{ active: selectedButton === 'state' }" @click="toggleButton('state')">
-        <strong>상태</strong>
-      </button>
-      <button class="history-button" :class="{ active: selectedButton === 'history' }" @click="toggleButton('history')">
-        <strong>이력</strong>
-      </button>
-    </div>
-    <div class="additional-content" v-if="showController">
-  <div class="box box-1">
-    <div class="friend-containerd" style="margin-bottom: 1vh;">
-      <div class="friend-text">현재 산책중인 친구 ></div>
-      <div class="friend-images">
-        <div class="friend-card">
-    <img src="../assets/people/Preview11.png" alt="Image 7" class="box-image" />
-    <div class="friend-name-container">
-      <div class="friend-name">별이</div>
-    </div>
-  </div>
-  <div class="friend-card">
-    <img src="../assets/people/Preview-2.png" alt="Image 3" class="box-image" />
-    <div class="friend-name-container">
-      <div class="friend-name">김지민</div>
-    </div>
-  </div>
-  <div class="friend-card">
-    <img src="../assets/people/Preview-3.png" alt="Image 4" class="box-image" />
-    <div class="friend-name-container">
-      <div class="friend-name">콩이</div>
-    </div>
-  </div>
-  <div class="friend-card">
-    <img src="../assets/people/Preview-4.png" alt="Image 4" class="box-image" />
-    <div class="friend-name-container">
-      <div class="friend-name">김유진</div>
-    </div>
-  </div>
-  <div class="friend-card">
-    <img src="../assets/people/Preview-5.png" alt="Image 4" class="box-image" />
-    <div class="friend-name-container">
-      <div class="friend-name">박태연</div>
-    </div>
-  </div>
-  <div class="friend-card">
-    <img src="../assets/people/Preview-6.png" alt="Image 4" class="box-image" />
-    <div class="friend-name-container">
-      <div class="friend-name">문효진</div>
-    </div>
-  </div>
-  <div class="friend-card">
-    <img src="../assets/people/Preview-3.png" alt="Image 4" class="box-image" />
-    <div class="friend-name-container">
-      <div class="friend-name">조나희</div>
-    </div>
-  </div>
+      <div class="square-image-container">
+        <img
+          class="square-image"
+          src="../assets/공원.png"
+          alt="정사각형 이미지"
+        />
       </div>
-      <button class="walk-request-button" style="margin-top: 5vh;"  @click="$router.push('./WalkMate')">산책신청</button> <!-- Move this line inside the div -->
-    </div>
-        </div>
-      <div class="box-row">
-        <div class="box2">
-          <div class="friend-text">음악 >
-            <img src="../assets/뮤직.png" alt="Music Icon" class="music-icon" />
+      <div class="button-group">
+        <button
+          class="controller-button"
+          :class="{ active: selectedButton === 'controller' }"
+          @click="toggleButton('controller')"
+        >
+          <strong>메인</strong>
+        </button>
+        <button
+          class="state-button"
+          :class="{ active: selectedButton === 'state' }"
+          @click="toggleButton('state')"
+        >
+          <strong>정보</strong>
+        </button>
+        <button
+          class="history-button"
+          :class="{ active: selectedButton === 'history' }"
+          @click="toggleButton('history')"
+        >
+          <strong>이력</strong>
+        </button>
+      </div>
+      <div class="additional-content" v-if="showController">
+        <div class="box box-1">
+          <div class="friend-containerd" style="margin-bottom: 1vh">
+            <div class="friend-text">현재 산책가능한 친구 ></div>
+            <div class="friend-images">
+              <div class="friend-card" @click="toggleFriendSelection('별이')" :class="{ selected: isSelected('별이') }">
+          <img src="../assets/people/Preview-8.png" alt="Image 7" class="box-image" />
+          <div class="friend-name-container">
+            <div class="friend-name">홍길동</div>
           </div>
         </div>
-        <div class="box2">
-          <div class="friend-text" @click="$router.push('./FriendList')">친구목록 >
-            <img src="../assets/3D사람.png" alt="friendlisted" class="friendlisted" />
+        <div class="friend-card" @click="toggleFriendSelection('김지민')" :class="{ selected: isSelected('김지민') }">
+          <img src="../assets/people/Preview-3.png" alt="Image 3" class="box-image" />
+          <div class="friend-name-container">
+            <div class="friend-name">김지민</div>
+          </div>
+        </div>
+        <div class="friend-card" @click="toggleFriendSelection('콩이')" :class="{ selected: isSelected('콩이') }">
+          <img src="../assets/people/Preview-3.png" alt="Image 4" class="box-image" />
+          <div class="friend-name-container">
+            <div class="friend-name">콩이</div>
+          </div>
+        </div>
+        <div class="friend-card" @click="toggleFriendSelection('김유진')" :class="{ selected: isSelected('김유진') }">
+          <img src="../assets/people/Preview-4.png" alt="Image 4" class="box-image" />
+          <div class="friend-name-container">
+            <div class="friend-name">김유진</div>
+          </div>
+        </div>
+        <div class="friend-card" @click="toggleFriendSelection('박태연')" :class="{ selected: isSelected('박태연') }">
+          <img src="../assets/people/Preview-5.png" alt="Image 4" class="box-image" />
+          <div class="friend-name-container">
+            <div class="friend-name">박태연</div>
+          </div>
+        </div>
+        <div class="friend-card" @click="toggleFriendSelection('문효진')" :class="{ selected: isSelected('문효진') }">
+          <img src="../assets/people/Preview-6.png" alt="Image 4" class="box-image" />
+          <div class="friend-name-container">
+            <div class="friend-name">문효진</div>
+          </div>
+        </div>
+        <div class="friend-card" @click="toggleFriendSelection('조나희')" :class="{ selected: isSelected('조나희') }">
+          <img src="../assets/people/Preview-3.png" alt="Image 4" class="box-image" />
+          <div class="friend-name-container">
+            <div class="friend-name">조나희</div>
+          </div>
+              </div>
+            </div>
+            <button class="walk-request-button" 
+            style="margin-top: 1vh;" 
+            @click="handleWalkRequest" 
+            :disabled="selectedFriends.length === 0">
+            산책신청
+          </button>
+          </div>
+        </div>
+        <div class="box-row">
+          <div class="box2">
+            <div class="friend-text" @click="$router.push('./Ranking')">
+              랭킹 >
+              <img
+                src="../assets/icon/goldcup.png"
+                alt="Music Icon"
+                class="music-icon"
+              />
             </div>
           </div>
+          <div class="box2">
+            <!-- 9.26 친구 목록 router 수정 -->
+            <div class="friend-text" @click="$router.push('./FriendAdd')">
+              친구목록 >
+              <img
+                src="../assets/3D사람.png"
+                alt="friendlisted"
+                class="friendlisted"
+              />
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="additional-content" v-if="showState">
       <div class="additional-content" v-if="showState">
-    <div class="box3">
+    <div class="user-box">
       <div class="user-information">
+      <div class="user-main">
         <div class="user-image">
           <img
-            src="../assets/people/Preview10.png"
+            src="../assets/icon/Preview.png"
             alt="사용자캐릭터"
             class="user-character"
           />
         </div>
+        <div class="user-details">
+      <div class="user-name">심청이</div>
+      <div class="badge-container">
+        <img
+          class="badge-image"
+          src="../assets/walkicon.png"
+          alt="배지 이미지"
+        />
+        <p class="user-badge-text">배지를 선택해주세요</p>
+        </div>
+    </div>
+  </div>
         <div class="user-stats">
-          <div class="user-info-row">
-            <div class="user-info-label">누적 산책 거리: </div>
-            <div class="user-info-value">1KM</div>
+          <!-- 사용자 정보 -->
+          <div class="user_info_row">
+            <p class="user_info_label">누적 거리</p>
+            <p class="user_info_value">0KM</p>
           </div>
-          <div class="user-info-row">
-            <div class="user-info-label">누적 산책 시간: </div>
-            <div class="user-info-value">30분</div>
+          <div class="division_line"></div>
+          <div class="user_info_row">
+            <p class="user_info_label">누적 시간</p>
+            <p class="user_info_value">0분</p>
           </div>
-          <div class="user-info-row">
-            <div class="user-info-label">도토리: </div>
-            <div class="user-info-value">4개</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pet-information">
-        <div class="pet-profile">
-          <img class="pet-profile-img" src="../assets/icon/dog1.png" alt="" />
-        </div>
-
-        <div class="pet-status">
-          <div class="pet-level">LV.1</div>
-          <div class="level-progressbar-wrap">
-            <div class="level-progressbar" style="width: 69%"></div>
+          <div class="division_line"></div>
+          <div class="user_info_row">
+            <p class="user_info_label">누적 도토리</p>
+            <p class="user_info_value">0개</p>
           </div>
         </div>
       </div>
     </div>
+    <div class="pet-box">
+      <div class="pet-information">
+        <div class="pet-main">
+          <div class="pet-profile">
+          <img
+            class="pet-image"
+            src="../assets/icon/dog4.png"
+            alt=""
+          />
+        </div>
+        <div class="pet-details">
+      <div class="pet-name">멍멍이</div>
+      <div class="pet_status">
+          <!-- 애완동물 산책레벨 -->
+          <div class="pet_level">LV.1</div>
+          <!-- 애완동물 레벨 바 -->
+          <div class="level_progressbar_wrap">
+            <div class="level_progressbar" style="width: 3%"></div>
+          </div>
+        </div>
+    </div>
   </div>
-  </div>
-    <div class="additional-content" v-if="showHistory">
-      <div class="box-row">
-        <div class="box2">
-      <!-- middle_4 -->
-      <div class="middle_4">
-        <!-- 배지 버튼 -->
-        <div class="middle_4_wrap">
-          <div class="btn_wrap btn_badge" @click="$router.push('./badgepage')">
-            <img
-              class="icon"
-              src="../assets/MyPage/icon_badge.png"
-              alt="배지"
-            />
           </div>
-          <div class="btn_text">
-            대표 배지를<br />
-            설정해 보세요!
-          </div>
-        </div>
-        </div>
-        </div>
-        <div class="box-row">
-        <div class="box2">
-        <!-- 산책 기록 버튼 -->
-        <div class="middle_4_wrap">
-          <div class="btn_wrap btn_badge" @click="$router.push('./NewWalkRecord')">
-            <img
-              class="icon"
-              src="../assets/MyPage/icon_calendar.png"
-              alt="산책기록"
-            />
-          </div>
-          <div class="btn_text">
-            산책 기록<br />
-            확인하러 가기
-          </div>
-        </div>
         </div>
       </div>
+      <div class="additional-content" v-if="showHistory">
+        <div class="box-row">
+          <div class="box2">
+            <!-- middle_4 -->
+            <div class="middle_4">
+              <!-- 배지 버튼 -->
+              <div class="middle_4_wrap">
+                <div
+                  class="btn_wrap btn_badge"
+                  @click="$router.push('./badgepage')"
+                >
+                  <img
+                    class="icon"
+                    src="../assets/MyPage/icon_badge.png"
+                    alt="배지"
+                  />
+                </div>
+                <div class="btn_text">
+                  대표 배지를<br />
+                  설정해 보세요!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="box-row">
+            <div class="box2">
+              <!-- 산책 기록 버튼 -->
+              <div class="middle_4_wrap">
+                <div
+                  class="btn_wrap btn_badge"
+                  @click="$router.push('./NewWalkRecord')"
+                >
+                  <img
+                    class="icon"
+                    src="../assets/MyPage/icon_calendar.png"
+                    alt="산책기록"
+                  />
+                </div>
+                <div class="btn_text">
+                  산책 기록<br />
+                  확인하러 가기
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
 import { defineComponent } from "vue";
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/dist/sweetalert2.css';
 
 export default defineComponent ({
   name: 'mainComponent',
@@ -215,9 +286,13 @@ export default defineComponent ({
       showState: false,
       showHistory: false,
       selectedButton: 'controller',
+      selectedFriends: [], // 선택된 친구를 저장할 배열
     };
   },
   methods: {
+    isSelected(friendName) {
+      return this.selectedFriends.includes(friendName);
+    },
     toggleButton(button) {
       if (this.selectedButton === button) {
         this.selectedButton = null;
@@ -228,6 +303,41 @@ export default defineComponent ({
       this.showState = this.selectedButton === 'state';
       this.showHistory = this.selectedButton === 'history';
     },
+    toggleFriendSelection(friendName) {
+      if (this.selectedFriends.includes(friendName)) {
+        const index = this.selectedFriends.indexOf(friendName);
+        if (index !== -1) {
+          this.selectedFriends.splice(index, 1);
+        }
+      } else if (this.selectedFriends.length < 3) {
+        this.selectedFriends.push(friendName);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '친구 선택 오류',
+          text: '3명만 선택이 가능합니다.',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+    },
+    handleWalkRequest() {
+      if (this.selectedFriends.length === 0) {
+        Swal.fire({
+          icon: 'error',
+          title: '친구 선택 오류',
+          text: '친구를 선택하지 않았습니다.',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        return;
+      }
+
+      this.$router.push({
+        path: './kakaomap',
+        query: { selectedFriends: this.selectedFriends },
+      });
+    }
   },
 });
 </script>
@@ -235,19 +345,14 @@ export default defineComponent ({
 <style>
 .main-container {
   position: relative;
-  overflow-y: auto;
 }
 
 .background-images {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  background-image: url('../assets/건강산책배경.png');
+  background-image: url("../assets/건강산책배경.png");
   background-size: cover;
   background-position: center;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .header-container {
@@ -290,16 +395,12 @@ export default defineComponent ({
   object-fit: cover;
 }
 
-.circle1:nth-child(3) {
-  transform: translateX(10px); 
-}
-
 .circle1:nth-child(2) {
-  transform: translateX(30px); 
+  transform: translateX(1px);
 }
 
 .circle1:nth-child(1) {
-  transform: translateX(50px); 
+  transform: translateX(-2px);
 }
 
 .image-button {
@@ -325,7 +426,7 @@ export default defineComponent ({
 .circle2 {
   width: 10vh;
   height: 4vh;
-  border: 3px solid #E0807A;
+  border: 3px solid #e0807a;
   border-radius: 2vh;
   position: relative;
   overflow: hidden;
@@ -369,7 +470,7 @@ export default defineComponent ({
 .square-image {
   width: 44vh;
   height: 44vh;
-  margin-top: 11vh;
+  margin-top: -3vh;
 }
 
 .additional-content {
@@ -390,22 +491,22 @@ export default defineComponent ({
 .state-button,
 .history-button {
   border-radius: 1vh;
-  background-color: #DFEFFF;
+  background-color: #dfefff;
   padding: 10px 20px;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   margin-right: 6px;
   width: 14.5vh;
-  -webkit-text-fill-color: #00C0FF;
-  border: 2px
+  -webkit-text-fill-color: #00c0ff;
+  border: 2px;
 }
 
 .controller-button.active,
 .state-button.active,
 .history-button.active {
   /* 활성화된 버튼의 스타일 */
-  background-color: #00BFFF;
+  background-color: #00bfff;
   -webkit-text-fill-color: white;
 }
 
@@ -427,7 +528,7 @@ export default defineComponent ({
   flex-direction: column;
   align-items: flex-start;
   padding: 10px;
-  height: 100%;
+  height: 87%;
   background-color: white;
   width: 40vh;
   justify-content: space-between;
@@ -441,7 +542,7 @@ export default defineComponent ({
   margin-bottom: 15px;
   margin-right: 10px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .friend-images {
@@ -460,16 +561,15 @@ export default defineComponent ({
 }
 
 .walk-request-button {
-    padding: 5px 16px;
-    background-color: #fff;
-    color: #00BFFF;
-    font-weight: bold;
-    cursor: pointer;
-    align-self: flex-end;
-    border-radius: 4vh;
-    border: 3px solid #00BFFF;
+  padding: 5px 16px;
+  background-color: #fff;
+  color: #00bfff;
+  font-weight: bold;
+  cursor: pointer;
+  align-self: flex-end;
+  border-radius: 4vh;
+  border: 3px solid #00bfff;
 }
-
 
 .box-image {
   width: 50px;
@@ -483,6 +583,7 @@ export default defineComponent ({
   height: 13.5vh;
   background-color: #ffffff;
   margin: 5px;
+  margin-bottom: 2vh;
   border-radius: 1vh;
   box-shadow: 0 2px 6px rgba(71, 71, 71, 0.2);
   padding: 10px;
@@ -493,16 +594,16 @@ export default defineComponent ({
 }
 
 .box3 {
-    width: 39.5vh;
-    height: 44.5vh;
-    background-color: #ffffff;
-    margin: 5px;
-    border-radius: 1vh;
-    box-shadow: 0 2px 6px rgba(71, 71, 71, 0.2);
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-  }
+  width: 39.5vh;
+  height: 44.5vh;
+  background-color: #ffffff;
+  margin: 5px;
+  border-radius: 1vh;
+  box-shadow: 0 2px 6px rgba(71, 71, 71, 0.2);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
 
 .box-row {
   display: flex;
@@ -524,14 +625,14 @@ export default defineComponent ({
 }
 
 .music-icon {
-  width: 10vh;
-}
-
-.friendlisted{
   width: 8vh;
 }
+
+.friendlisted {
+  width: 7vh;
+}
 /* middle */
-.MainPage .middle {
+.middle {
   position: relative;
   width: 100%;
   height: 90%;
@@ -541,7 +642,7 @@ export default defineComponent ({
   flex-direction: column;
 }
 /* middle 1 */
-.MainPage .middle_1 {
+.middle_1 {
   position: relative;
   width: 100%;
   height: 32%;
@@ -550,17 +651,17 @@ export default defineComponent ({
   align-items: flex-end;
 }
 .mypage .user_information_box {
-    width: 72%;
-    height: 57%;
-    margin-left: -6vh;
-    transform: translateX(5%);
-    display: flex;
-    justify-content: space-evenly;
-    align-items: flex-end;
-    background: #ffffff;
-    border: 1px solid #c3c3c5;
-    border-radius: 10px;
-    padding: 1em;
+  width: 72%;
+  height: 57%;
+  margin-left: -6vh;
+  transform: translateX(5%);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  background: #ffffff;
+  border: 1px solid #c3c3c5;
+  border-radius: 10px;
+  padding: 1em;
 }
 
 .user_name_box {
@@ -633,15 +734,43 @@ export default defineComponent ({
   color: #747474;
 }
 
+.user-box {
+    display: flex;
+    width: 40vh;
+    height: 24.5vh;
+    background-color: #ffffff;
+    margin: 5px;
+    margin-bottom: 1vh;
+    border-radius: 1vh;
+    box-shadow: 0 2px 6px rgba(71, 71, 71, 0.2);
+    padding: 10px;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+}
+
+.pet-box {
+  display: flex;
+  width: 40vh;
+  height: 13.5vh;
+  background-color: #ffffff;
+  margin: 5px;
+  margin-bottom: 2vh;
+  border-radius: 1vh;
+  box-shadow: 0 2px 6px rgba(71, 71, 71, 0.2);
+  padding: 10px;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+}
+
 /* middle 4 */
 .middle_4 {
   position: relative;
-  width: 100%;
-  height: 25%;
+  width: 120%;
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
-
   box-sizing: border-box;
   padding: 1em;
 }
@@ -667,12 +796,13 @@ export default defineComponent ({
   align-items: flex-start;
 }
 .pet_level {
+  display: flex;
   font-size: 1.2rem;
   font-weight: bold;
   color: #747474;
 }
 .level_progressbar_wrap {
-  width: 100%;
+  width: 23vh;
   height: auto;
   background-color: #dedede;
 }
@@ -702,13 +832,11 @@ export default defineComponent ({
 .user_info_label {
   font-family: "Inter";
   font-style: normal;
-  font-weight: 700;
-  font-size: 1.2rem;
   line-height: 1.3em;
   letter-spacing: -0.32px;
-  color: #747474;
   z-index: 1000;
   font-size: 1.5vh;
+  font-weight: bold;
 }
 
 .user_info_value {
@@ -722,79 +850,76 @@ export default defineComponent ({
   z-index: 1000;
 }
 
-  .user-information,
-  .pet-information {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+.user-information,
+.pet-information {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-  .user-image,
-  .pet-profile {
-    display: flex;
-    justify-content: center;
-  }
+.user-image,
+.pet-profile {
+  display: flex;
+  justify-content: center;
+}
 
-  .user-image img,
-  .pet-profile img {
-    width: 10vh;
-    height: 9vh;
-    background-color: #ddd;
-    border-radius: 100%;
-    padding: 0.5vh;
-  }
+.user-image img,
+.pet-profile img {
+  width: 10vh;
+  height: 10vh;
+  background-color: #ddd;
+  border-radius: 100%;
+  padding: 0.5vh;
+}
 
-  .user-stats,
-  .pet-status {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2vh;
-  }
+.user-stats,
+.pet-status {
+  display: flex;
+}
 
-  .user-info-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
+.user-info-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
 
-  .user-info-label,
-  .user-info-value {
-    font-family: "Inter";
-    font-style: normal;
-    font-weight: 700;
-    font-size: 1rem;
-    line-height: 1.3em;
-    letter-spacing: -0.32px;
-    color: #747474;
-  }
+.user-info-label,
+.user-info-value {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.3em;
+  letter-spacing: -0.32px;
+  color: #747474;
+}
 
-  .pet-level {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #747474;
-  }
+.pet-level {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #747474;
+}
 
-  .level-progressbar-wrap {
-    width: 100%;
-    height: auto;
-    background-color: #dedede;
-  }
+.level-progressbar-wrap {
+  width: 23vh;
+  height: auto;
+  background-color: #dedede;
+}
 
-  .level-progressbar {
-    height: 3vw;
-    background-color: #638263;
-    animation-name: pet-level-ani;
-    animation-duration: 3s;
-  }
+.level-progressbar {
+  height: 3vw;
+  background-color: #638263;
+  animation-name: pet-level-ani;
+  animation-duration: 3s;
+}
 
-  @keyframes pet-level-ani {
-    0% {
-      width: 0%;
-    }
-    100% {
-    }
+@keyframes pet-level-ani {
+  0% {
+    width: 0%;
   }
+  100% {
+  }
+}
 
 .middle_4_wrap {
   width: 50%;
@@ -810,6 +935,7 @@ export default defineComponent ({
   background-color: #bbb;
   justify-content: center;
   align-items: center;
+  display: flex;
   border-radius: 14px;
   cursor: pointer;
 }
@@ -825,4 +951,106 @@ export default defineComponent ({
   padding-top: 0.5em;
 }
 
+.friend-card.selected {
+  background-color: #a0c0eb; 
+  border: 2px solid #979797;
+  box-shadow: 0 0 5px rgba(128, 128, 128, 0.5); 
+  display: flex; 
+  align-items: center;
+}
+
+.friend-card.selected img {
+  margin: auto; 
+}
+
+.friend-card.selected .friend-name-container {
+  margin: auto; 
+}
+
+.division_line {
+    width: 1px;
+    background-color: #c3c3c5;
+    margin: 4vh;
+    height: 47%;
+  }
+
+  .user-image {
+  margin-right: 10px; /* 사진과 간격을 조절합니다. */
+}
+
+.user-character {
+  width: 9vh;
+  height: 9vh;
+  background-color: #ddd;
+  border-radius: 100%;
+  padding: 0.5vh;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-grow: 1;
+}
+
+.user-name {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.badge-container {
+  display: flex;
+  align-items: center;
+}
+
+.user-badge-text {
+  font-size: 1rem;
+  color: gray;
+  margin-bottom: 5px;
+}
+
+.badge-image {
+  width: 3vh;
+  height: auto;
+}
+
+.user-badge-text {
+  font-size: 1rem;
+  color: gray;
+  margin-left: 5px; /* 배지 텍스트와 간격을 조절합니다. */
+}
+
+.user-main {
+  display : flex;
+}
+
+.pet-image {
+  margin-right: 10px; /* 사진과 간격을 조절합니다. */
+}
+
+.pet-character {
+  width: 9vh;
+  height: 9vh;
+  background-color: #ddd;
+  border-radius: 100%;
+  padding: 0.5vh;
+}
+
+.pet-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-grow: 1;
+}
+
+.pet-name {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.pet-main {
+  display : flex;
+}
 </style>

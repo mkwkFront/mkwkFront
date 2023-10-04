@@ -16,11 +16,11 @@
         <div class="top_left">
           <img
             class="icon"
-            src="../assets/LeftIcon.png"
+            src="@/assets/backbutton.png"
             @click="$router.go(-1)"
           />
         </div>
-        <p class="top_center top_name">마이페이지</p>
+        <div class="top_center">배지</div>
         <div class="top_right"></div>
       </div>
     </div>
@@ -28,22 +28,20 @@
     <!-- middle -->
     <div class="middle scroller">
       <transition name="fade">
-        <div v-if="showMessage" class="badge-message">배지 획득</div>
+        <div v-if="showMessage" class="badge-message">
+          배지 획득
+        </div>
       </transition>
 
-      <!-- 대표 배지 박스 -->
-      <div class="mainbadge">
+     <!-- 대표 배지 박스 -->
+     <div class="mainbadge">
         <div class="MB_main">
           <div class="MB_top">
             <p>대표 배지</p>
           </div>
           <div class="MB_wrap">
             <div class="MB_left">
-              <img
-                class="mainbadge_img"
-                :src="mainBadge.img || require('@/assets/BadgePage/lock.png')"
-                alt="대표 배지"
-              />
+              <img class="mainbadge_img" :src="mainBadge.img || require('@/assets/BadgePage/lock.png')" alt="대표 배지" />
             </div>
             <div class="MB_right">
               <p v-if="!mainBadge.img">대표 배지를<br />설정해 보세요!</p>
@@ -58,18 +56,9 @@
 
       <!-- 배지 리스트 -->
       <div class="badgelist">
-        <div
-          class="badge"
-          v-for="(badge, index) in badgedata[0].badges"
-          :key="index"
-        >
-          <div
-            class="badge_img"
-            @click="
-              getBadgeImage(badge) !== require('@/assets/BadgePage/lock.png') &&
-                ((openModal = true), (selectedBadge = badge))
-            "
-          >
+        <div class="badge" v-for="(badge, index) in          badgedata[0].badges         " :key="index">
+          <div class="badge_img"
+            @click="getBadgeImage(badge) !== require('@/assets/BadgePage/lock.png') && (openModal = true, selectedBadge = badge)">
             <img :src="getBadgeImage(badge)" />
           </div>
           <div class="badge_name">{{ badge.name }}</div>
@@ -88,7 +77,7 @@ export default {
     walkCount: {
       type: Number,
       default: 2,
-    },
+    }
   }, // walkCount prop 선언
   data() {
     return {
@@ -96,7 +85,7 @@ export default {
       openModal: false,
       selectedBadge: null,
       mainBadge: {
-        img: "", // 대표 배지 이미지 URL
+        img: "" // 대표 배지 이미지 URL
       },
       hasShownMessage: false,
     };
@@ -112,24 +101,14 @@ export default {
     getMainBadgeName() {
       if (this.mainBadge.img) {
         // 대표 배지 이미지가 설정되어 있을 때 해당 배지의 이름 반환
-        const badge = this.badgedata[0].badges.find(
-          (b) => b.img === this.mainBadge.img
-        );
-        return badge ? badge.name : "";
+        const badge = this.badgedata[0].badges.find(b => b.img === this.mainBadge.img);
+        return badge ? badge.name : '';
       }
-      return "";
+      return '';
     },
 
     getBadgeImage(badge) {
-      if (
-        this.walkCount >= 1 &&
-        [
-          this.badgedata[0].badges[0],
-          this.badgedata[0].badges[3],
-          this.badgedata[0].badges[2],
-          this.badgedata[0].badges[1],
-        ].some((b) => b === badge)
-      ) {
+      if (this.walkCount >= 1 && [this.badgedata[0].badges[0], this.badgedata[0].badges[3], this.badgedata[0].badges[2], this.badgedata[0].badges[1]].some(b => b === badge)) {
         return badge.img;
       }
       return require("@/assets/BadgePage/lock.png");
@@ -140,6 +119,21 @@ export default {
 
 
 <style>
+/* 9.26 눈누 폰트 배지 전체 페이지에 적용 */
+body {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+}
+/* 9.26 page title style */
+.page_title{
+  color: #747474;
+  font-size: 1.5em;
+  width: 80%;
+  text-align: left;
+  /* padding-top: %; */
+}
 .MBcheck_bg {
   width: 100%;
   height: 100vh;
@@ -181,36 +175,40 @@ export default {
   width: 10%;
 }
 .badgepage {
-  background-color: #f1f8ff;
   width: 100%;
   height: 90vh;
 }
-.badgepage .top {
+/* .badgepage .top {
   position: relative;
   box-sizing: border-box;
   width: 100%;
   height: 10%;
   display: flex;
-  justify-content: center; /* 가로 중앙에 위치 */
+  justify-content: center; 
   align-items: flex-end;
-  background: #70b4cb;
-  padding: 1em;
-}
-.badgepage .top_wrap {
+  background: none;
+} */
+/* .badgepage .top_wrap {
   width: 100%;
   height: auto;
   display: flex;
+} */
+/* .badgepage .top_center {
+  color: #747474;
+  font-size: 3vh;
+  flex-grow: 1; 
   align-items: center;
-}
-.badgepage .top_center {
-  width: 70%;
-  height: fit-content;
-}
-.badgepage .top_left,
+  justify-content: left;
+  text-align: left;
+} */
+/* .badgepage .top_left,
 .badgepage .top_right {
-  width: 15%;
-  height: fit-content;
-}
+  width: 10%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+} */
 .badgepage .top_name {
   text-align: center;
   font-family: "Inter";
@@ -235,7 +233,6 @@ export default {
 }
 .badgepage .scroller {
   scroll-behavior: smooth;
-  overflow-y: scroll;
   -ms-overflow-style: none;
   /* IE and Edge */
 }
@@ -302,7 +299,7 @@ export default {
   height: 80px;
   background-color: #ffffff;
   border-radius: 100%;
-  margin: 5px;
+  margin: 15px;
 }
 .badgepage .MB_right {
   width: 50%;
@@ -371,8 +368,5 @@ export default {
   color: #747474;
 
   padding: 5% 0;
-}
-.icon {
-  margin-top: 15px;
 }
 </style>
