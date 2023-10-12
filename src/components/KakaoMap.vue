@@ -1,4 +1,5 @@
 <template>
+
     <div id="mappage" class="scrollable-content">
       <!-- 산책취소할건지 확인 모달창 -->
       <div class="black-bg" v-if="openModal1 == true">
@@ -7,6 +8,7 @@
               <button class="yes" @click="$router.push('/')">확인</button>
               <button class="no" @click="openModal1 = false">취소</button>
           </div>
+
       </div>
   
       <!-- 산책종료할건지 확인 모달창 -->
