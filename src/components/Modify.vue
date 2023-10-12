@@ -456,7 +456,7 @@ const showValidationModal = (message) => {
     const confirmSettings = () => {
       showModal3.value = false;
       showOutButton.value = false;
-      router.push("/mainpage"); // Navigate to the main page
+      router.push("/"); // Navigate to the main page
     };
 
     return {

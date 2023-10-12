@@ -15,7 +15,7 @@
       <span v-else class="white">
           <div class="walkingwith">
               <div class="friend0">
-                  <img src="../../assets/people/Preview10.png">
+                  <img src="../../assets/people/Preview.png">
                   <p style="font-size: 2vh; font-family: 'IBM Plex Sans KR', sans-serif;">조나희</p>
               </div>
           </div>
@@ -33,7 +33,16 @@
                   <i class="fa-regular fa-user fa-2xl fa-pull-left"></i>
                   <p>김유진</p>
                   <button type="button" id="sendwith" @click="openModal = true">+</button>
-  
+              </div>
+              <div class="friend2">
+                  <i class="fa-regular fa-user fa-2xl fa-pull-left"></i>
+                  <p>조나희</p>
+                  <button type="button" id="sendwith" @click="openModal = true">+</button>
+              </div>
+              <div class="friend2">
+                  <i class="fa-regular fa-user fa-2xl fa-pull-left"></i>
+                  <p>박태연</p>
+                  <button type="button" id="sendwith" @click="openModal = true">+</button>
               </div>
           </div>
       </span>
@@ -151,13 +160,14 @@
   
   .pink {
       height: 8vh;
-      background-color: rgb(248, 215, 220);
+      background-color: #70b4cb;
       text-align: center;
       padding-top: 5vh;
       font-family: 'IBM Plex Sans KR', sans-serif;
   }
   .pink h2 {
       font-size: 2.5vh;
+      color: white;
   }
   
   .sidefriendlist {

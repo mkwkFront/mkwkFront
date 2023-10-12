@@ -40,7 +40,7 @@ export default {
         {
           image: "mainpage.png",
           text: "홈",
-          path: "/MainPage",
+          path: "/",
         },
         {
           image: "store.png",

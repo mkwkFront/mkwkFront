@@ -3,33 +3,37 @@
     <!-- top -->
     <div class="top">
       <div class="top_wrap">
-        <div class="top_left"></div>
-        <p class="top_center top_name">랭킹</p>
+        <div class="top_left">
+          <img
+            class="icon"
+            src="@/assets/backbutton.png"
+            @click="$router.go(-1)"
+          />
+        </div>
+        <p class="top_center">랭킹</p>
         <div class="top_right"></div>
       </div>
     </div>
 
     <div class="Rank_middle">
-      <div class="myRank_wrap">
+      <!-- <div class="myRank_wrap">
         <h3 id="myRank">나의 랭킹</h3>
-      </div>
-      <div class="arrow-buttons-container">
-        <!-- 왼쪽 화살표 버튼 -->
-        <div @click="PetRankPage" class="arrow-button">&#60; 반려동물 랭킹</div>
-        <!-- 오른쪽 화살표 버튼 -->
-        <div @click="FamilyRankPage" class="arrow-button">가족 랭킹 &#62;</div>
+      </div> -->
+      <div class="buttons_container">
+        <button @click="MyRankPage" class="click_rank_button">나의 랭킹</button>
+        <button @click="FriendRankPage" class="rank_button">친구 랭킹</button>
       </div>
 
       <!-- 랭킹 데이터 -->
       <div class="rank_margin">
-        <div class="rank">
+        <!-- <div class="rank"> -->
           <div class="rank-container">
-            <h2>{{ data[0].title }}</h2>
-            <p>{{ compareCount() }}</p>
+            <h2 class="text_style_title">{{ data[0].title }}</h2>
+            <p class="text_style_subtitle">{{ compareCount() }}</p>
             <div class="green-rank">
               <!-- months 데이터 반복문 -->
               <div v-for="month in lastTwoMonths" :key="month.id">
-                <p>{{ month.month }}월</p>
+                <p class="text_style_content"> {{ month.month }}월</p>
                 <!-- month 그래프 -->
                 <div class="graph">
                   <div class="text">{{ month.count }}회</div>
@@ -43,7 +47,7 @@
           </div>
           <!-- 그래프 추가하고 싶음 -->
           <div class="rank-container">
-            <h2>{{ data[1].title }}</h2>
+            <h2 class="text_style_title">{{ data[1].title }}</h2>
             <div class="pink-rank">
               <!-- friends 데이터 반복문 -->
               <div v-for="(friend, index) in sortedFriends" :key="friend.id">
@@ -52,7 +56,7 @@
                     <img :src="friend.img" />
                   </div>
                   <div class="friend-info">
-                    <p>{{ friend.name }}</p>
+                    <p class="text_style_content">{{ friend.name }}</p>
                     <div class="graph">
                       <div class="text">{{ friend.count }}회</div>
                       <div
@@ -74,7 +78,7 @@
               </div>
             </div>
           </div>
-        </div>
+        <!-- </div> -->
       </div>
     </div>
 
@@ -100,19 +104,19 @@ export default defineComponent({
     };
   },
   methods: {
-    PetRankPage() {
-      // 오른쪽 화살표 버튼이 클릭되었을 때 실행되는 메소드
-      this.$router.push("/rank/pet");
-    },
-    FamilyRankPage() {
-      // 왼쪽 화살표 버튼이 클릭되었을 때 실행되는 메소드
-      this.$router.push("/rank/family");
-    },
+    // PetRankPage() {
+    //   // 오른쪽 화살표 버튼이 클릭되었을 때 실행되는 메소드
+    //   this.$router.push("/rank/pet");
+    // },
+    // FamilyRankPage() {
+    //   // 왼쪽 화살표 버튼이 클릭되었을 때 실행되는 메소드
+    //   this.$router.push("/rank/family");
+    // },
     MyRankPage() {
-      this.$router.push("/rank");
+      this.$router.push("/ranking");
     },
     FriendRankPage() {
-      this.$router.push("/rank/friend");
+      this.$router.push("/friendRank");
     },
 
     //그래프 width 값 조절: 최대 50으로 함
@@ -191,6 +195,18 @@ export default defineComponent({
 </script>
 
 <style>
+.text_style_title{
+  text-align: left;
+}
+.text_style_subtitle{
+  text-align: left;
+  padding-left: 2%;
+  font-size: 2.1vh;
+  color: #353535;
+}
+.text_style_content{
+  text-align: left;
+}
 #Myrankingpg {
   width: 100%;
   height: 90vh;
@@ -204,7 +220,7 @@ export default defineComponent({
 }
 /* 페이지 정보*/
 .rank-head {
-  background-color: #00BFFF;
+  background-color: #687089;
   padding: 40px 30px 20px 30px;
   color: #ffffff;
   font-size: 25px;
@@ -227,32 +243,51 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #DFEFFF;
+  background-color: #dfefff;
   border-radius: 10px;
-  color: #00BFFF;
+  color: #ffffff;
 }
 
 /* 페이지 이동 버튼 */
-.arrow-buttons-container {
+.buttons_container{
   width: 100%;
-  height: 3%;
+  height: 7%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 2.5%;
+  margin-bottom: 3%;
 }
-.arrow-button {
+.rank_button {
+  width: 50%;
+  height: 100%;
+  margin: 3.5%;
   font-size: 15px;
   border: none;
-  color: #a2a2a2;
-  padding: 0 2%;
+  color: #00c0ff;
+  padding: 2%;
   cursor: pointer;
+  border-radius: 3vh;
+  background-color: #dfefff;
+}
+.click_rank_button {
+  width: 50%;
+  height: 100%;
+  margin: 3.5%;
+  font-size: 15px;
+  border: none;
+  color: #dfefff;
+  padding: 2%;
+  cursor: pointer;
+  border-radius: 3vh;
+  background-color:#00c0ff;
 }
 
 /* 페이지 전체 테두리 */
 .rank_margin {
   width: 100%;
-  height: 88%;
-  padding: 2%;
+  height: 80%;
+  padding: 3%;
   box-sizing: border-box;
 }
 .rank {
@@ -265,22 +300,24 @@ export default defineComponent({
   overflow-y: scroll;
 }
 .rank-container {
-  padding-top: 10px;
+  padding-top: 1%;
+  padding-bottom: 0.1%;
 }
 
 /* 초록 테두리와 핑크 테두리 */
 .green-rank {
   background-color: #ffffff;
-  border: 2px solid #638263;
+  border: 2px solid #00c0ff;
   border-radius: 10px;
-
-  padding: 15px 30px 30px; /* 상하 15px, 좌우 30px */
+  margin: 2%;
+  padding: 7%;
+  margin-bottom: 7%;
 }
 .pink-rank {
-  border: 2px solid #e8cfcf;
+  border: 2px solid #00c0ff;
   border-radius: 10px;
-  padding: 25px 30px;
-  margin: 20px 0;
+  padding: 7%;
+  margin: 2%;
 }
 
 /*그래프 */
@@ -289,19 +326,21 @@ export default defineComponent({
   width: 100%;
   height: 30px;
   background-color: #dedede;
+  margin-top: 1.5%;
+  margin-bottom: 3%;
 }
 .graph .text {
   position: absolute;
   left: 10px;
   top: 4px;
   z-index: 1;
-  color: #ffffff;
-  font-size: 1rem;
+  color: #353535;
+  font-size: 2.1vh;
 }
 .greenanimate {
   height: 30px;
   text-align: center;
-  background-color: #638263;
+  background-color: #dfefff;
   color: #111;
   animation-name: fadegreen;
   animation-duration: 3s;
@@ -309,7 +348,7 @@ export default defineComponent({
 .pinkanimate {
   height: 30px;
   text-align: center;
-  background-color: #e8cfcf;
+  background-color: #dfefff;
   color: #111;
   animation-name: fadepink;
   animation-duration: 3s;
@@ -349,6 +388,7 @@ export default defineComponent({
 }
 .friend-info {
   flex: 1;
+  text-align: left;
 }
 
 /* 구분선 */

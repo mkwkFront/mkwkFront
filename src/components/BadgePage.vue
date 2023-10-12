@@ -16,11 +16,11 @@
         <div class="top_left">
           <img
             class="icon"
-            src="../assets/LeftIcon.png"
+            src="@/assets/backbutton.png"
             @click="$router.go(-1)"
           />
         </div>
-        <p class="top_center top_name">마이페이지</p>
+        <div class="top_center">배지</div>
         <div class="top_right"></div>
       </div>
     </div>
@@ -119,6 +119,21 @@ export default {
 
 
 <style>
+/* 9.26 눈누 폰트 배지 전체 페이지에 적용 */
+body {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+}
+/* 9.26 page title style */
+.page_title{
+  color: #747474;
+  font-size: 1.5em;
+  width: 80%;
+  text-align: left;
+  /* padding-top: %; */
+}
 .MBcheck_bg {
   width: 100%;
   height: 100vh;
@@ -142,7 +157,6 @@ export default {
 
 .MBcheck p {
   margin: 3% 0;
-  
 }
 
 .MBcheck_flex {
@@ -161,36 +175,40 @@ export default {
   width: 10%;
 }
 .badgepage {
-  background-color: #F1F8FF;
   width: 100%;
   height: 90vh;
 }
-.badgepage .top {
+/* .badgepage .top {
   position: relative;
   box-sizing: border-box;
   width: 100%;
   height: 10%;
   display: flex;
-  justify-content: center; /* 가로 중앙에 위치 */
+  justify-content: center; 
   align-items: flex-end;
-  background: #70B4CB;
-  padding: 1em;
-}
-.badgepage .top_wrap {
+  background: none;
+} */
+/* .badgepage .top_wrap {
   width: 100%;
   height: auto;
   display: flex;
+} */
+/* .badgepage .top_center {
+  color: #747474;
+  font-size: 3vh;
+  flex-grow: 1; 
   align-items: center;
-}
-.badgepage .top_center {
-  width: 70%;
-  height: fit-content;
-}
-.badgepage .top_left,
+  justify-content: left;
+  text-align: left;
+} */
+/* .badgepage .top_left,
 .badgepage .top_right {
-  width: 15%;
-  height: fit-content;
-}
+  width: 10%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+} */
 .badgepage .top_name {
   text-align: center;
   font-family: "Inter";
@@ -215,7 +233,6 @@ export default {
 }
 .badgepage .scroller {
   scroll-behavior: smooth;
-  overflow-y: scroll;
   -ms-overflow-style: none;
   /* IE and Edge */
 }
@@ -282,7 +299,7 @@ export default {
   height: 80px;
   background-color: #ffffff;
   border-radius: 100%;
-  margin: 5px;
+  margin: 15px;
 }
 .badgepage .MB_right {
   width: 50%;
@@ -351,8 +368,5 @@ export default {
   color: #747474;
 
   padding: 5% 0;
-}
-.icon {
-  margin-top: 15px;
 }
 </style>
