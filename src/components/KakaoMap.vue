@@ -4,7 +4,7 @@
     <div class="black-bg" v-if="openModal1 == true">
       <div class="white-bg">
         <h2>산책을 취소할까요?</h2>
-        <button class="yes" @click="$router.push('/MainPage')">확인</button>
+        <button class="yes" @click="$router.push('/')">확인</button>
         <button class="no" @click="openModal1 = false">취소</button>
       </div>
     </div>
