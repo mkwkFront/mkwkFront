@@ -101,7 +101,7 @@ export default {
         });
 
         if (result.isConfirmed) {
-          this.router.push('/MainPage');
+          this.router.push('/');
           return;
         } else {
           return;

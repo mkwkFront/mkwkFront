@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div>
-            <button class="walkclose" @click="$router.push('/MainPage')">닫기</button>
+            <button class="walkclose" @click="$router.push('/')">닫기</button>
         </div>
     </div>
 </template>

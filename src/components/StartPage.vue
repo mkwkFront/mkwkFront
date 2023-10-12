@@ -574,7 +574,7 @@ export default {
     const confirmSettings = () => {
       showModal.value = false;
       showOutButton.value = false;
-      router.push("/mainpage"); // Navigate to the main page
+      router.push("/"); // Navigate to the main page
     };
 
     return {
