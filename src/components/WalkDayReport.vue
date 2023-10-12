@@ -1,56 +1,57 @@
 <template>
-
-    <div id="background">
-        <div id="dailyreport">
-            <div class="reportbody">
-                <div class="walkfriend">
-                    <h1>동행한 사람</h1>
-                    <div class="person-container">
-                        <img src="../assets/people/Preview-8.png">
-                        <img src="../assets/people/Preview-3.png">
-                        <img src="../assets/people/Preview-3.png">
-                    </div>
-                </div>
-                <div class="todaypoint">
-                    <p>획득한<br/>도토리</p>
-                    <div class="point-container">
-                        <img v-for="(image, index) in images" :key="index" :src="image" class="point" />
-                    </div>
-                </div>
-
-                <div class="todaydata_1">
-                    <div class="walk">
-                        <img src="../assets/walkicon.png">
-                        <p>{{steps}} 걸음</p>
-
+  <div id="background">
+    <div id="dailyreport">
+      <div class="reportbody">
+        <div class="walkfriend">
+          <h1>동행한 사람</h1>
+          <div class="person-container">
+            <img src="../assets/people/Preview-8.png" />
+            <img src="../assets/people/Preview-3.png" />
+            <img src="../assets/people/Preview-3.png" />
+          </div>
+        </div>
+        <div class="todaypoint">
+          <p>획득한<br />도토리</p>
+          <div class="point-container">
+            <img
+              v-for="(image, index) in images"
+              :key="index"
+              :src="image"
+              class="point"
+            />
+          </div>
+        </div>
 
         <div class="todaydata_1">
           <div class="walk">
             <img src="../assets/walkicon.png" />
             <p>{{ steps }} 걸음</p>
-          </div>
-          <div class="kcal">
-            <img src="../assets/kcal.png" />
-            <p>{{ calculateCaloriesBurned(this.totalDistance) }} 칼로리</p>
-          </div>
-        </div>
 
-
-                <div class="todaydata_2">
-                    <div class="time">
-                        <img src="../assets/timericon.png">
-                        <p>{{ totalTime }}</p>
-                        <KakaoMap />
-                    </div>
-                    
-                    <div class="long">
-                        <img src="../assets/distanceicon.png">
-                        <p>{{ totalDistance.toFixed(2)  }} KM</p>
-                    </div>
-                </div>
+            <div class="todaydata_1">
+              <div class="walk">
+                <img src="../assets/walkicon.png" />
+                <p>{{ steps }} 걸음</p>
+              </div>
+              <div class="kcal">
+                <img src="../assets/kcal.png" />
+                <p>{{ calculateCaloriesBurned(this.totalDistance) }} 칼로리</p>
+              </div>
             </div>
-            <button class="walkclose" @click="$router.push('/')">닫기</button>
 
+            <div class="todaydata_2">
+              <div class="time">
+                <img src="../assets/timericon.png" />
+                <p>{{ totalTime }}</p>
+                <KakaoMap />
+              </div>
+
+              <div class="long">
+                <img src="../assets/distanceicon.png" />
+                <p>{{ totalDistance.toFixed(2) }} KM</p>
+              </div>
+            </div>
+          </div>
+          <button class="walkclose" @click="$router.push('/')">닫기</button>
         </div>
       </div>
       <button class="walkclose" @click="$router.push('/')">닫기</button>
@@ -97,45 +98,47 @@ export default {
         .padStart(2, "0")}`;
     },
 
-
     mounted() {
-        this.timeData = {
+      this.timeData = {
         min: parseInt(this.$route.query.min),
-        seconds: parseInt(this.$route.query.seconds)
-        };
-        console.log('timeData:', this.timeData);
+        seconds: parseInt(this.$route.query.seconds),
+      };
+      console.log("timeData:", this.timeData);
 
-        this.totalDistance = parseFloat(this.$route.query.distance); 
-        this.steps = parseInt(this.$route.query.steps);
+      this.totalDistance = parseFloat(this.$route.query.distance);
+      this.steps = parseInt(this.$route.query.steps);
 
-        this.changeImages();
+      this.changeImages();
     },
     computed: {
-        totalTime() {
-        return `${this.timeData.min.toString().padStart(2, '0')}:${this.timeData.seconds.toString().padStart(2, '0')}`;
-        },
-        formattedTotalDistance() {
-            return this.totalDistance.toFixed(2); 
-        },
-        calculateCaloriesBurned() {
-            return (distance) => {
-                const calories = distance * 65; 
-                return calories.toFixed(0);
-            }
-        },
+      totalTime() {
+        return `${this.timeData.min
+          .toString()
+          .padStart(2, "0")}:${this.timeData.seconds
+          .toString()
+          .padStart(2, "0")}`;
+      },
+      formattedTotalDistance() {
+        return this.totalDistance.toFixed(2);
+      },
+      calculateCaloriesBurned() {
+        return (distance) => {
+          const calories = distance * 65;
+          return calories.toFixed(0);
+        };
+      },
     },
     methods: {
-        changeImages() {
-            const numImageChanges = Math.floor(this.timeData.seconds / 5);
-            const newImage = getpointImage;
+      changeImages() {
+        const numImageChanges = Math.floor(this.timeData.seconds / 5);
+        const newImage = getpointImage;
 
-            for (let i = 0; i < numImageChanges; i++) {
-                if (i < this.images.length) {
-                this.images.splice(i, 1, newImage);
-                }
-            }
+        for (let i = 0; i < numImageChanges; i++) {
+          if (i < this.images.length) {
+            this.images.splice(i, 1, newImage);
+          }
         }
-      }
+      },
     },
   },
 };
@@ -143,12 +146,11 @@ export default {
 
 <style scoped>
 #background {
-    background-color: rgb(141, 139, 139);
-    position: relative;
-    width: inherit;
-    padding: 40px;
-    height: 100vh;
-
+  background-color: rgb(141, 139, 139);
+  position: relative;
+  width: inherit;
+  padding: 40px;
+  height: 100vh;
 }
 
 #dailyreport {
@@ -159,9 +161,8 @@ export default {
   padding: 50px 0;
 }
 .todaypoint {
-    padding: 0 70px;
-    display: flex; 
-
+  padding: 0 70px;
+  display: flex;
 }
 
 .point-container {
@@ -181,8 +182,7 @@ export default {
 }
 
 .walkfriend h1 {
-    font-size: 1.4vh;
-
+  font-size: 1.4vh;
 }
 
 .person-container {
@@ -208,10 +208,9 @@ export default {
 }
 
 .todaypoint p {
-    font-weight: bold;
-    text-align: center;
-    font-size: 1.5vh;
-
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.5vh;
 }
 
 .point-container {
@@ -296,15 +295,14 @@ export default {
 }
 
 .walkclose {
-    cursor: pointer;
-    border : none;
-    background: #02311e;
-    color: white;
-    font-size: 30px;
-    border-radius: 20px;
-    padding: 0.8vh 4vh;
-    margin: 0.8vh;
-
+  cursor: pointer;
+  border: none;
+  background: #02311e;
+  color: white;
+  font-size: 30px;
+  border-radius: 20px;
+  padding: 0.8vh 4vh;
+  margin: 0.8vh;
 }
 .walkclose:hover {
   background-color: rgba(182, 10, 10, 0.63);
