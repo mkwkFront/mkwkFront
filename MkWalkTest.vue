@@ -60,11 +60,11 @@ export default defineComponent({
     // 산책 추가하기
     async testSaveWalk() {
       const param = {
-        walkname: "산책8",
+        walkname: "산책테스트",
         startdate: new Date(),
         // enddate: new Date(),
         distance: "1234555",
-        creuserkey: 1, //하드코딩
+        creuserkey: 11, //하드코딩
       };
       const result = await axios.post("/wk.saveWalk", { walk: param });
       console.log(result);
@@ -72,7 +72,7 @@ export default defineComponent({
     // 산책 리스트 가져오기
     async testGetWalkList() {
       const param = {
-        userkey: 3, //하드코딩
+        userkey: 11, //하드코딩
         /* startdate: new Date(),
         enddate: '2023-10-18',
         distance: '1234555',
@@ -92,7 +92,7 @@ export default defineComponent({
       // let muserWalkKey = null as number|null
       let muser = null;
       for (let i = 0; i < muserList.length; i++) {
-        if (Number(muserList[i].userkey) === 6) {
+        if (Number(muserList[i].userkey) === 11) {
           // 내 유저키 : 1(임시)//하드코딩
           muser = muserList[i];
         }
@@ -108,7 +108,7 @@ export default defineComponent({
     // user의 뱃지 리스트 가져오기
     async testGetMbadgeList() {
       const param = {
-        userkey: 6, //하드코딩
+        userkey: 11, //하드코딩
       };
       const result = await axios.post("/wk.getmuserBadgeList", {
         badge: param,
@@ -123,7 +123,7 @@ export default defineComponent({
     // 전체 뱃지 리스트 가져오기
     async testGetBadgeList() {
       const param = {
-        userkey: 6, //하드코딩
+        userkey: 11, //하드코딩
       };
       const result = await axios.post("/wk.getBadgeList", { badge: param });
       console.log(result);

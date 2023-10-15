@@ -26,35 +26,27 @@
           <div class="walk">
             <img src="../assets/walkicon.png" />
             <p>{{ steps }} 걸음</p>
-
-            <div class="todaydata_1">
-              <div class="walk">
-                <img src="../assets/walkicon.png" />
-                <p>{{ steps }} 걸음</p>
-              </div>
-              <div class="kcal">
-                <img src="../assets/kcal.png" />
-                <p>{{ calculateCaloriesBurned(this.totalDistance) }} 칼로리</p>
-              </div>
-            </div>
-
-            <div class="todaydata_2">
-              <div class="time">
-                <img src="../assets/timericon.png" />
-                <p>{{ totalTime }}</p>
-                <KakaoMap />
-              </div>
-
-              <div class="long">
-                <img src="../assets/distanceicon.png" />
-                <p>{{ totalDistance.toFixed(2) }} KM</p>
-              </div>
-            </div>
           </div>
-          <button class="walkclose" @click="$router.push('/')">닫기</button>
+          <div class="kcal">
+            <img src="../assets/kcal.png" />
+            <p>{{ calculateCaloriesBurned(this.totalDistance) }} 칼로리</p>
+          </div>
+        </div>
+
+        <div class="todaydata_2">
+          <div class="time">
+            <img src="../assets/timericon.png" />
+            <p>{{ totalTime }}</p>
+            <KakaoMap />
+          </div>
+
+          <div class="long">
+            <img src="../assets/distanceicon.png" />
+            <p>{{ totalDistance.toFixed(2) }} KM</p>
+          </div>
         </div>
       </div>
-      <button class="walkclose" @click="$router.push('/')">닫기</button>
+      <button class="walkclose" @click="$router.push('/MainPage')">닫기</button>
     </div>
   </div>
 </template>
@@ -84,8 +76,8 @@ export default {
     };
     console.log("timeData:", this.timeData);
 
-    this.totalDistance = parseFloat(this.$route.query.distance); // Assign the value of distance to totalDistance
-    this.steps = parseInt(this.$route.query.steps); // 걸음수 데이터
+    this.totalDistance = parseFloat(this.$route.query.distance);
+    this.steps = parseInt(this.$route.query.steps);
 
     this.changeImages();
   },
@@ -97,48 +89,26 @@ export default {
         .toString()
         .padStart(2, "0")}`;
     },
-
-    mounted() {
-      this.timeData = {
-        min: parseInt(this.$route.query.min),
-        seconds: parseInt(this.$route.query.seconds),
+    formattedTotalDistance() {
+      return this.totalDistance.toFixed(2);
+    },
+    calculateCaloriesBurned() {
+      return (distance) => {
+        const calories = distance * 65;
+        return calories.toFixed(0);
       };
-      console.log("timeData:", this.timeData);
-
-      this.totalDistance = parseFloat(this.$route.query.distance);
-      this.steps = parseInt(this.$route.query.steps);
-
-      this.changeImages();
     },
-    computed: {
-      totalTime() {
-        return `${this.timeData.min
-          .toString()
-          .padStart(2, "0")}:${this.timeData.seconds
-          .toString()
-          .padStart(2, "0")}`;
-      },
-      formattedTotalDistance() {
-        return this.totalDistance.toFixed(2);
-      },
-      calculateCaloriesBurned() {
-        return (distance) => {
-          const calories = distance * 65;
-          return calories.toFixed(0);
-        };
-      },
-    },
-    methods: {
-      changeImages() {
-        const numImageChanges = Math.floor(this.timeData.seconds / 5);
-        const newImage = getpointImage;
+  },
+  methods: {
+    changeImages() {
+      const numImageChanges = Math.floor(this.timeData.seconds / 5);
+      const newImage = getpointImage;
 
-        for (let i = 0; i < numImageChanges; i++) {
-          if (i < this.images.length) {
-            this.images.splice(i, 1, newImage);
-          }
+      for (let i = 0; i < numImageChanges; i++) {
+        if (i < this.images.length) {
+          this.images.splice(i, 1, newImage);
         }
-      },
+      }
     },
   },
 };
