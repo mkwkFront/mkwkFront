@@ -143,7 +143,7 @@ export default defineComponent({
     // 전체 유저 리스트 가져오기
     async testGetUserList() {
       const param = {
-        userName: '김'
+        userText: '유'
       };
       const result = await axios.post("/wk.getUserList", { user: param });
       console.log(result);
