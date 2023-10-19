@@ -17,7 +17,22 @@ async function webviewBridgelistener(data) {
   if (data && data.type != 'webpackWarnings') {
     console.log('native로부터 도착!!');
     console.log(data);
+    if (data.type === 'GPSInfo') {
+        let stepCounts = data.data;
+        if (isJsonString(stepCounts)) {
+            stepCounts = JSON.parse(stepCounts);
+        }
+        if (GISCallbackFunc) {
+            GISCallbackFunc(stepCounts)
+        }
+    console.log('steps', stepCounts);
+    }
   }
+}
+
+let GISCallbackFunc = null;
+export function setGISCallbackFunc (func) {
+    GISCallbackFunc = func
 }
 
 export default {

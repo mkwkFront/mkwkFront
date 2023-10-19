@@ -4,6 +4,12 @@
       class="fl"
       style="width: 100%; height: 40px; cursor: pointer; border: 1px solid #ccc"
     >
+      <Button @click="testGetUserList">유저리스트 가져오기</Button>
+    </div>
+    <div
+      class="fl"
+      style="width: 100%; height: 40px; cursor: pointer; border: 1px solid #ccc"
+    >
       <Button @click="testSaveWalk">testSaveWalk</Button>
     </div>
     <div
@@ -131,6 +137,18 @@ export default defineComponent({
         if (result.data.badge) {
           this.mBadgeList = result.data.badge;
         }
+      }
+    },
+    
+    // 전체 유저 리스트 가져오기
+    async testGetUserList() {
+      const param = {
+        userName: '김'
+      };
+      const result = await axios.post("/wk.getUserList", { user: param });
+      console.log(result);
+      if (result.data) {
+        //
       }
     },
   },
