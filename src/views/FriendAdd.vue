@@ -23,22 +23,17 @@
         <img v-if="!friend" src="@/assets/x.png" alt="나가기" class="exit-button" @click="openModal = false">
       </div>
     </div>
-    <div class="top">
-      <div class="top_wrap">
-        <div class="top_left">
-          <img class="icon" src="@/assets/backbutton.png" @click="$router.go(-1)" />
-        </div>
-        <div class="top_center">친구 추가</div>
+    <Header :title="pageTitle">
+      <!-- "right" 슬롯에 버튼을 전달 -->
+      <template v-slot:right>
         <div class="top_right">
-          <div class="top_right">
-            <div></div>
-            <button class="friendadd-button2" @click="openModal = true">
-              아이디로 친구추가
-            </button>
-          </div>
+          <button class="friendadd-button2" @click="openModal = true">
+            아이디로 친구추가
+          </button>
         </div>
-      </div>
-    </div>
+      </template>
+    </Header>
+
     <div class="friend-list-box1">
       <div class="friend-list-box2">
         <div class="friend-list2">
@@ -60,10 +55,13 @@
   
 <script>
 import { useRouter } from "vue-router";
+import Header from '@/components/Header.vue';
 
 export default {
   name: "pg_friendadd",
-
+  components: {
+    Header,
+  },
   setup() {
     const router = useRouter();
     function goBack() {
@@ -71,6 +69,7 @@ export default {
     }
     return {
       goBack,
+
     };
   },
   methods: {
@@ -105,6 +104,7 @@ export default {
   },
   data() {
     return {
+      pageTitle: "친구 추가",
       openModal: false,
       inputValue: "",
       friend: null,
@@ -153,7 +153,6 @@ export default {
 </script>
   
 <style>
-
 .friendadd.top_center {
   width: 40%;
 }
@@ -161,13 +160,16 @@ export default {
 .friendadd .top_left {
   width: 10%;
 }
+
 .friendadd .top_right {
   width: 50%;
   height: 100%;
 }
+
 .friendadd .top_wrap {
   width: 100%;
 }
+
 #friendaddpg {
   height: 90vh;
   width: 100%;
@@ -186,6 +188,7 @@ export default {
   font-size: 20px;
   padding-left: 20px;
 }
+
 /* 
 .friendadd-button2_btn_wrap {
   display: flex;
@@ -196,20 +199,25 @@ export default {
   justify-content: space-between;
 } */
 
+
+
 .top_right>.friendadd-button2 {
-  width: 95%;
-  height: 100%;
   padding: 4%;
   border-radius: 30vh;
   border: none;
+  display: flex;
+  width: 17vh;
+  height: 4.5vh;
+  justify-content: center; 
+  align-items: center;
 }
 
-.top_right>.friendadd-button2:hover {
+/* .top_right>.friendadd-button2:hover {
   border: 0.4vh solid grey;
   font-weight: bold;
   transform: scale(1, 1);
   transition: all 0.3s;
-}
+} */
 
 .friend-list-box1 {
   width: 100%;
@@ -236,6 +244,7 @@ export default {
 
 .friend-list2 {
   width: 100%;
+  
   /* margin: 0; */
   /* padding: 0; */
   /* white-space: nowrap; */

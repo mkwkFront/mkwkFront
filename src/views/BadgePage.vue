@@ -11,19 +11,7 @@
       </div>
     </div>
     <!-- top -->
-    <div class="top">
-      <div class="top_wrap">
-        <div class="top_left">
-          <img
-            class="icon"
-            src="@/assets/backbutton.png"
-            @click="$router.go(-1)"
-          />
-        </div>
-        <div class="top_center">배지</div>
-        <div class="top_right"></div>
-      </div>
-    </div>
+    <Header :title="pageTitle" />
 
     <!-- middle -->
     <div class="middle scroller">
@@ -70,9 +58,13 @@
 
 <script>
 import badgedata from "../assets/BadgePage/BadgeData.js";
+import Header from '@/components/Header.vue';
 
 export default {
   name: "MyPage",
+  components: {
+    Header,
+  },
   props: {
     walkCount: {
       type: Number,
@@ -88,6 +80,7 @@ export default {
         img: "" // 대표 배지 이미지 URL
       },
       hasShownMessage: false,
+      pageTitle: "배지"
     };
   },
   methods: {

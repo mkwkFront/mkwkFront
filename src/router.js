@@ -1,22 +1,22 @@
 import { createWebHistory, createRouter } from 'vue-router';
-import MainPage from './components/MainPage.vue';
-import StartPageC from './components/StartPageC.vue';
-import StartPageP from './components/StartPageP.vue';
+import MainPage from './views/MainPage.vue';
+import StartPageC from './views/StartPageC.vue';
+import StartPageP from './views/StartPageP.vue';
 // 9.26 마이 페이지 삭제
-import BadgePage from './components/BadgePage.vue';
-import NewWalkRecord from './components/NewWalkRecord.vue';
-import Alarm from './components/Alarm.vue';
-import KakaoMap from './components/KakaoMap.vue';
-import WalkDayReport from './components/WalkDayReport.vue';
-import FriendAdd from './components/FriendAdd.vue';
+import BadgePage from './views/BadgePage.vue';
+import NewWalkRecord from './views/NewWalkRecord.vue';
+import Alarm from './views/Alarm.vue';
+import KakaoMap from './views/KakaoMap.vue';
+import WalkDayReport from './views/WalkDayReport.vue';
+import FriendAdd from './views/FriendAdd.vue';
 // 9.26 friendlist 삭제
 // 9.26 가족 리스트 주석 처리
 // import familylist from "./components/familylist.vue"
 
-import Ranking from './components/rank/Ranking.vue';
+import Ranking from './views/rank/Ranking.vue';
 // 9.26 가족 랭킹 주석 처리
 // import FamilyRank from './components/rank/FamilyRank.vue'
-import FriendRank from './components/rank/FriendRank.vue';
+import FriendRank from './views/rank/FriendRank.vue';
 // 9.26 펫 랭킹 주석 처리
 // import PetRank from './components/rank/PetRank.vue'
 import MkWalkTest from '../MkWalkTest.vue';

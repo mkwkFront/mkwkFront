@@ -1,23 +1,7 @@
 <template>
   <div class="alarmpage">
     <!-- top -->
-    <div class="top">
-      <div class="top_wrap">
-        <div class="top_left">
-          <img
-            class="icon"
-            src="@/assets/backbutton.png"
-            @click="$router.go(-1)"
-          />
-        </div>
-        <div class="top_center">📬 알림이 왔어요!</div>
-        <div class="top_right"></div>
-      </div>
-      </div>
-
-
-    <!-- 9.26 스타벅스 배너 삭제 -->
-
+    <Header :title="pageTitle" />
     <div class="alarmlist">
       <div class="alarmbox" v-for="(request, index) in walkRequests" :key="index">
         <img
@@ -78,15 +62,20 @@
   
 <script>
 import { defineComponent } from "vue";
+import Header from '@/components/Header.vue';
 
 export default defineComponent({
   name: "alarmComponent",
+  components: {
+    Header,
+  },
   data() {
     return {
       pageName: "alarm",
       showBanner: true,
       walkRequests: ["김루나"],
       friendRequests: ["이지은"],
+      pageTitle: "📬 알림이 왔어요!"
     };
   },
   methods: {

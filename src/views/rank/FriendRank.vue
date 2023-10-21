@@ -1,20 +1,7 @@
 <template>
   <div id="Friendrankpg">
     <!-- top -->
-    <div class="top">
-      <div class="top_wrap">
-        <div class="top_left">
-          <img
-            class="icon"
-            src="@/assets/backbutton.png"
-            @click="$router.go(-1)"
-          />
-        </div>
-        <p class="top_center">랭킹</p>
-        <div class="top_right"></div>
-      </div>
-    </div>
-
+    <Header :title="pageTitle" />
     <div class="Rank_middle">
       <!-- <div class="myRank_wrap">
         <h3 id="myRank">친구 랭킹</h3>
@@ -51,23 +38,22 @@
       </div>
     </div>
 
-    <!-- <div class="page-indicator">
-      <span class="empty"></span>
-      <span class="empty"></span>
-      <span class="filled"></span>
-      <span class="empty"></span>
-    </div> -->
   </div>
 </template>
 
 <script>
 import data from "../../assets/rankData.js";
+import Header from '@/components/Header.vue';
 
 export default {
   name: "friendrankComponent",
+  components: {
+    Header,
+  },
   data() {
     return {
       data: data,
+      pageTitle: "랭킹"
     };
   },
   methods: {
@@ -116,7 +102,7 @@ export default {
 .rank-icon {
   position: absolute; /* 이미지에 대해 절대적인 위치 설정 */
   left: -25px;
-  top: -20px;
+  top: -70px;
   font-size: 50px;
   height: 100px; /* 이미지 크기 설정 */
   z-index: 1; /* 이미지를 다른 요소들 위로 렌더링하기 위한 z-index 설정 */

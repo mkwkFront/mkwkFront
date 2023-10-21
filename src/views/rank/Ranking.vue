@@ -1,20 +1,7 @@
 <template>
   <div id="Myrankingpg">
     <!-- top -->
-    <div class="top">
-      <div class="top_wrap">
-        <div class="top_left">
-          <img
-            class="icon"
-            src="@/assets/backbutton.png"
-            @click="$router.go(-1)"
-          />
-        </div>
-        <p class="top_center">랭킹</p>
-        <div class="top_right"></div>
-      </div>
-    </div>
-
+    <Header :title="pageTitle" />
     <div class="Rank_middle">
       <!-- <div class="myRank_wrap">
         <h3 id="myRank">나의 랭킹</h3>
@@ -81,37 +68,30 @@
         <!-- </div> -->
       </div>
     </div>
-
-    <!-- <div class="page-indicator">
-      <span class="filled"></span>
-      <span class="empty"></span>
-      <span class="empty"></span>
-      <span class="empty"></span>
-    </div> -->
   </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 import data from "../../assets/rankData.js";
+import Header from '@/components/Header.vue';
+
+
+
 
 export default defineComponent({
   name: "rankingComponent",
+  components: {
+    Header,
+  },
   data() {
     return {
       pageName: "ranking",
       data: data,
+      pageTitle: "랭킹"
     };
   },
   methods: {
-    // PetRankPage() {
-    //   // 오른쪽 화살표 버튼이 클릭되었을 때 실행되는 메소드
-    //   this.$router.push("/rank/pet");
-    // },
-    // FamilyRankPage() {
-    //   // 왼쪽 화살표 버튼이 클릭되었을 때 실행되는 메소드
-    //   this.$router.push("/rank/family");
-    // },
     MyRankPage() {
       this.$router.push("/ranking");
     },
@@ -209,26 +189,16 @@ export default defineComponent({
 }
 #Myrankingpg {
   width: 100%;
-  height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 90vh; 
 }
 .Rank_middle {
   width: 100%;
   height: 90%;
 }
-/* 페이지 정보*/
-.rank-head {
-  background-color: #687089;
-  padding: 40px 30px 20px 30px;
-  color: #ffffff;
-  font-size: 25px;
-  height: 5vh;
-  font-weight: bolder;
-  letter-spacing: 20px;
-  text-align: center;
-}
+
 
 /* 페이지 정보 바 */
 .myRank_wrap {
@@ -396,36 +366,8 @@ export default defineComponent({
   border: 1.5px solid #dddddd;
 }
 
-/* 페이지 위치 */
-.page-indicator {
-  font-size: 24px;
-}
-.page-indicator span {
-  display: inline-block;
-  margin-right: 5px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-.page-indicator .filled {
-  background-color: #000;
-  border: 1px solid #000;
-}
-.page-indicator .empty {
-  border: 1px solid #eaeaea;
-  background-color: #eaeaea;
-}
-
 /* top 가운데 정렬 */
 .top_10 {
   text-align: center;
-}
-</style>
-<style>
-.arrow-button:hover {
-  color: rgb(64, 64, 64);
-  font-weight: bolder;
-  transform: scale(1, 1);
-  transition: all 0.3s;
 }
 </style>

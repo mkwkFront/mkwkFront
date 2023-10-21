@@ -1,19 +1,7 @@
 <template>
   <div class="NewWalkRecordPage">
     <!-- top -->
-    <div class="top">
-      <div class="top_wrap">
-        <div class="top_left">
-          <img
-            class="icon"
-            src="@/assets/backbutton.png"
-            @click="$router.go(-1)"
-          />
-        </div>
-        <div class="top_center">산책기록</div>
-        <div class="top_right"></div>
-      </div>
-    </div>
+    <Header :title="pageTitle" />
     <!-- middle-->
     <div class="middle">
       <div class="middle_top">
@@ -117,6 +105,7 @@
 
 <script>
 import { defineComponent, ref, computed, watch } from "vue";
+import Header from '@/components/Header.vue';
 import {
   startOfMonth,
   endOfMonth,
@@ -129,6 +118,14 @@ import {
 
 export default defineComponent({
   name: "NewWalkRecordpage",
+  components: {
+    Header,
+  },
+  data(){
+    return{
+      pageTitle: "산책 기록"
+    };
+  },
   setup() {
     const currentDate = ref(new Date());
     const showModal = ref(false);
