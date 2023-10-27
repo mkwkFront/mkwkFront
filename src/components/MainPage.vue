@@ -3,7 +3,7 @@
     <div class="background-images">
       <div class="header-container">
         <div class="text-image-container" @click="goMain">
-          <img 
+          <img
             class="text-image"
             src="../assets/건강산책.png"
             alt="작은 글씨 이미지"
@@ -25,11 +25,8 @@
       </div>
       <div class="middle-container">
         <!-- 9.26 산책 시작 router 수정 -->
-        <div class="circle2" @click="$router.push('./kakaomap')">
-          <button
-            class="default-button"
-            @click="showController = !showController"
-          >
+        <div class="circle2" @click="testSaveWalk()">
+          <button class="default-button" @click="testSaveWalk()">
             <strong>산책시작</strong>
           </button>
           <div class="box-container" v-if="showController">
@@ -80,55 +77,113 @@
           <div class="friend-containerd" style="margin-bottom: 1vh">
             <div class="friend-text">현재 산책가능한 친구 ></div>
             <div class="friend-images">
-              <div class="friend-card" @click="toggleFriendSelection('별이')" :class="{ selected: isSelected('별이') }">
-          <img src="../assets/people/Preview-8.png" alt="Image 7" class="box-image" />
-          <div class="friend-name-container">
-            <div class="friend-name">홍길동</div>
-          </div>
-        </div>
-        <div class="friend-card" @click="toggleFriendSelection('김지민')" :class="{ selected: isSelected('김지민') }">
-          <img src="../assets/people/Preview-3.png" alt="Image 3" class="box-image" />
-          <div class="friend-name-container">
-            <div class="friend-name">김지민</div>
-          </div>
-        </div>
-        <div class="friend-card" @click="toggleFriendSelection('콩이')" :class="{ selected: isSelected('콩이') }">
-          <img src="../assets/people/Preview-3.png" alt="Image 4" class="box-image" />
-          <div class="friend-name-container">
-            <div class="friend-name">콩이</div>
-          </div>
-        </div>
-        <div class="friend-card" @click="toggleFriendSelection('김유진')" :class="{ selected: isSelected('김유진') }">
-          <img src="../assets/people/Preview-4.png" alt="Image 4" class="box-image" />
-          <div class="friend-name-container">
-            <div class="friend-name">김유진</div>
-          </div>
-        </div>
-        <div class="friend-card" @click="toggleFriendSelection('박태연')" :class="{ selected: isSelected('박태연') }">
-          <img src="../assets/people/Preview-5.png" alt="Image 4" class="box-image" />
-          <div class="friend-name-container">
-            <div class="friend-name">박태연</div>
-          </div>
-        </div>
-        <div class="friend-card" @click="toggleFriendSelection('문효진')" :class="{ selected: isSelected('문효진') }">
-          <img src="../assets/people/Preview-6.png" alt="Image 4" class="box-image" />
-          <div class="friend-name-container">
-            <div class="friend-name">문효진</div>
-          </div>
-        </div>
-        <div class="friend-card" @click="toggleFriendSelection('조나희')" :class="{ selected: isSelected('조나희') }">
-          <img src="../assets/people/Preview-3.png" alt="Image 4" class="box-image" />
-          <div class="friend-name-container">
-            <div class="friend-name">조나희</div>
-          </div>
+              <div
+                class="friend-card"
+                @click="toggleFriendSelection('별이')"
+                :class="{ selected: isSelected('별이') }"
+              >
+                <img
+                  src="../assets/people/Preview-8.png"
+                  alt="Image 7"
+                  class="box-image"
+                />
+                <div class="friend-name-container">
+                  <div class="friend-name">홍길동</div>
+                </div>
+              </div>
+              <div
+                class="friend-card"
+                @click="toggleFriendSelection('김지민')"
+                :class="{ selected: isSelected('김지민') }"
+              >
+                <img
+                  src="../assets/people/Preview-3.png"
+                  alt="Image 3"
+                  class="box-image"
+                />
+                <div class="friend-name-container">
+                  <div class="friend-name">김지민</div>
+                </div>
+              </div>
+              <div
+                class="friend-card"
+                @click="toggleFriendSelection('콩이')"
+                :class="{ selected: isSelected('콩이') }"
+              >
+                <img
+                  src="../assets/people/Preview-3.png"
+                  alt="Image 4"
+                  class="box-image"
+                />
+                <div class="friend-name-container">
+                  <div class="friend-name">콩이</div>
+                </div>
+              </div>
+              <div
+                class="friend-card"
+                @click="toggleFriendSelection('김유진')"
+                :class="{ selected: isSelected('김유진') }"
+              >
+                <img
+                  src="../assets/people/Preview-4.png"
+                  alt="Image 4"
+                  class="box-image"
+                />
+                <div class="friend-name-container">
+                  <div class="friend-name">김유진</div>
+                </div>
+              </div>
+              <div
+                class="friend-card"
+                @click="toggleFriendSelection('박태연')"
+                :class="{ selected: isSelected('박태연') }"
+              >
+                <img
+                  src="../assets/people/Preview-5.png"
+                  alt="Image 4"
+                  class="box-image"
+                />
+                <div class="friend-name-container">
+                  <div class="friend-name">박태연</div>
+                </div>
+              </div>
+              <div
+                class="friend-card"
+                @click="toggleFriendSelection('문효진')"
+                :class="{ selected: isSelected('문효진') }"
+              >
+                <img
+                  src="../assets/people/Preview-6.png"
+                  alt="Image 4"
+                  class="box-image"
+                />
+                <div class="friend-name-container">
+                  <div class="friend-name">문효진</div>
+                </div>
+              </div>
+              <div
+                class="friend-card"
+                @click="toggleFriendSelection('조나희')"
+                :class="{ selected: isSelected('조나희') }"
+              >
+                <img
+                  src="../assets/people/Preview-3.png"
+                  alt="Image 4"
+                  class="box-image"
+                />
+                <div class="friend-name-container">
+                  <div class="friend-name">조나희</div>
+                </div>
               </div>
             </div>
-            <button class="walk-request-button" 
-            style="margin-top: 1vh;" 
-            @click="handleWalkRequest" 
-            :disabled="selectedFriends.length === 0">
-            산책신청
-          </button>
+            <button
+              class="walk-request-button"
+              style="margin-top: 1vh"
+              @click="handleWalkRequest"
+              :disabled="selectedFriends.length === 0"
+            >
+              산책신청
+            </button>
           </div>
         </div>
         <div class="box-row">
@@ -156,69 +211,65 @@
         </div>
       </div>
       <div class="additional-content" v-if="showState">
-    <div class="user-box">
-      <div class="user-information">
-      <div class="user-main">
-        <div class="user-image">
-          <img
-            src="../assets/icon/Preview.png"
-            alt="사용자캐릭터"
-            class="user-character"
-          />
-        </div>
-        <div class="user-details">
-      <div class="user-name">심청이</div>
-      <div class="badge-container">
-        <img
-          class="badge-image"
-          src="../assets/walkicon.png"
-          alt="배지 이미지"
-        />
-        <p class="user-badge-text">배지를 선택해주세요</p>
-        </div>
-    </div>
-  </div>
-        <div class="user-stats">
-          <!-- 사용자 정보 -->
-          <div class="user_info_row">
-            <p class="user_info_label">누적 거리</p>
-            <p class="user_info_value">0KM</p>
-          </div>
-          <div class="division_line"></div>
-          <div class="user_info_row">
-            <p class="user_info_label">누적 시간</p>
-            <p class="user_info_value">0분</p>
-          </div>
-          <div class="division_line"></div>
-          <div class="user_info_row">
-            <p class="user_info_label">누적 도토리</p>
-            <p class="user_info_value">0개</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="pet-box">
-      <div class="pet-information">
-        <div class="pet-main">
-          <div class="pet-profile">
-          <img
-            class="pet-image"
-            src="../assets/icon/dog4.png"
-            alt=""
-          />
-        </div>
-        <div class="pet-details">
-      <div class="pet-name">멍멍이</div>
-      <div class="pet_status">
-          <!-- 애완동물 산책레벨 -->
-          <div class="pet_level">LV.1</div>
-          <!-- 애완동물 레벨 바 -->
-          <div class="level_progressbar_wrap">
-            <div class="level_progressbar" style="width: 3%"></div>
+        <div class="user-box">
+          <div class="user-information">
+            <div class="user-main">
+              <div class="user-image">
+                <img
+                  src="../assets/icon/Preview.png"
+                  alt="사용자캐릭터"
+                  class="user-character"
+                />
+              </div>
+              <div class="user-details">
+                <div class="user-name">심청이</div>
+                <div class="badge-container">
+                  <img
+                    class="badge-image"
+                    src="../assets/walkicon.png"
+                    alt="배지 이미지"
+                  />
+                  <p class="user-badge-text">배지를 선택해주세요</p>
+                </div>
+              </div>
+            </div>
+            <div class="user-stats">
+              <!-- 사용자 정보 -->
+              <div class="user_info_row">
+                <p class="user_info_label">누적 거리</p>
+                <p class="user_info_value">0KM</p>
+              </div>
+              <div class="division_line"></div>
+              <div class="user_info_row">
+                <p class="user_info_label">누적 시간</p>
+                <p class="user_info_value">0분</p>
+              </div>
+              <div class="division_line"></div>
+              <div class="user_info_row">
+                <p class="user_info_label">누적 도토리</p>
+                <p class="user_info_value">0개</p>
+              </div>
+            </div>
           </div>
         </div>
-    </div>
-  </div>
+        <div class="pet-box">
+          <div class="pet-information">
+            <div class="pet-main">
+              <div class="pet-profile">
+                <img class="pet-image" src="../assets/icon/dog4.png" alt="" />
+              </div>
+              <div class="pet-details">
+                <div class="pet-name">멍멍이</div>
+                <div class="pet_status">
+                  <!-- 애완동물 산책레벨 -->
+                  <div class="pet_level">LV.1</div>
+                  <!-- 애완동물 레벨 바 -->
+                  <div class="level_progressbar_wrap">
+                    <div class="level_progressbar" style="width: 3%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -275,21 +326,47 @@
 
 <script>
 import { defineComponent } from "vue";
-import Swal from 'sweetalert2/dist/sweetalert2.js';
-import 'sweetalert2/dist/sweetalert2.css';
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/dist/sweetalert2.css";
+import axios from "axios";
 
-export default defineComponent ({
-  name: 'mainComponent',
+export default defineComponent({
+  name: "mainComponent",
   data() {
     return {
       showController: true,
       showState: false,
       showHistory: false,
-      selectedButton: 'controller',
+      selectedButton: "controller",
       selectedFriends: [], // 선택된 친구를 저장할 배열
     };
   },
   methods: {
+    async testSaveWalk() {
+      if (!this.walkDataSent) {
+        const currentWalk = {
+          walkname: "1027test",
+          startdate: new Date(),
+          // enddate: new Date(),
+          distance: "11111111",
+          creuserkey: 2, // 하드코딩
+        };
+        const result = await axios.post("/wk.saveWalk", { walk: currentWalk });
+        console.log("ddddddddddddddddddddddddddddddddd", result);
+
+        // 산책 데이터를 전송한 후 walkDataSent 변수를 true로 설정하여 중복 전송 방지
+        this.walkDataSent = true;
+        this.currentWalk = true;
+
+        this.$router.push({
+          path: "./kakaomap",
+          props: {
+            walkkey: result.data.walkkey,
+          },
+        });
+        console.log("ddddddddddddddddddddddddddddddddd", result.data.walkkey);
+      }
+    },
     isSelected(friendName) {
       return this.selectedFriends.includes(friendName);
     },
@@ -299,9 +376,9 @@ export default defineComponent ({
       } else {
         this.selectedButton = button;
       }
-      this.showController = this.selectedButton === 'controller';
-      this.showState = this.selectedButton === 'state';
-      this.showHistory = this.selectedButton === 'history';
+      this.showController = this.selectedButton === "controller";
+      this.showState = this.selectedButton === "state";
+      this.showHistory = this.selectedButton === "history";
     },
     toggleFriendSelection(friendName) {
       if (this.selectedFriends.includes(friendName)) {
@@ -313,9 +390,9 @@ export default defineComponent ({
         this.selectedFriends.push(friendName);
       } else {
         Swal.fire({
-          icon: 'error',
-          title: '친구 선택 오류',
-          text: '3명만 선택이 가능합니다.',
+          icon: "error",
+          title: "친구 선택 오류",
+          text: "3명만 선택이 가능합니다.",
           showConfirmButton: false,
           timer: 2000,
         });
@@ -324,9 +401,9 @@ export default defineComponent ({
     handleWalkRequest() {
       if (this.selectedFriends.length === 0) {
         Swal.fire({
-          icon: 'error',
-          title: '친구 선택 오류',
-          text: '친구를 선택하지 않았습니다.',
+          icon: "error",
+          title: "친구 선택 오류",
+          text: "친구를 선택하지 않았습니다.",
           showConfirmButton: false,
           timer: 2000,
         });
@@ -334,10 +411,10 @@ export default defineComponent ({
       }
 
       this.$router.push({
-        path: './kakaomap',
+        path: "./kakaomap",
         query: { selectedFriends: this.selectedFriends },
       });
-    }
+    },
   },
 });
 </script>
@@ -735,18 +812,18 @@ export default defineComponent ({
 }
 
 .user-box {
-    display: flex;
-    width: 40vh;
-    height: 24.5vh;
-    background-color: #ffffff;
-    margin: 5px;
-    margin-bottom: 1vh;
-    border-radius: 1vh;
-    box-shadow: 0 2px 6px rgba(71, 71, 71, 0.2);
-    padding: 10px;
-    flex-direction: column-reverse;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  width: 40vh;
+  height: 24.5vh;
+  background-color: #ffffff;
+  margin: 5px;
+  margin-bottom: 1vh;
+  border-radius: 1vh;
+  box-shadow: 0 2px 6px rgba(71, 71, 71, 0.2);
+  padding: 10px;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
 }
 
 .pet-box {
@@ -952,29 +1029,29 @@ export default defineComponent ({
 }
 
 .friend-card.selected {
-  background-color: #a0c0eb; 
+  background-color: #a0c0eb;
   border: 2px solid #979797;
-  box-shadow: 0 0 5px rgba(128, 128, 128, 0.5); 
-  display: flex; 
+  box-shadow: 0 0 5px rgba(128, 128, 128, 0.5);
+  display: flex;
   align-items: center;
 }
 
 .friend-card.selected img {
-  margin: auto; 
+  margin: auto;
 }
 
 .friend-card.selected .friend-name-container {
-  margin: auto; 
+  margin: auto;
 }
 
 .division_line {
-    width: 1px;
-    background-color: #c3c3c5;
-    margin: 4vh;
-    height: 47%;
-  }
+  width: 1px;
+  background-color: #c3c3c5;
+  margin: 4vh;
+  height: 47%;
+}
 
-  .user-image {
+.user-image {
   margin-right: 10px; /* 사진과 간격을 조절합니다. */
 }
 
@@ -1022,7 +1099,7 @@ export default defineComponent ({
 }
 
 .user-main {
-  display : flex;
+  display: flex;
 }
 
 .pet-image {
@@ -1051,6 +1128,6 @@ export default defineComponent ({
 }
 
 .pet-main {
-  display : flex;
+  display: flex;
 }
 </style>
