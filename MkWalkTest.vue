@@ -4,6 +4,12 @@
       class="fl"
       style="width: 100%; height: 40px; cursor: pointer; border: 1px solid #ccc"
     >
+      <Button @click="testGetUserList">유저리스트 가져오기</Button>
+    </div>
+    <div
+      class="fl"
+      style="width: 100%; height: 40px; cursor: pointer; border: 1px solid #ccc"
+    >
       <Button @click="testSaveWalk">testSaveWalk</Button>
     </div>
     <div
@@ -38,13 +44,11 @@
       <div v-for="(walk, index) in mwalkList" :key="index">
         <p class="fl">[{{ walk.enddate ? "산책완료" : "산책중" }}]</p>
         <p class="fl">{{ walk.walkname }}</p>
-
         <Button @click="testEndWalkUser(walk)">산책종료</Button>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import axios from "axios";
 import { defineComponent } from "vue";
@@ -60,11 +64,11 @@ export default defineComponent({
     // 산책 추가하기
     async testSaveWalk() {
       const param = {
-        walkname: "산책테스트",
+        walkname: "산책8",
         startdate: new Date(),
         // enddate: new Date(),
         distance: "1234555",
-        creuserkey: 11, //하드코딩
+        creuserkey: 1, //하드코딩
       };
       const result = await axios.post("/wk.saveWalk", { walk: param });
       console.log(result);
@@ -72,7 +76,7 @@ export default defineComponent({
     // 산책 리스트 가져오기
     async testGetWalkList() {
       const param = {
-        userkey: 11, //하드코딩
+        userkey: 3, //하드코딩
         /* startdate: new Date(),
         enddate: '2023-10-18',
         distance: '1234555',
@@ -92,7 +96,7 @@ export default defineComponent({
       // let muserWalkKey = null as number|null
       let muser = null;
       for (let i = 0; i < muserList.length; i++) {
-        if (Number(muserList[i].userkey) === 11) {
+        if (Number(muserList[i].userkey) === 6) {
           // 내 유저키 : 1(임시)//하드코딩
           muser = muserList[i];
         }
@@ -108,7 +112,7 @@ export default defineComponent({
     // user의 뱃지 리스트 가져오기
     async testGetMbadgeList() {
       const param = {
-        userkey: 11, //하드코딩
+        userkey: 6, //하드코딩
       };
       const result = await axios.post("/wk.getmuserBadgeList", {
         badge: param,
@@ -123,7 +127,7 @@ export default defineComponent({
     // 전체 뱃지 리스트 가져오기
     async testGetBadgeList() {
       const param = {
-        userkey: 11, //하드코딩
+        userkey: 6, //하드코딩
       };
       const result = await axios.post("/wk.getBadgeList", { badge: param });
       console.log(result);
@@ -133,10 +137,20 @@ export default defineComponent({
         }
       }
     },
+
+    // 전체 유저 리스트 가져오기
+    async testGetUserList() {
+      const param = {
+        userName: "김",
+      };
+      const result = await axios.post("/wk.getUserList", { user: param });
+      console.log(result);
+      if (result.data) {
+        //
+      }
+    },
   },
 });
 </script>
-
-
 <style scoped>
 </style>
