@@ -12,10 +12,18 @@
         <div class="right-container">
           <div class="circle-container">
             <div class="circle1">
-              <img src="../assets/icon/Preview.png" alt="이미지 1" />
+              <img
+                v-if="loggedInUser"
+                :src="require('@/assets/' + loggedInUser.memberImage)"
+                alt="이미지 1"
+              />
             </div>
             <div class="circle1">
-              <img src="../assets/icon/dog4.png" alt="이미지 2" />
+              <img
+                v-if="loggedInUser"
+                :src="require('@/assets/' + loggedInUser.petImage)"
+                alt="이미지 2"
+              />
             </div>
           </div>
           <button class="image-button" @click="$router.push('./Alarm')">
@@ -24,7 +32,6 @@
         </div>
       </div>
       <div class="middle-container">
-        <!-- 9.26 산책 시작 router 수정 -->
         <div class="circle2" @click="testSaveWalk()">
           <button class="default-button" @click="testSaveWalk()">
             <strong>산책시작</strong>
@@ -79,100 +86,17 @@
             <div class="friend-images">
               <div
                 class="friend-card"
-                @click="toggleFriendSelection('별이')"
-                :class="{ selected: isSelected('별이') }"
+                v-for="friend in friends"
+                :key="friend.userKey"
+                @click="toggleFriendSelection(friend)"
+                :class="{ selected: isSelected(friend) }"
               >
                 <img
-                  src="../assets/people/Preview-8.png"
-                  alt="Image 7"
+                  :src="require('@/assets/' + friend.memberImage)"
                   class="box-image"
                 />
                 <div class="friend-name-container">
-                  <div class="friend-name">홍길동</div>
-                </div>
-              </div>
-              <div
-                class="friend-card"
-                @click="toggleFriendSelection('김지민')"
-                :class="{ selected: isSelected('김지민') }"
-              >
-                <img
-                  src="../assets/people/Preview-3.png"
-                  alt="Image 3"
-                  class="box-image"
-                />
-                <div class="friend-name-container">
-                  <div class="friend-name">김지민</div>
-                </div>
-              </div>
-              <div
-                class="friend-card"
-                @click="toggleFriendSelection('콩이')"
-                :class="{ selected: isSelected('콩이') }"
-              >
-                <img
-                  src="../assets/people/Preview-3.png"
-                  alt="Image 4"
-                  class="box-image"
-                />
-                <div class="friend-name-container">
-                  <div class="friend-name">콩이</div>
-                </div>
-              </div>
-              <div
-                class="friend-card"
-                @click="toggleFriendSelection('김유진')"
-                :class="{ selected: isSelected('김유진') }"
-              >
-                <img
-                  src="../assets/people/Preview-4.png"
-                  alt="Image 4"
-                  class="box-image"
-                />
-                <div class="friend-name-container">
-                  <div class="friend-name">김유진</div>
-                </div>
-              </div>
-              <div
-                class="friend-card"
-                @click="toggleFriendSelection('박태연')"
-                :class="{ selected: isSelected('박태연') }"
-              >
-                <img
-                  src="../assets/people/Preview-5.png"
-                  alt="Image 4"
-                  class="box-image"
-                />
-                <div class="friend-name-container">
-                  <div class="friend-name">박태연</div>
-                </div>
-              </div>
-              <div
-                class="friend-card"
-                @click="toggleFriendSelection('문효진')"
-                :class="{ selected: isSelected('문효진') }"
-              >
-                <img
-                  src="../assets/people/Preview-6.png"
-                  alt="Image 4"
-                  class="box-image"
-                />
-                <div class="friend-name-container">
-                  <div class="friend-name">문효진</div>
-                </div>
-              </div>
-              <div
-                class="friend-card"
-                @click="toggleFriendSelection('조나희')"
-                :class="{ selected: isSelected('조나희') }"
-              >
-                <img
-                  src="../assets/people/Preview-3.png"
-                  alt="Image 4"
-                  class="box-image"
-                />
-                <div class="friend-name-container">
-                  <div class="friend-name">조나희</div>
+                  <div class="friend-name">{{ friend.memberName }}</div>
                 </div>
               </div>
             </div>
@@ -216,13 +140,13 @@
             <div class="user-main">
               <div class="user-image">
                 <img
-                  src="../assets/icon/Preview.png"
+                  :src="require('@/assets/' + loggedInUser.memberImage)"
                   alt="사용자캐릭터"
                   class="user-character"
                 />
               </div>
               <div class="user-details">
-                <div class="user-name">심청이</div>
+                <div class="user-name">{{ loggedInUser.memberName }}</div>
                 <div class="badge-container">
                   <img
                     class="badge-image"
@@ -256,10 +180,14 @@
           <div class="pet-information">
             <div class="pet-main">
               <div class="pet-profile">
-                <img class="pet-image" src="../assets/icon/dog4.png" alt="" />
+                <img
+                  class="pet-image"
+                  :src="require('@/assets/' + loggedInUser.petImage)"
+                  alt=""
+                />
               </div>
               <div class="pet-details">
-                <div class="pet-name">멍멍이</div>
+                <div class="pet-name">{{ loggedInUser.petName }}</div>
                 <div class="pet_status">
                   <!-- 애완동물 산책레벨 -->
                   <div class="pet_level">LV.1</div>
@@ -339,9 +267,28 @@ export default defineComponent({
       showHistory: false,
       selectedButton: "controller",
       selectedFriends: [], // 선택된 친구를 저장할 배열
+      friends: [],
+      loggedInUser: null,
     };
   },
+
+  mounted() {
+    // Fetch user data when the component is mounted
+    this.fetchUserData();
+  },
+
   methods: {
+    async fetchUserData() {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/member-info"
+        );
+        this.loggedInUser = response.data.find((user) => user.userkey === 1);
+        this.friends = response.data.filter((user) => user.userkey !== 1);
+      } catch (error) {
+        console.error("Error fetching user data", error);
+      }
+    },
     async testSaveWalk() {
       if (!this.walkDataSent) {
         const currentWalk = {
@@ -411,7 +358,7 @@ export default defineComponent({
 
       this.$router.push({
         path: "./kakaomap",
-        query: { selectedFriends: this.selectedFriends },
+        query: { selectedFriends: JSON.stringify(this.selectedFriends) }, // stringify the array to pass it as a query param
       });
     },
   },

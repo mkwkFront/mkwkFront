@@ -5,9 +5,13 @@
         <div class="walkfriend">
           <h1>동행한 사람</h1>
           <div class="person-container">
-            <img src="../assets/people/Preview-8.png" />
-            <img src="../assets/people/Preview-3.png" />
-            <img src="../assets/people/Preview-3.png" />
+            <img
+            v-for="friend in selectedFriendsData"
+            :key="friend.userKey"
+            :src="require('@/assets/' + friend.memberImage)"
+            alt="friend image"
+          />
+
           </div>
         </div>
         <div class="todaypoint">
@@ -59,6 +63,7 @@ export default {
     return {
       // images: Array(5).fill(pointImage),
       steps: 0,
+      selectedFriendsData: [],
       // timer: this.time, // Initialize timer with the passed prop
       // distance: this.distance, // Initialize distance with the passed prop
     };
@@ -74,6 +79,7 @@ export default {
     this.getpoint = parseFloat(this.$route.query.getpoint);
     this.timer = parseInt(this.$route.query.time);
     this.distance = parseFloat(this.$route.query.distance).toFixed(2);
+    this.selectedFriendsData = JSON.parse(this.$route.query.selectedFriends || '[]');
 
     console.log("Props received:");
     console.log("distance:", this.distance);

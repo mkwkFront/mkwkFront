@@ -12,7 +12,7 @@
     <div class="black-bg" v-if="openModal2 == true">
       <div class="white-bg">
         <h2>산책을 마칠까요?</h2>
-        <button class="quit" @click="testEndWalkUser(walk)">확인</button>
+        <button class="quit" @click="stopTimerAndNavigate">확인</button>
         <button class="close" @click="closeModal">취소</button>
       </div>
     </div>
@@ -60,14 +60,14 @@
       <button
         type="button"
         :class="{ walkstart: !isWalking, walkend: isWalking }"
-        @click="showMyRoute"
+        @click="toggleTimer"
       >
         {{ isWalking ? "Stop" : "Start" }}
       </button>
     </div>
   </div>
 </template>
-    
+
 <script>
 /* eslint-disable no-undef */
 import pointImage from "@/assets/point.png";
@@ -75,11 +75,35 @@ import getpointImage from "@/assets/getpoint.png";
 import axios from "axios";
 import { setGISCallbackFunc } from "@/assets/js/teamplCore";
 
+//function degreesToRadians(degrees) {
+//return degrees * Math.PI / 180;
+// }
+
+//function calculateDistance(point1, point2) {
+//const lat1 = point1.getLat();
+//const lng1 = point1.getLng();
+//const lat2 = point2.getLat();
+//const lng2 = point2.getLng();
+//const earthRadiusKm = 6371;
+//const dLat = degreesToRadians(lat2 - lat1);
+//const dLng = degreesToRadians(lng2 - lng1);
+//const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+//Math.cos(degreesToRadians(lat1)) * Math.cos(degreesToRadians(lat2)) *
+//Math.sin(dLng / 2) * Math.sin(dLng / 2);
+//const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//const distance = earthRadiusKm * c;
+//return distance;
+// }
 function calculateCaloriesBurned(distance) {
+  // Conversion factor (calories per kilometer)
   const conversionFactor = 65;
+
+  // Calculate calories burned
   const caloriesBurned = distance * conversionFactor;
+
   return caloriesBurned;
 }
+
 export default {
   name: "KakaoMap",
   data() {
@@ -89,21 +113,20 @@ export default {
       openModal2: false,
       timer: 0,
       isWalking: false,
-      distance: 0.0,
+      distance: 0.0, // Keep track of total distance
       watchId: null,
       position: null,
       marker: null,
-      previousPosition: null,
-      timeoutId: null,
+      previousPosition: null, // Declare previousPosition variable
+      timeoutId: null, // Declare timeoutId variable
       timerId: null,
       polyline: null,
       images: Array(5).fill(pointImage),
       averageNumberOfSteps: 0,
       getpoint: 0,
-      sampleList: [],
       selectedFriendsData: [],
 
-      walkDataSent: false,
+      walkDataSent: false, // 산책 데이터 전송 여부를 추적하는 변수
       walkkey: this.walkkey,
       currentWalk: null,
     };
@@ -111,8 +134,7 @@ export default {
   mounted() {
     this.selectedFriendsData = JSON.parse(
       this.$route.query.selectedFriends || "[]"
-    );
-
+    ); // Parse the stringified array
     // 지도관련 callback함수 등록(native로부터 위치값 수신시 GPSRecvMsg함수 실행)
     setGISCallbackFunc(this.GPSRecvMsg);
     // id = map인 div 내부에 팀플코어측 맵 추가하는 함수
@@ -120,16 +142,15 @@ export default {
   },
 
   methods: {
-    // 산책 리스트 가져오기
     async testGetWalkList() {
       const param = {
-        userkey: 2,
+        userkey: 1, //하드코딩
         walkkey: this.walkkey,
       };
       const result = await axios.post("/wk.getWalkList", { walk: param });
-      console.log(result.data.walk[0].walkkey);
-      console.log(result.data.walk[0].creuserkey);
-      console.log(result.data.walk[0]);
+      console.log("kkkkkkkkkkkkkkkkkkkkkkk", result.data.walk[0].walkkey);
+      console.log("kkkkkkkkkkkkkkkkkkkkkkk", result.data.walk[0].creuserkey);
+      console.log("kkkkkkkkkkkkkkkkkkkkkkk", result.data.walk[0]);
 
       this.currentWalk = result.data.walk[0].walkkey;
       this.creuserkey = result.data.walk[0].creuserkey;
@@ -159,57 +180,24 @@ export default {
       const result = await axios.post("/wk.endWalkUser", param);
       console.log("=====================", result);
 
-      // 선택한 모든 친구 이미지 파일 이름을 DB에 저장
-      this.selectedFriendsData.forEach((friend) => {
-        const friendImage = friend.memberImage;
-        if (friendImage) {
-          // 간단한 JSON 형식으로 파일 이름만 전송
-          axios
-            .post("/api/save-friend-image", {
-              walkkey: 3, // walkkey를 요청에 추가
-              userkey: 1,
-              friendImage: friendImage,
-            })
-            .then((response) => {
-              if (response.data.status === "success") {
-                console.log("서버 응답:", response.data);
-                console.log(response.data.message);
-              } else {
-                console.error("서버 응답:", response.data);
-                console.error(response.data.message);
-              }
-            })
-            .catch((error) => {
-              console.error(
-                "친구 이미지 파일 이름을 저장하는 중 오류 발생:",
-                error.message
-              );
-              if (error.response && error.response.data) {
-                console.error("Server response:", error.response.data);
-              }
-            });
-        }
-      });
-
       this.stopTimer();
       const caloriesBurned = calculateCaloriesBurned(this.totalDistance); // Calculate calories bWalkDayReporturned
       console.log(`소모칼로리: ${caloriesBurned.toFixed(2)} `);
 
-      console.log(
-        "========================",
-        this.timer,
-        this.distance,
-        this.getpoint
-      );
-
+      const timeData = {
+        min: Math.floor(this.timer / 60),
+        seconds: this.timer % 60,
+      };
       this.$router.push({
         path: "./walkdayreport",
-        query: {
+        props: {
           // walkkey: result.data.walkkey,
-          selectedFriends: JSON.stringify(this.selectedFriendsData),
           getpoint: this.getpoint,
-          time: this.timer,
-          distance: this.distance,
+          min: timeData.min,
+          seconds: timeData.seconds,
+          distance: this.totalDistance,
+          calories: calculateCaloriesBurned(this.totalDistance),
+          steps: this.averageNumberOfSteps,
         },
       });
     },
@@ -269,9 +257,6 @@ export default {
       ];
       // eslint-disable-next-line no-undef
       tcSso.showMap({ coords: routeList, zoom: 14 });
-
-      let totalDistance = 0;
-
       if (!this.isWalking) {
         // Start the timer and random movement
         this.isWalking = true;
@@ -283,28 +268,7 @@ export default {
             this.changeImage();
           }
         }, 1000);
-        // Calculate distance
-        for (let i = 1; i < routeList.length; i++) {
-          const lat1 = routeList[i - 1].lat;
-          const lng1 = routeList[i - 1].lng;
-          const lat2 = routeList[i].lat;
-          const lng2 = routeList[i].lng;
-          // Using Haversine formula to calculate distance
-          const radlat1 = (Math.PI * lat1) / 180;
-          const radlat2 = (Math.PI * lat2) / 180;
-          const theta = lng1 - lng2;
-          const radtheta = (Math.PI * theta) / 180;
-          let distance =
-            Math.sin(radlat1) * Math.sin(radlat2) +
-            Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-          distance = Math.acos(distance);
-          distance = (distance * 180) / Math.PI;
-          distance = distance * 60 * 1.1515;
-          distance = distance * 1.609344; // Convert to kilometers
-          totalDistance += distance;
-        }
 
-        this.distance = totalDistance;
         // Call the startRandomMovement method
       } else {
         // Stop the timer
@@ -333,52 +297,113 @@ export default {
       // eslint-disable-next-line no-undef
       iframeService.startCount();
     },
-    // calculateAverageSteps(distance) {
-    //   const averageWalk = 0.762; // 평균적으로 성인 걸음 당 미터
-    //   const distanceInMeters = distance * 1000;
-    //   const averageNumberOfSteps = Math.round(distanceInMeters / averageWalk);
-    //   return averageNumberOfSteps;
-    // },
-    // startRandomMovement() {
-    //   if (this.position) {
-    //     const { latitude, longitude } = this.position;
-    //     const randomLat = latitude + Math.random() * 0.001;
-    //     const randomLng = longitude + Math.random() * 0.001;
-    //     const newPosition = new kakao.maps.LatLng(randomLat, randomLng);
+    initMap() {
+      const success = (position) => {
+        this.position = position.coords;
+        const { latitude, longitude } = position.coords;
+        const currentPosition = new kakao.maps.LatLng(latitude, longitude);
 
-    //     const path = this.polyline.getPath();
-    //     path.push(newPosition);
-    //     this.polyline.setPath(path);
+        if (!this.map) {
+          const mapOptions = {
+            center: new kakao.maps.LatLng(latitude, longitude),
+            level: 3,
+            MapTypeId: kakao.maps.MapTypeId.ROADMAP,
+          };
+          this.map = new kakao.maps.Map(
+            document.getElementById("map"),
+            mapOptions
+          );
+          this.marker = new kakao.maps.Marker({
+            position: currentPosition,
+            map: this.map,
+          });
+          this.polyline = new kakao.maps.Polyline({
+            map: this.map,
+            path: [],
+            strokeWeight: 5,
+            strokeColor: "#00FF00",
+            strokeOpacity: 0.7,
+            strokeStyle: "solid",
+          });
+          this.previousPosition = currentPosition;
+        } else {
+          const path = this.polyline.getPath();
+          path.push(currentPosition);
+          this.polyline.setPath(path);
 
-    //     this.marker.setPosition(newPosition);
-    //     this.map.panTo(newPosition);
+          this.marker.setPosition(currentPosition);
+          this.map.panTo(currentPosition);
 
-    //     if (this.previousPosition) {
-    //       const newDistance = calculateDistance(
-    //         this.previousPosition,
-    //         newPosition
-    //       );
-    //       this.distance += newDistance;
+          if (this.previousPosition) {
+            this.previousPosition = currentPosition;
 
-    //       const averageSteps = this.calculateAverageSteps(this.distance); // 걸음수 계산
-    //       this.averageNumberOfSteps = averageSteps;
-    //     }
-    //     this.previousPosition = newPosition;
+            const newDistance = calculateDistance(
+              this.previousPosition,
+              currentPosition
+            );
+            this.distance += newDistance;
+            console.log(`Distance traveled: ${newDistance.toFixed(3)} km`);
+            console.log(
+              `Total distance traveled: ${this.distance.toFixed(3)} km`
+            );
+          }
+        }
+      };
 
-    //     this.timeoutId = setTimeout(() => {
-    //       this.startRandomMovement();
-    //     }, 2000);
-    //   } else {
-    //     console.error("Position is not available.");
-    //   }
-    // },
+      function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+      }
+      const watchOptions = { enableHighAccuracy: true };
+      this.watchId = navigator.geolocation.watchPosition(
+        success,
+        error,
+        watchOptions
+      );
+    },
+    //calculateAverageSteps(distance) {
+    //const averageWalk = 0.762; // 평균적으로 성인 걸음 당 미터
+    //const distanceInMeters = distance * 1000;
+    //const averageNumberOfSteps = Math.round(distanceInMeters / averageWalk);
+    //return averageNumberOfSteps;
+    //},
+    //startRandomMovement() {
+    //if (this.position) {
+    //const { latitude, longitude } = this.position;
+    //const randomLat = latitude + Math.random() * 0.001;
+    //const randomLng = longitude + Math.random() * 0.001;
+    //onst newPosition = new kakao.maps.LatLng(randomLat, randomLng);
 
-    // stopTracking() {
-    //   navigator.geolocation.clearWatch(this.watchId);
-    //   this.distance = 0;
-    //   this.totalDistance = 0;
-    //   console.log("Tracking stopped.");
-    // },
+    //const path = this.polyline.getPath();
+    //path.push(newPosition);
+    //this.polyline.setPath(path);
+
+    //this.marker.setPosition(newPosition);
+    //this.map.panTo(newPosition);
+
+    //f (this.previousPosition) {
+    //const newDistance = calculateDistance(this.previousPosition, newPosition);
+    //this.distance += newDistance;
+
+    //const averageSteps = this.calculateAverageSteps(this.distance); // 걸음수 계산
+    //this.averageNumberOfSteps = averageSteps;
+
+    // }
+    // this.previousPosition = newPosition;
+
+    // this.timeoutId = setTimeout(() => {
+    // this.startRandomMovement();
+    // }, 2000);
+    // } else {
+    //console.error('Position is not available.');
+    //}
+    //},
+
+    //stopTracking() {
+    // navigator.geolocation.clearWatch(this.watchId);
+    //this.distance = 0;
+    //this.totalDistance = 0;
+    //console.log('Tracking stopped.');
+    //},
     startTimer() {
       this.timerId = setInterval(() => {
         this.timer += 1;
@@ -391,6 +416,95 @@ export default {
       this.timerId = null;
       this.isWalking = false;
     },
+    stopTimerAndNavigate() {
+      this.stopTimer();
+      this.totalDistance = this.distance;
+      this.distance = 0;
+
+      const caloriesBurned = calculateCaloriesBurned(this.totalDistance);
+      console.log(`소모칼로리: ${caloriesBurned.toFixed(0)} `);
+
+      const timeData = {
+        min: Math.floor(this.timer / 60),
+        seconds: this.timer % 60,
+      };
+      console.log("timeData:", timeData);
+      console.log(`Final Distance: ${this.totalDistance.toFixed(3)} km`);
+
+      // 선택한 모든 친구 이미지 파일 이름을 DB에 저장
+      this.selectedFriendsData.forEach((friend) => {
+        const friendImage = friend.memberImage;
+        if (friendImage) {
+          // 간단한 JSON 형식으로 파일 이름만 전송
+          axios
+            .post("/api/save-friend-image", {
+              walkkey: 3, // walkkey를 요청에 추가
+              userkey: 1,
+              friendImage: friendImage,
+            })
+            .then((response) => {
+              if (response.data.status === "success") {
+                console.log("서버 응답:", response.data);
+                console.log(response.data.message);
+              } else {
+                console.error("서버 응답:", response.data);
+                console.error(response.data.message);
+              }
+            })
+            .catch((error) => {
+              console.error(
+                "친구 이미지 파일 이름을 저장하는 중 오류 발생:",
+                error.message
+              );
+              if (error.response && error.response.data) {
+                console.error("Server response:", error.response.data);
+              }
+            });
+        }
+      });
+
+      this.$router.push({
+        name: "WalkDayReport",
+        query: {
+          selectedFriends: JSON.stringify(this.selectedFriendsData),
+          min: timeData.min,
+          seconds: timeData.seconds,
+          distance: this.totalDistance,
+          calories: calculateCaloriesBurned(this.totalDistance),
+          steps: this.averageNumberOfSteps,
+        },
+      });
+    },
+
+    //toggleTimer() {
+    //if (!this.isWalking) {
+    // Start the timer and random movement
+    //this.isWalking = true;
+    //this.timer = 0;
+    //this.intervalId = setInterval(() => {
+    //this.timer++;
+
+    //if (this.timer % 5 === 0) {
+    //this.changeImage();
+    //}
+    //}, 1000);
+
+    //if (this.position) {
+    //this.startRandomMovement();
+    //}else{
+    //console.error('Position is not available.');
+    //}
+    // Call the startRandomMovement method
+    //} else {
+    // Stop the timer
+    //this.isWalking = false;
+    //clearInterval(this.intervalId);
+    //clearTimeout(this.timeoutId);
+
+    //this.stopTimer();
+    //this.openModal2 = true;
+    //}
+    //},
     changeImage() {
       const newImage = getpointImage;
       const currentIndex = Math.floor(this.timer / 5) - 1;
@@ -398,17 +512,15 @@ export default {
       if (currentIndex < this.images.length) {
         // Replace the image at the current index with the new image
         this.images.splice(currentIndex, 1, newImage);
-
-        this.getpoint++;
       }
     },
     updateChangedImageCount(count) {
-      this.getpoint = count;
+      this.changedImageCount = count;
     },
     closeModal() {
       this.openModal2 = false;
       this.startTimer();
-      // this.startRandomMovement(); // Call the startRandomMovement method
+      //this.startRandomMovement(); // Call the startRandomMovement method
     },
     formatTime(seconds) {
       const min = Math.floor(seconds / 60);
@@ -420,10 +532,37 @@ export default {
     destroyed() {
       this.stopTimer();
     },
+    sendWalkDataToBack(timeData, distance, walkdate) {
+      const headers = {
+        "Content-Type": "application/json", // 요청의 Content-Type을 application/json으로 설정
+      };
+      console.log(distance);
+
+      console.log("전송하는 산책 시간 데이터:", timeData); // 산책 시간 데이터 확인
+      console.log("전송하는 코인 개수:", this.getpoint);
+      console.log("전송하는 산책 거리:", distance.toFixed(2));
+
+      const requestData = JSON.stringify({
+        min: Math.floor(timeData / 60), // Convert total seconds to minutes
+        seconds: timeData % 60, // Get the remaining seconds
+        getpoint: this.getpoint,
+        distance: distance.toFixed(2),
+        walkdate: walkdate,
+      });
+      axios
+        .post("http://localhost:8001/walkData", requestData, { headers })
+        .then((response) => {
+          console.log("산책 데이터 백엔드로 전송 성공");
+          console.log("응답 데이터:", response.data); // 응답 데이터 출력
+        })
+        .catch((error) => {
+          console.error("산책 데이터 전송 실패 : ", error);
+        });
+    },
   },
 };
 </script>
-    
+
 <style scoped>
 .scrollable-content {
   overflow: hidden; /* 혹은 필요한 높이 값으로 설정 */
@@ -513,8 +652,10 @@ p {
   position: absolute;
 }
 .imwith {
-  width: 7vh;
+  width: 9vh;
   margin: 5px;
+  border-radius: 100%;
+  border: 1px solid #333;
 }
 
 #walkcontainer {
