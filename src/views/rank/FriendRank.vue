@@ -13,27 +13,23 @@
 
       <div class="rank_margin">
         <!-- <div class="rank"> -->
-          <h3 class="top_10">TOP 10</h3>
-          <div
-            class="green-rank"
-            v-for="(friend, index) in sortedFriends.slice(0, 10)"
-            :key="index"
-          >
-            <p v-if="index === 0" class="rank-icon">&#x1F947;</p>
-            <p v-else-if="index === 1" class="rank-icon">&#x1F948;</p>
-            <p v-else-if="index === 2" class="rank-icon">&#x1F949;</p>
-            <div class="friend-container">
-              <div class="profile">
-                <img :src="friend.img" />
-              </div>
-              <div class="friend-info">
-                <p class="title-name">{{ friend.name }}</p>
-                <p class="walk-content">총 {{ friend.range }}KM 산책</p>
-                <p>총 {{ friend.time }}시간 산책</p>
-                <p>동반 산책 : {{ friend.mate }}회</p>
-              </div>
+        <h3 class="top_10">TOP 10</h3>
+        <div class="green-rank" v-for="(friend, index) in sortedFriends.slice(0, 10)" :key="index">
+          <p v-if="index === 0" class="rank-icon">&#x1F947;</p>
+          <p v-else-if="index === 1" class="rank-icon">&#x1F948;</p>
+          <p v-else-if="index === 2" class="rank-icon">&#x1F949;</p>
+          <div class="friend-container">
+            <div class="profile">
+              <img :src="friend.img" />
+            </div>
+            <div class="friend-info">
+              <p class="title-name">{{  }}</p>
+              <p class="walk-content">총 {{ friend.range }}KM 산책</p>
+              <p>총 {{ friend.time }}시간 산책</p>
+              <!-- <p>동반 산책 : {{ friend.mate }}회</p> -->
             </div>
           </div>
+        </div>
         <!-- </div> -->
       </div>
     </div>
@@ -44,6 +40,7 @@
 <script>
 import data from "../../assets/rankData.js";
 import Header from '@/components/Header.vue';
+import axios from "axios";
 
 export default {
   name: "friendrankComponent",
@@ -53,8 +50,21 @@ export default {
   data() {
     return {
       data: data,
-      pageTitle: "랭킹"
+      pageTitle: "랭킹",
+      dataFromBackend: null,
+      groupedData: {},
+      monthGroup: {},
     };
+  },
+  created() {
+    this.fetchDataFromBackend();
+
+    // this.currentDate = new Date(); // currentDate 초기화
+    // this.currentMonth = this.currentDate.getMonth() + 1; // currentMonth 초기화
+    // this.lastMonth = this.currentMonth === 1 ? 12 : this.currentMonth - 1;
+    // this.currentYear = this.currentDate.getFullYear();
+
+
   },
   methods: {
     MyRankPage() {
@@ -63,6 +73,48 @@ export default {
     FriendRankPage() {
       this.$router.push("/friendRank");
     },
+
+    async fetchDataFromBackend() {
+      try {
+        const response = await axios.get("http://localhost:8081/api/fwrank-info");
+        this.dataFromBackend = response.data;
+        console.log("API 응답 데이터:", this.dataFromBackend);
+
+        // 데이터를 가져온 후에 이번 달과 저번 달 데이터 초기화
+        this.groupData(this.dataFromBackend);
+        console.log(this.groupedData);
+        // this.getCount();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+    groupData(data) {
+  this.groupedData = {};
+
+  data.forEach(item => {
+    const year = item.startdate[0];
+    const month = item.startdate[1];
+    const key = `${year}-${month}`;
+
+    if (!this.groupedData[key]) {
+      this.groupedData[key] = {};
+    }
+
+    // 그룹화된 데이터에서 동일한 달 내에서 creuserkey가 같은 것을 더 그룹화
+    const monthGroup = this.groupedData[key];
+
+    if (!monthGroup[item.creuserkey]) {
+      monthGroup[item.creuserkey] = [];
+    }
+
+    monthGroup[item.creuserkey].push(item);
+  });
+
+  return this.groupedData;
+}
+
+
+
   },
   computed: {
     sortedFriends() {
@@ -86,7 +138,8 @@ export default {
 }
 
 .green-rank {
-  position: relative; /* 부모 요소에 대해 상대적인 위치 설정 */
+  position: relative;
+  /* 부모 요소에 대해 상대적인 위치 설정 */
   margin: 5%;
   margin-bottom: 7%;
 }
@@ -99,16 +152,20 @@ export default {
   margin: 2%;
   padding-right: 4%;
 }
+
 .rank-icon {
-  position: absolute; /* 이미지에 대해 절대적인 위치 설정 */
+  position: absolute;
+  /* 이미지에 대해 절대적인 위치 설정 */
   left: -25px;
   top: -70px;
   font-size: 50px;
-  height: 100px; /* 이미지 크기 설정 */
-  z-index: 1; /* 이미지를 다른 요소들 위로 렌더링하기 위한 z-index 설정 */
+  height: 100px;
+  /* 이미지 크기 설정 */
+  z-index: 1;
+  /* 이미지를 다른 요소들 위로 렌더링하기 위한 z-index 설정 */
 }
 
-.title-name{
+.title-name {
   padding-bottom: 3%;
 }
 </style>

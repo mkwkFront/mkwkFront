@@ -10,62 +10,55 @@
         <button @click="MyRankPage" class="click_rank_button">나의 랭킹</button>
         <button @click="FriendRankPage" class="rank_button">친구 랭킹</button>
       </div>
+      <div class="month_change">
+        <div class="prevMonth" @click="prevMonth">&#60;</div>
+        <p class="month">{{ currentYear + "-" + currentMonth }}</p>
+        <div class="nextMonth" v-if="isNextMonthVisible" @click="nextMonth">&#62;</div>
+      </div>
 
       <!-- 랭킹 데이터 -->
       <div class="rank_margin">
         <!-- <div class="rank"> -->
-          <div class="rank-container">
-            <h2 class="text_style_title">{{ data[0].title }}</h2>
-            <p class="text_style_subtitle">{{ compareCount() }}</p>
-            <div class="green-rank">
-              <!-- months 데이터 반복문 -->
-              <div v-for="month in lastTwoMonths" :key="month.id">
-                <p class="text_style_content"> {{ month.month }}월</p>
-                <!-- month 그래프 -->
-                <div class="graph">
-                  <div class="text">{{ month.count }}회</div>
-                  <div
-                    ref="green"
-                    :style="{ width: getGreenWidth(month.count) }"
-                  ></div>
-                </div>
-              </div>
+        <div class="rank-container">
+          <h2 class="text_style_title">&#x1F333; 산책 횟수</h2>
+          <p class="text_style_subtitle">{{ compareCount() }}</p>
+          <div class="green-rank">
+            <p class="text_style_content"> {{ lastMonth }}월</p>
+            <div class="graph">
+              <div class="text">{{ lastMonthCount }}회</div>
+              <div ref="greenLastMonth" :style="{ width: getGreenWidth(lastMonthCount) }"></div>
+            </div>
+            <p class="text_style_content"> {{ currentMonth }}월</p>
+            <div class="graph">
+              <div class="text">{{ currentMonthCount }}회</div>
+              <div ref="greenCurrentMonth" :style="{ width: getGreenWidth(currentMonth) }"></div>
             </div>
           </div>
-          <!-- 그래프 추가하고 싶음 -->
-          <div class="rank-container">
-            <h2 class="text_style_title">{{ data[1].title }}</h2>
-            <div class="pink-rank">
-              <!-- friends 데이터 반복문 -->
-              <div v-for="(friend, index) in sortedFriends" :key="friend.id">
-                <div class="friend-container" v-show="friend.count !== 0">
-                  <div class="profile">
-                    <img :src="friend.img" />
-                  </div>
-                  <div class="friend-info">
-                    <p class="text_style_content">{{ friend.name }}</p>
-                    <div class="graph">
-                      <div class="text">{{ friend.count }}회</div>
-                      <div
-                        ref="pink"
-                        :style="{ width: getPinkWidth(friend.count) }"
-                      ></div>
-                    </div>
+        </div>
+
+        <!-- <div class="rank-container">
+          <h2 class="text_style_title">&#x1F46B; 산책 동반자</h2>
+          <div class="pink-rank">
+            <div v-for="(friend, index) in sortedFriends" :key="friend.id">
+              <div class="friend-container" v-show="friend.count !== 0">
+                <div class="profile">
+                  <img :src="friend.img" />
+                </div>
+                <div class="friend-info">
+                  <p class="text_style_content">{{ friend.name }}</p>
+                  <div class="graph">
+                    <div class="text">{{ friend.count }}회</div>
+                    <div ref="pink" :style="{ width: getPinkWidth(friend.count) }"></div>
                   </div>
                 </div>
-                <!-- 마지막 데이터가 아닐 때만 구분선 표시 -->
-                <hr
-                  class="friend-separator"
-                  v-if="
-                    index < sortedFriends.length - 1 &&
-                    friend.count !== 0 &&
-                    sortedFriends[index + 1].count !== 0
-                  "
-                />
               </div>
+              <hr class="friend-separator" v-if="index < sortedFriends.length - 1 &&
+                friend.count !== 0 &&
+                sortedFriends[index + 1].count !== 0
+                " />
             </div>
           </div>
-        <!-- </div> -->
+        </div> -->
       </div>
     </div>
   </div>
@@ -75,7 +68,7 @@
 import { defineComponent } from "vue";
 import data from "../../assets/rankData.js";
 import Header from '@/components/Header.vue';
-
+import axios from "axios";
 
 
 
@@ -88,10 +81,146 @@ export default defineComponent({
     return {
       pageName: "ranking",
       data: data,
-      pageTitle: "랭킹"
+      pageTitle: "랭킹",
+      dataFromBackend: null,
+      userData: null,
+      currentDate: null,
+      currentMonth: null,
+      lastMonth: null,
+      currentYear: null,
+      currentMonthCount: 0,
+      lastMonthCount: 0,
+      monthlyData: [],
+      groupedData: {},
+      isNextMonthVisible: true,
     };
   },
+  created() {
+    this.fetchDataFromBackend();
+
+    this.currentDate = new Date(); // currentDate 초기화
+    this.currentMonth = this.currentDate.getMonth() + 1; // currentMonth 초기화
+    this.lastMonth = this.currentMonth === 1 ? 12 : this.currentMonth - 1;
+    this.currentYear = this.currentDate.getFullYear();
+
+
+  },
   methods: {
+
+
+
+
+    // 나머지 코드
+    async fetchDataFromBackend() {
+      try {
+        const response = await axios.get("http://localhost:8081/api/fwrank-info");
+        this.dataFromBackend = response.data;
+        console.log("API 응답 데이터:", this.dataFromBackend);
+        this.filterUserData();
+
+        // 데이터를 가져온 후에 이번 달과 저번 달 데이터 초기화
+        this.groupDataByYearAndMonth(this.dataFromBackend);
+        console.log(this.groupedData);
+        this.getCount();
+
+
+        // 이제 데이터를 가져왔으므로 그래프 애니메이션을 시작합니다.
+        this.startGraphAnimations();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+    startGraphAnimations() {
+      this.$nextTick(() => {
+        // greenLastMonthElements, greenCurrentMonthElements, pinkElements를 배열로 초기화
+        const greenLastMonthElements = Array.from(this.$refs.greenLastMonth);
+        const greenCurrentMonthElements = Array.from(this.$refs.greenCurrentMonth);
+        // const pinkElements = Array.from(this.$refs.pink);
+
+        // 배열을 순회하며 애니메이션을 시작
+        greenLastMonthElements.forEach((element) => {
+          element.classList.add("greenanimate");
+        });
+
+        greenCurrentMonthElements.forEach((element) => {
+          element.classList.add("greenanimate");
+        });
+
+        // pinkElements.forEach((element) => {
+        //   element.classList.add("pinkanimate");
+        // });
+      });
+    },
+
+    filterUserData() {
+      if (this.dataFromBackend) {
+        // userkey가 1인 데이터만 필터링하여 userData에 저장
+        this.userData = this.dataFromBackend.filter((item) => item.creuserkey === 1);
+        console.log("creuserkey가 1인 데이터:", this.userData);
+      }
+    },
+    groupDataByYearAndMonth(data) {
+      this.groupedData = {};
+      data.forEach(item => {
+        const year = item.startdate[0];
+        const month = item.startdate[1];
+        const key = `${year}-${month}`;
+
+        if (!this.groupedData[key]) {
+          this.groupedData[key] = [];
+        }
+
+        this.groupedData[key].push(item);
+      });
+      return this.groupedData;
+    },
+    getCount() {
+      //저번달 횟수
+      const lastKey = `${this.currentYear}-${this.lastMonth}`;
+      this.lastMonthCount = this.groupedData[lastKey] ? this.groupedData[lastKey].length : 0;
+      console.log(this.lastMonthCount);
+      //이번달 횟수
+      const currentkey = `${this.currentYear}-${this.currentMonth}`;
+      this.currentMonthCount = this.groupedData[currentkey] ? this.groupedData[currentkey].length : 0;
+      console.log(this.currentMonthCount);
+    },
+
+
+
+    prevMonth() {
+      if (this.currentMonth > 1) {
+        this.currentMonth--;
+      } else {
+        this.currentYear--;
+        this.currentMonth = 12;
+      }
+      this.updateLastMonth();
+      this.getCount();
+      this.checkNextMonthVisibility();
+    },
+    nextMonth() {
+      if (this.currentMonth < 12) {
+        this.currentMonth++;
+      } else {
+        this.currentYear++;
+        this.currentMonth = 1;
+      }
+      this.updateLastMonth();
+      this.getCount();
+      this.checkNextMonthVisibility();
+    },
+    updateLastMonth() {
+      this.lastMonth = this.currentMonth === 1 ? 12 : this.currentMonth - 1;
+    },
+    checkNextMonthVisibility() {
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth() + 1;
+      this.isNextMonthVisible = !(this.currentYear === currentYear && this.currentMonth === currentMonth);
+    },
+
+
+
     MyRankPage() {
       this.$router.push("/ranking");
     },
@@ -108,33 +237,20 @@ export default defineComponent({
         return `100%`;
       }
     },
-    getPinkWidth(count) {
-      // month.count의 값에 따라 .pinkanimate의 width 값 계산
-      if (count < 51) {
-        return `${count * 2}%`;
-      } else {
-        return `100%`;
-      }
-    },
+    // getPinkWidth(count) {
+    //   // month.count의 값에 따라 .pinkanimate의 width 값 계산
+    //   if (count < 51) {
+    //     return `${count * 2}%`;
+    //   } else {
+    //     return `100%`;
+    //   }
+    // },
 
     // month.count 비교
     compareCount() {
-      const currentDate = new Date();
-      const currentMonth = currentDate.getMonth() + 1;
-      const lastMonth = currentMonth === 1 ? 12 : currentMonth - 1;
-
-      const filteredMonths = this.data[0].months.filter(
-        (month) => month.month === currentMonth || month.month === lastMonth
-      );
-      const countOfCurrentMonth =
-        filteredMonths.find((month) => month.month === currentMonth)?.count ||
-        0;
-      const countOfLastMonth =
-        filteredMonths.find((month) => month.month === lastMonth)?.count || 0;
-
-      if (countOfCurrentMonth > countOfLastMonth) {
+      if (this.currentMonthCount > this.lastMonthCount) {
         return "이번 달 산책 횟수가 저번 달보다 늘었어요!";
-      } else if (countOfCurrentMonth < countOfLastMonth) {
+      } else if (this.currentMonthCount < this.lastMonthCount) {
         return "이번 달 산책 횟수가 저번 달보다 줄었어요!";
       } else {
         return "이번 달 산책 횟수와 저번 달 산책 횟수가 같아요!";
@@ -149,51 +265,59 @@ export default defineComponent({
       );
       return sortedArr;
     },
-    lastTwoMonths() {
-      const currentDate = new Date();
-      const currentMonth = currentDate.getMonth() + 1; // JavaScript의 getMonth()는 0부터 시작하므로 +1 해줌
-      const lastMonth = currentMonth === 1 ? 12 : currentMonth - 1; // 저번 달 계산
-      return this.data[0].months.filter(
-        (month) => month.month === currentMonth || month.month === lastMonth
-      );
-    },
   },
   mounted() {
-    this.$nextTick(() => {
-      const greenElements = this.$refs.green;
-      greenElements.forEach((element) => {
-        element.classList.add("greenanimate");
-      });
-
-      const pinkElements = this.$refs.pink;
-      pinkElements.forEach((element) => {
-        element.classList.add("pinkanimate");
-      });
-    });
+    this.checkNextMonthVisibility(); // Check visibility when the component is mounted
   },
 });
 </script>
 
 <style>
-.text_style_title{
+.month_change {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 2vh;
+  width: 100%;
+  height: 7%;
+  box-sizing: border-box;
+  justify-content: space-between;
+}
+.prevMonth{
+  width: 10%;
+  
+}
+.month{
+  width: 80%;
+  align-items: center;
+}
+.nextMonth{
+  flex: 1;
+}
+
+.text_style_title {
   text-align: left;
 }
-.text_style_subtitle{
+
+.text_style_subtitle {
   text-align: left;
   padding-left: 2%;
   font-size: 2.1vh;
   color: #353535;
 }
-.text_style_content{
+
+.text_style_content {
   text-align: left;
 }
+
 #Myrankingpg {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 90vh; 
+  height: 90vh;
 }
+
 .Rank_middle {
   width: 100%;
   height: 90%;
@@ -207,6 +331,7 @@ export default defineComponent({
   padding: 2%;
   box-sizing: border-box;
 }
+
 #myRank {
   width: 100%;
   height: 100%;
@@ -219,7 +344,7 @@ export default defineComponent({
 }
 
 /* 페이지 이동 버튼 */
-.buttons_container{
+.buttons_container {
   width: 100%;
   height: 7%;
   display: flex;
@@ -228,6 +353,7 @@ export default defineComponent({
   margin-top: 2.5%;
   margin-bottom: 3%;
 }
+
 .rank_button {
   width: 50%;
   height: 100%;
@@ -240,6 +366,7 @@ export default defineComponent({
   border-radius: 3vh;
   background-color: #dfefff;
 }
+
 .click_rank_button {
   width: 50%;
   height: 100%;
@@ -250,7 +377,7 @@ export default defineComponent({
   padding: 2%;
   cursor: pointer;
   border-radius: 3vh;
-  background-color:#00c0ff;
+  background-color: #00c0ff;
 }
 
 /* 페이지 전체 테두리 */
@@ -260,6 +387,7 @@ export default defineComponent({
   padding: 3%;
   box-sizing: border-box;
 }
+
 .rank {
   width: 100%;
   height: 100%;
@@ -269,6 +397,7 @@ export default defineComponent({
   padding: 3%;
   overflow-y: scroll;
 }
+
 .rank-container {
   padding-top: 1%;
   padding-bottom: 0.1%;
@@ -283,6 +412,7 @@ export default defineComponent({
   padding: 7%;
   margin-bottom: 7%;
 }
+
 .pink-rank {
   border: 2px solid #00c0ff;
   border-radius: 10px;
@@ -299,6 +429,7 @@ export default defineComponent({
   margin-top: 1.5%;
   margin-bottom: 3%;
 }
+
 .graph .text {
   position: absolute;
   left: 10px;
@@ -307,6 +438,7 @@ export default defineComponent({
   color: #353535;
   font-size: 2.1vh;
 }
+
 .greenanimate {
   height: 30px;
   text-align: center;
@@ -315,6 +447,7 @@ export default defineComponent({
   animation-name: fadegreen;
   animation-duration: 3s;
 }
+
 .pinkanimate {
   height: 30px;
   text-align: center;
@@ -323,19 +456,21 @@ export default defineComponent({
   animation-name: fadepink;
   animation-duration: 3s;
 }
+
 @keyframes fadegreen {
   0% {
     width: 0%;
   }
-  100% {
-  }
+
+  100% {}
 }
+
 @keyframes fadepink {
   0% {
     width: 0%;
   }
-  100% {
-  }
+
+  100% {}
 }
 
 /* 프로필 사진 */
@@ -344,6 +479,7 @@ export default defineComponent({
   align-items: center;
   margin-bottom: 10px;
 }
+
 .profile {
   width: 70px;
   height: 70px;
@@ -351,11 +487,13 @@ export default defineComponent({
   overflow: hidden;
   margin-right: 20px;
 }
+
 .profile img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .friend-info {
   flex: 1;
   text-align: left;
