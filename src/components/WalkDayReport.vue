@@ -13,12 +13,9 @@
         <div class="todaypoint">
           <p>획득한<br />도토리</p>
           <div class="point-container">
-            <img
-              v-for="(image, index) in images"
-              :key="index"
-              :src="image"
-              class="point"
-            />
+            <template v-for="i in getpoint" :key="i">
+              <img src="../assets/getpoint.png" class="point" />
+            </template>
           </div>
         </div>
 
@@ -29,20 +26,20 @@
           </div>
           <div class="kcal">
             <img src="../assets/kcal.png" />
-            <p>{{ calculateCaloriesBurned(this.totalDistance) }} 칼로리</p>
+            <p>{{ calculateCaloriesBurned(this.distance) }} 칼로리</p>
           </div>
         </div>
 
         <div class="todaydata_2">
           <div class="time">
             <img src="../assets/timericon.png" />
-            <p>{{ totalTime }}</p>
+            <p>{{ this.timer }} sec</p>
             <KakaoMap />
           </div>
 
           <div class="long">
             <img src="../assets/distanceicon.png" />
-            <p>{{ totalDistance.toFixed(2) }} KM</p>
+            <p>{{ this.distance }} KM</p>
           </div>
         </div>
       </div>
@@ -52,46 +49,58 @@
 </template>
 
 <script>
-import pointImage from "@/assets/point.png";
-import getpointImage from "@/assets/getpoint.png";
+// import pointImage from "@/assets/point.png";
+// import getpointImage from "@/assets/getpoint.png";
 
 export default {
   name: "WalkDayReport",
+
   data() {
     return {
-      timeData: {
-        min: 0,
-        seconds: 0,
-      },
-      totalDistance: 0,
-      images: Array(5).fill(pointImage),
+      // images: Array(5).fill(pointImage),
       steps: 0,
+      // timer: this.time, // Initialize timer with the passed prop
+      // distance: this.distance, // Initialize distance with the passed prop
     };
   },
 
   mounted() {
-    this.timeData = {
-      min: parseInt(this.$route.query.min),
-      seconds: parseInt(this.$route.query.seconds),
-    };
-    console.log("timeData:", this.timeData);
+    // this.timeData = {
+    //   min: parseInt(this.$route.query.min),
+    //   seconds: parseInt(this.$route.query.seconds),
+    // };
+    // console.log("timeData:", this.timeData);
 
-    this.totalDistance = parseFloat(this.$route.query.distance);
+    this.getpoint = parseFloat(this.$route.query.getpoint);
+    this.timer = parseInt(this.$route.query.time);
+    this.distance = parseFloat(this.$route.query.distance).toFixed(2);
+
+    console.log("Props received:");
+    console.log("distance:", this.distance);
+    console.log("timer:", this.timer);
+    console.log("getpoint:", this.getpoint); // Use "this.getpoint" to access the prop
+
+    // this.distance = parseFloat(this.$route.query.distance);
     this.steps = parseInt(this.$route.query.steps);
 
-    this.changeImages();
+    // this.changeImages();
   },
   computed: {
-    totalTime() {
-      return `${this.timeData.min
-        .toString()
-        .padStart(2, "0")}:${this.timeData.seconds
-        .toString()
-        .padStart(2, "0")}`;
-    },
-    formattedTotalDistance() {
-      return this.totalDistance.toFixed(2);
-    },
+    // totalTime() {
+    //   return `${this.timeData.min
+    //     .toString()
+    //     .padStart(2, "0")}:${this.timeData.seconds
+    //     .toString()
+    //     .padStart(2, "0")}`;
+    // },
+    // totalTime() {
+    //   const min = Math.floor(this.time / 60);
+    //   const seconds = this.time % 60;
+    //   return `${min.toString().padStart(2, "0")}:${seconds
+    //     .toString()
+    //     .padStart(2, "0")}`;
+    // },
+
     calculateCaloriesBurned() {
       return (distance) => {
         const calories = distance * 65;
@@ -99,18 +108,19 @@ export default {
       };
     },
   },
-  methods: {
-    changeImages() {
-      const numImageChanges = Math.floor(this.timeData.seconds / 5);
-      const newImage = getpointImage;
-
-      for (let i = 0; i < numImageChanges; i++) {
-        if (i < this.images.length) {
-          this.images.splice(i, 1, newImage);
-        }
-      }
-    },
-  },
+  // methods: {
+  // changeImages() {
+  //   const numImageChanges = this.getpoint; // Assuming one image per 5 units of getpoint
+  //   const newImage = getpointImage;
+  //   if (numImageChanges > this.images.length) {
+  //     // Increase the length of the images array
+  //     const additionalImages = Array(
+  //       numImageChanges - this.images.length
+  //     ).fill(newImage);
+  //     this.images = this.images.concat(additionalImages);
+  //   }
+  // },
+  // },
 };
 </script>
 

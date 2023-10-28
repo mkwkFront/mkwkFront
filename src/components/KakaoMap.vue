@@ -159,13 +159,13 @@ export default {
     // 산책 리스트 가져오기
     async testGetWalkList() {
       const param = {
-        userkey: 2, //하드코딩
+        userkey: 2,
         walkkey: this.walkkey,
       };
       const result = await axios.post("/wk.getWalkList", { walk: param });
-      console.log("kkkkkkkkkkkkkkkkkkkkkkk", result.data.walk[0].walkkey);
-      console.log("kkkkkkkkkkkkkkkkkkkkkkk", result.data.walk[0].creuserkey);
-      console.log("kkkkkkkkkkkkkkkkkkkkkkk", result.data.walk[0]);
+      console.log(result.data.walk[0].walkkey);
+      console.log(result.data.walk[0].creuserkey);
+      console.log(result.data.walk[0]);
 
       this.currentWalk = result.data.walk[0].walkkey;
       this.creuserkey = result.data.walk[0].creuserkey;
@@ -199,20 +199,20 @@ export default {
       const caloriesBurned = calculateCaloriesBurned(this.totalDistance); // Calculate calories bWalkDayReporturned
       console.log(`소모칼로리: ${caloriesBurned.toFixed(2)} `);
 
-      const timeData = {
-        min: Math.floor(this.timer / 60),
-        seconds: this.timer % 60,
-      };
+      console.log(
+        "========================",
+        this.timer,
+        this.distance,
+        this.getpoint
+      );
+
       this.$router.push({
         path: "./walkdayreport",
-        props: {
+        query: {
           // walkkey: result.data.walkkey,
           getpoint: this.getpoint,
-          min: timeData.min,
-          seconds: timeData.seconds,
-          distance: this.totalDistance,
-          calories: calculateCaloriesBurned(this.totalDistance),
-          steps: this.averageNumberOfSteps,
+          time: this.timer,
+          distance: this.distance,
         },
       });
     },
@@ -272,6 +272,9 @@ export default {
       ];
       // eslint-disable-next-line no-undef
       tcSso.showMap({ coords: routeList, zoom: 14 });
+
+      let totalDistance = 0;
+
       if (!this.isWalking) {
         // Start the timer and random movement
         this.isWalking = true;
@@ -283,7 +286,28 @@ export default {
             this.changeImage();
           }
         }, 1000);
+        // Calculate distance
+        for (let i = 1; i < routeList.length; i++) {
+          const lat1 = routeList[i - 1].lat;
+          const lng1 = routeList[i - 1].lng;
+          const lat2 = routeList[i].lat;
+          const lng2 = routeList[i].lng;
+          // Using Haversine formula to calculate distance
+          const radlat1 = (Math.PI * lat1) / 180;
+          const radlat2 = (Math.PI * lat2) / 180;
+          const theta = lng1 - lng2;
+          const radtheta = (Math.PI * theta) / 180;
+          let distance =
+            Math.sin(radlat1) * Math.sin(radlat2) +
+            Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+          distance = Math.acos(distance);
+          distance = (distance * 180) / Math.PI;
+          distance = distance * 60 * 1.1515;
+          distance = distance * 1.609344; // Convert to kilometers
+          totalDistance += distance;
+        }
 
+        this.distance = totalDistance;
         // Call the startRandomMovement method
       } else {
         // Stop the timer

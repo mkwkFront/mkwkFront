@@ -347,12 +347,11 @@ export default defineComponent({
         const currentWalk = {
           walkname: "1027test",
           startdate: new Date(),
-          // enddate: new Date(),
           distance: "11111111",
-          creuserkey: 2, // 하드코딩
+          creuserkey: 2,
         };
         const result = await axios.post("/wk.saveWalk", { walk: currentWalk });
-        console.log("ddddddddddddddddddddddddddddddddd", result);
+        console.log("========================================", result);
 
         // 산책 데이터를 전송한 후 walkDataSent 변수를 true로 설정하여 중복 전송 방지
         this.walkDataSent = true;

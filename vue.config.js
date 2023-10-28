@@ -7,9 +7,10 @@ module.exports = defineConfig({
       '^/wk': {
         // 백앤드 주소 작성
         target: 'http://localhost:18080',
-        target: 'http://192.168.11.159:18080',
+        // target: 'http://192.168.11.159:18080',
         // target: 'http://192.168.35.242:18080',
         // target: 'http://192.168.0.138:18080',
+        target: 'http://172.30.1.2:18080',
 
         changeOrigin: true,
         secure: false,
