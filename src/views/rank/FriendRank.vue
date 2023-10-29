@@ -10,10 +10,13 @@
         <button @click="MyRankPage" class="rank_button">나의 랭킹</button>
         <button @click="FriendRankPage" class="click_rank_button">친구 랭킹</button>
       </div>
-      <div>{{ creuserkeyDistanceMap }}</div>
+      <div class="month_change">
+        <div class="prevMonth" @click="prevMonth">&#60;</div>
+        <p class="month">{{ currentYear + "-" + currentMonth }}</p>
+        <div class="nextMonth" v-if="isNextMonthVisible" @click="nextMonth">&#62;</div>
+      </div>
       <div class="rank_margin">
         <!-- <div class="rank"> -->
-
         <div class="rank">
           <h3 class="top_10">TOP 10</h3>
           <div class="green-rank" v-for="(friend, index) in sortedFriends.slice(0, 10)" :key="index">
@@ -224,9 +227,34 @@ export default {
         minutes: minutes,
         seconds: seconds
       };
-    }
+    },
 
 
+
+    prevMonth() {
+      if (this.currentMonth > 1) {
+        this.currentMonth--;
+      } else {
+        this.currentYear--;
+        this.currentMonth = 12;
+      }
+      this.checkNextMonthVisibility();
+    },
+    nextMonth() {
+      if (this.currentMonth < 12) {
+        this.currentMonth++;
+      } else {
+        this.currentYear++;
+        this.currentMonth = 1;
+      }
+      this.checkNextMonthVisibility();
+    },
+    checkNextMonthVisibility() {
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth() + 1;
+      this.isNextMonthVisible = !(this.currentYear === currentYear && this.currentMonth === currentMonth);
+    },
 
 
   },
