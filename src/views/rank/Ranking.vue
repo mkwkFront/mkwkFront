@@ -149,7 +149,10 @@ export default defineComponent({
         // pinkElements.forEach((element) => {
         //   element.classList.add("pinkanimate");
         // });
+
+        
       });
+      
     },
 
     filterUserData() {
@@ -230,6 +233,7 @@ export default defineComponent({
 
     //그래프 width 값 조절: 최대 50으로 함
     getGreenWidth(count) {
+      console.log("count",count);
       // month.count의 값에 따라 .greenanimate의 width 값 계산
       if (count < 51) {
         return `${count * 2}%`;
@@ -281,18 +285,19 @@ export default defineComponent({
   width: 100%;
   height: 7%;
   box-sizing: border-box;
-  justify-content: space-between;
 }
 .prevMonth{
   width: 10%;
-  
+
 }
 .month{
   width: 80%;
   align-items: center;
+  display: flex; /* Flex container 설정 */
+  justify-content: center; /* 가로 왼쪽 정렬 설정 */
 }
 .nextMonth{
-  flex: 1;
+  width: 10%;
 }
 
 .text_style_title {
