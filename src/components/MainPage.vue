@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="middle-container">
-        <div class="circle2" @click="testSaveWalk()">
+        <div class="circle2">
           <button class="default-button" @click="testSaveWalk()">
             <strong>산책시작</strong>
           </button>
@@ -44,7 +44,7 @@
         </div>
         <div class="text-container">
           <p>
-            <span class="bold-text large-text">0.24</span>
+            <span class="bold-text large-text">{{ this.totalDistance }}</span>
             <span class="bold-text gray-text small-text">Km</span>
           </p>
         </div>
@@ -103,7 +103,7 @@
             <button
               class="walk-request-button"
               style="margin-top: 1vh"
-              @click="handleWalkRequest"
+              @click="handleWalkRequest()"
               :disabled="selectedFriends.length === 0"
             >
               산책신청
@@ -161,7 +161,7 @@
               <!-- 사용자 정보 -->
               <div class="user_info_row">
                 <p class="user_info_label">누적 거리</p>
-                <p class="user_info_value">0KM</p>
+                <p class="user_info_value">{{ this.totalDistance }}KM</p>
               </div>
               <div class="division_line"></div>
               <div class="user_info_row">
@@ -171,7 +171,7 @@
               <div class="division_line"></div>
               <div class="user_info_row">
                 <p class="user_info_label">누적 도토리</p>
-                <p class="user_info_value">0개</p>
+                <p class="user_info_value">{{ this.totalGetpoint }}개</p>
               </div>
             </div>
           </div>
@@ -189,9 +189,7 @@
               <div class="pet-details">
                 <div class="pet-name">{{ loggedInUser.petName }}</div>
                 <div class="pet_status">
-                  <!-- 애완동물 산책레벨 -->
                   <div class="pet_level">LV.1</div>
-                  <!-- 애완동물 레벨 바 -->
                   <div class="level_progressbar_wrap">
                     <div class="level_progressbar" style="width: 3%"></div>
                   </div>
@@ -269,19 +267,22 @@ export default defineComponent({
       selectedFriends: [], // 선택된 친구를 저장할 배열
       friends: [],
       loggedInUser: null,
+      totalGetpoint: 0,
+      totalDistance: 0,
     };
   },
 
   mounted() {
     // Fetch user data when the component is mounted
     this.fetchUserData();
+    this.getUserData();
   },
 
   methods: {
     async fetchUserData() {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/member-info"
+          "http://localhost:18080/api/member-info"
         );
         this.loggedInUser = response.data.find((user) => user.userkey === 1);
         this.friends = response.data.filter((user) => user.userkey !== 1);
@@ -289,29 +290,90 @@ export default defineComponent({
         console.error("Error fetching user data", error);
       }
     },
-    async testSaveWalk() {
-      if (!this.walkDataSent) {
-        const currentWalk = {
-          walkname: "1027test",
-          startdate: new Date(),
-          distance: "11111111",
-          creuserkey: 2,
-        };
-        const result = await axios.post("/wk.saveWalk", { walk: currentWalk });
-        console.log("========================================", result);
 
-        // 산책 데이터를 전송한 후 walkDataSent 변수를 true로 설정하여 중복 전송 방지
-        this.walkDataSent = true;
-        this.currentWalk = true;
+    async getUserData() {
+      // Define a function to fetch data from the API
+      fetch("/wk.getUserData", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json(); // Parse the JSON response
+          } else {
+            throw new Error("Failed to fetch data");
+          }
+        })
+        .then((data) => {
+          // Handle the data received from the server
+          // console.log("ddddddddddddddddddddddddddddddddd/d", data.userWalkData); // You can process or display the data here
+          // console.log("dddddddddddddddddddddddddddddddddd", data.walkData); // You can process or display the data here
+          const filteredUserkey = data.userWalkData.filter(
+            (item) => item.userkey === 1
+          );
+          // console.log(filteredUserkey);
 
-        this.$router.push({
-          path: "./kakaomap",
-          props: {
-            walkkey: result.data.walkkey,
-          },
+          // filteredUserkey 배열에서 getpoint 값을 추출하여 배열을 생성
+          const getpointValues = filteredUserkey.map((item) => item.getpoint);
+
+          // 배열의 합계 계산
+          const totalGetpoint = getpointValues.reduce(
+            (acc, currentValue) => acc + currentValue,
+            0
+          );
+
+          // totalGetpoint에 합산된 getpoint 값이 포함됩니다.
+          console.log(totalGetpoint);
+
+          this.totalGetpoint = totalGetpoint;
+
+          const filteredCreuserkey = data.walkData.filter(
+            (item) => item.creuserkey === 1
+          );
+          // console.log(filteredCreuserkey);
+
+          // filteredCreuserkey 배열에서 distance 값을 추출하여 정수로 변환하고 더하기
+          const totalDistance = filteredCreuserkey.reduce((total, item) => {
+            const distance = parseInt(item.distance, 10); // 문자열을 정수로 변환
+            if (!isNaN(distance)) {
+              return total + distance;
+            }
+            return total;
+          }, 0);
+
+          // totalDistance에 더해진 distance 값이 포함됩니다.
+          console.log(totalDistance);
+
+          this.totalDistance = totalDistance;
+        })
+        .catch((error) => {
+          console.error(error);
         });
-        console.log("ddddddddddddddddddddddddddddddddd", result.data.walkkey);
-      }
+    },
+
+    async testSaveWalk() {
+      const currentWalk = {
+        walkname: "test",
+        startdate: new Date(),
+        distance: "1",
+        creuserkey: 1,
+      };
+      const result = await axios.post("/wk.saveWalk", { walk: currentWalk });
+      console.log("========================================", result);
+
+      // 산책 데이터를 전송한 후 walkDataSent 변수를 true로 설정하여 중복 전송 방지
+      this.walkDataSent = true;
+      this.currentWalk = true;
+
+      this.$router.push({
+        path: "./kakaomap",
+        query: {
+          walkkey: result.data.walkkey,
+        },
+      });
+      console.log("ddddddddddddddddddddddddddddddddd", result.data.walkkey);
     },
     isSelected(friendName) {
       return this.selectedFriends.includes(friendName);
@@ -344,7 +406,7 @@ export default defineComponent({
         });
       }
     },
-    handleWalkRequest() {
+    async handleWalkRequest() {
       if (this.selectedFriends.length === 0) {
         Swal.fire({
           icon: "error",
@@ -356,10 +418,30 @@ export default defineComponent({
         return;
       }
 
+      const currentWalk = {
+        walkname: "test",
+        startdate: new Date(),
+        distance: "1",
+        creuserkey: 1,
+      };
+      const result = await axios.post("/wk.saveWalk", { walk: currentWalk });
+      console.log("========================================", result);
+
+      // 산책 데이터를 전송한 후 walkDataSent 변수를 true로 설정하여 중복 전송 방지
+      this.walkDataSent = true;
+      this.currentWalk = true;
+
       this.$router.push({
         path: "./kakaomap",
-        query: { selectedFriends: JSON.stringify(this.selectedFriends) }, // stringify the array to pass it as a query param
+        // props: {
+        //   walkkey: result.data.walkkey,
+        // },
+        query: {
+          selectedFriends: JSON.stringify(this.selectedFriends),
+          walkkey: result.data.walkkey,
+        }, // stringify the array to pass it as a query param
       });
+      console.log("ddddddddddddddddddddddddddddddddd", result.data.walkkey);
     },
   },
 });

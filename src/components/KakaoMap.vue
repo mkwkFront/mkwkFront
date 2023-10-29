@@ -4,7 +4,7 @@
     <div class="black-bg" v-if="openModal1 == true">
       <div class="white-bg">
         <h2>산책을 취소할까요?</h2>
-        <button class="yes" @click="$router.push('/')">확인</button>
+        <button class="yes" @click="deleteWalk()">확인</button>
         <button class="no" @click="openModal1 = false">취소</button>
       </div>
     </div>
@@ -112,6 +112,7 @@ export default {
     this.selectedFriendsData = JSON.parse(
       this.$route.query.selectedFriends || "[]"
     );
+    this.walkKey = JSON.parse(this.$route.query.walkkey || null);
 
     // 지도관련 callback함수 등록(native로부터 위치값 수신시 GPSRecvMsg함수 실행)
     setGISCallbackFunc(this.GPSRecvMsg);
@@ -123,16 +124,18 @@ export default {
     // 산책 리스트 가져오기
     async testGetWalkList() {
       const param = {
-        userkey: 2,
+        userkey: 1,
         walkkey: this.walkkey,
       };
       const result = await axios.post("/wk.getWalkList", { walk: param });
       console.log(result.data.walk[0].walkkey);
       console.log(result.data.walk[0].creuserkey);
+      console.log(result.data.walk[0].muserList[0].userwalkkey);
       console.log(result.data.walk[0]);
 
       this.currentWalk = result.data.walk[0].walkkey;
       this.creuserkey = result.data.walk[0].creuserkey;
+      this.userwalkkey = result.data.walk[0].muserList[0].userwalkkey;
       if (result.data) {
         if (result.data.walk) {
           this.mwalkList = result.data.walk;
@@ -146,15 +149,17 @@ export default {
       // let muserWalkKey = null as number|null
       // let muser = null;
       // for (let i = 0; i < muserList.length; i++) {
-      //   if (Number(muserList[i].userkey) === 2) {
+      //   if (Number(muserList[i].userkey) === 1) {
       //     // 내 유저키 : 1(임시)//하드코딩
       //     muser = muserList[i];
       //   }
       // }
+
       const param = {
         walkkey: this.currentWalk,
         userkey: this.creuserkey,
-        userwalkkey: this.currentWalk + 3,
+        userwalkkey: this.userwalkkey,
+        getpoint: this.getpoint,
       };
       const result = await axios.post("/wk.endWalkUser", param);
       console.log("=====================", result);
@@ -166,7 +171,7 @@ export default {
           // 간단한 JSON 형식으로 파일 이름만 전송
           axios
             .post("/api/save-friend-image", {
-              walkkey: 3, // walkkey를 요청에 추가
+              walkkey: 333, // walkkey를 요청에 추가
               userkey: 1,
               friendImage: friendImage,
             })
@@ -211,6 +216,21 @@ export default {
           time: this.timer,
           distance: this.distance,
         },
+      });
+    },
+    async deleteWalk() {
+      const param = {
+        walkkey: this.walkKey,
+      };
+      // walkkey: this.walkKey,
+      console.log("ddddddddddddddddd", this.walkKey);
+
+      const result = await axios.post("/wk.deleteWalk", { walkkey: param.walkkey });
+      console.log("ddddddddddddddddd", result);
+      this.walkKey = null;
+
+      this.$router.push({
+        path: "./mainpage",
       });
     },
 
